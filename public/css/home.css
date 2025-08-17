@@ -1,0 +1,75 @@
+/* Dark & Minimalist CSS para stock.html */
+:root {
+  --text: rgb(225, 233, 242);
+  --background: rgb(10, 19, 28);
+  --primary: rgb(143, 185, 226);
+  --secondary: rgb(24, 77, 129);
+  --accent: rgb(60, 146, 231);
+  --card:hsl(210, 59%, 72%, 5%);
+  --selected:hsl(210, 59%, 72%, 20%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+   background-color: var(--background)!important;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.header a {
+  text-decoration: none !important;
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 800;
+  height: 200px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 36px;
+  gap: 24px;
+  line-break: 5px;
+  background-color: var(--card);
+}
+
+.header a:hover {
+  transition: 200ms;
+  background-color: var(--selected);
+}
+
+.grupo_tarjetitas {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 700px;
+  flex-wrap: wrap;
+  padding: 24px 12px;
+  text-align: center;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .grupo_tarjetitas {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+  }
+}

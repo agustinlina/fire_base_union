@@ -1,0 +1,115 @@
+/* Dark & Minimalist CSS para stock.html */
+:root {
+  --text: rgb(225, 233, 242);
+  --background: rgb(10, 19, 28);
+  --primary: rgb(143, 185, 226);
+  --secondary: rgb(24, 77, 129);
+  --accent: rgb(60, 146, 231);
+  --accent_selected:rgb(100, 146, 231);
+  --card:hsl(210, 59%, 72%, 5%);
+  --selected:hsl(210, 59%, 72%, 20%);
+}
+
+body {
+  background-color: var(--background)!important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  text-underline-offset: 4px;
+}
+
+.container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+label {
+  display: block;
+  margin: 0.5rem 0 0.2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.delete-cheque-button:hover {
+  background-color: #0c122e !important;
+}
+
+#addChequeButton {
+  background-color: var(--accent);
+  color: #111c46;
+  font-weight: bold;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+#addChequeButton:hover {
+  transition: 100ms;
+  background-color: var(--accent_selected);
+}
+
+input[type='date'] {
+  width: 80%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.cheque-item {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.days-remaining {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #bbb;
+  font-weight: bold;
+}
+
+.button {
+  background-color: none;
+  border: none;
+  height: 100%;
+  width: 100%;
+}
+.button:hover {
+  background-color: #b31414;
+}
+
+input {
+  background-color: #16245a !important;
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  input[type='date'] {
+    font-size: 1rem;
+  }
+
+  button {
+    font-size: 1rem;
+  }
+}

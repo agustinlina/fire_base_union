@@ -1,0 +1,4 @@
+/* Oculta todo el documento hasta que auth.js confirme sesión */
+html {
+  visibility: hidden;
+}

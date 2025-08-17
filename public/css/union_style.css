@@ -1,0 +1,38 @@
+/* Dark & Minimalist CSS para stock.html */
+:root {
+  --text: rgb(225, 233, 242);
+  --background: rgb(10, 19, 28);
+  --primary: rgb(143, 185, 226);
+  --secondary: rgb(24, 77, 129);
+  --accent: rgb(60, 146, 231);
+  --card: hsl(210, 59%, 72%, 5%);
+  --selected: hsl(210, 59%, 72%, 20%);
+}
+
+body {
+  background-color: var(
+    --background
+  ) !important; /* background-image: url("data:image/svg+xml,%3Csvg width='40' height='1' viewBox='0 0 40 1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v1H0z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E"); */
+  background-repeat: repeat;
+  background-size: auto;
+  background-attachment: fixed;
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  padding: 0;
+}
+
+header {
+  border-bottom: 1px solid var(--selected);
+}
+
+.navbar,
+.offcanvas-body,
+.offcanvas-header,
+header,
+.header_color {
+  background-color: var(--background) !important;
+}
+.active {
+  color: var(--accent) !important;
+}

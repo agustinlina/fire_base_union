@@ -1,0 +1,270 @@
+/* Dark & Minimalist CSS para stock.html */
+:root {
+  --text: rgb(225, 233, 242);
+  --background: rgb(10, 19, 28);
+  --primary: rgb(143, 185, 226);
+  --secondary: rgb(24, 77, 129);
+  --accent: rgb(60, 146, 231);
+  --card:hsl(210, 59%, 72%, 5%);
+  --selected:hsl(210, 59%, 72%, 20%);
+}
+
+body{
+   background-color: var(--background)!important;
+}
+
+.buscador {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: #16245a !important;
+  border: none;
+  color: var(--fg-color);
+}
+
+.controls_buscador {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  align-items: center;
+  gap: 4px;
+}
+
+.lupita {
+  height: fit-content;
+  margin-left: 4px;
+  padding: 0 8px;
+  pointer-events: none;
+}
+
+.container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0.8rem;
+  border-radius: 12px;
+}
+
+body {
+  margin: 0;
+
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-color);
+}
+
+p {
+  font-size: 0.9rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1a1a1a;
+}
+
+th,
+td {
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+}
+
+th {
+  background-color: #1f1f1f;
+  text-align: left;
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:nth-child(even) {
+  background-color: #1b1b1b;
+}
+
+tbody tr:hover {
+  background-color: var(--hover-color);
+}
+
+#lastUpdate {
+  font-weight: 500;
+  color: var(--accent-color);
+}
+
+/* Estilos de enlaces y botones si es necesario */
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Estilo para la barra buscadora */
+.buscador {
+  width: 100%;
+  padding: 10px 16px;
+  background-color: #161616;
+  border: 1.5px solid var(--border-color);
+  color: var(--fg-color);
+  border-radius: 8px;
+  margin: 0 auto 18px auto;
+  font-size: 1em;
+}
+
+.buscador:focus {
+  outline: none;
+  border-color: white;
+}
+
+/* Contenedor de los controles (filtros y buscador juntos) */
+.controles_buscador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: none;
+  padding: 0;
+}
+
+/* Botones de filtro */
+.filtro-btn {
+  background-color: var(--secondary);
+  color: var(--text)!important;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.98em;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+  font-weight: 500;
+  outline: none;
+}
+
+.filtro-btn:hover,
+.filtro-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.lupita {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5em;
+  font-size: 1.15em;
+  color: #757575;
+}
+
+.copy-btn:hover,
+.copy-btn:active {
+  transition: 100ms;
+  opacity: 0.9;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--accent);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  z-index: 9999 !important;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+th,
+td {
+  padding: 16px 8px;
+  border: 1px solid var var(--secondary);
+  background-color: #16245a;
+}
+
+th {
+  background-color: #16245a !important;
+  text-align: left;
+  font-weight: 400;
+  color: var(--accent-color);
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--secondary);
+  border: 1px solid var(--secondary);
+}
+
+tbody tr:nth-child(even) {
+  background-color: #e9c500;
+}
+
+tbody tr:hover {
+  background-color: #e9c500;
+}
+
+/* Responsive para filtros */
+@media (max-width: 600px) {
+  .container {
+    width: 100%;
+    padding: 8px;
+  }
+  .controles_buscador {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+  }
+  .buscador {
+    max-width: 100%;
+  }
+  .stock-select {
+    background: #161616;
+    color: var(--fg-color);
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 1em;
+    margin-right: 8px;
+    transition: border 0.18s;
+  }
+
+  .stock-select:focus {
+    outline: none;
+    border-color: var(--border-color);
+  }
+
+  .controles_buscador label {
+    margin-right: 3px;
+    font-size: 0.99em;
+    letter-spacing: 0.3px;
+  }
+  table{
+    font-size: 12px;
+      
+  }
+}

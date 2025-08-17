@@ -1,0 +1,79 @@
+/* Dark & Minimalist CSS para stock.html */
+:root {
+  --text: rgb(225, 233, 242);
+  --background: rgb(10, 19, 28);
+  --primary: rgb(143, 185, 226);
+  --secondary: rgb(24, 77, 129);
+  --accent: rgb(60, 146, 231);
+  --card: hsl(210, 59%, 72%, 5%);
+  --selected: hsl(210, 59%, 72%, 20%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: var(--background) !important;
+  color: #fff;
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+header {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+header a {
+  text-decoration: none;
+  color: white;
+  font-weight: 800;
+}
+.container {
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  padding: 2rem;
+}
+h1 {
+  margin-bottom: 1rem;
+}
+p {
+  margin-bottom: 1.5rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+input[type='file'] {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  padding: 0.5rem;
+}
+.button {
+  padding: 0.75rem;
+  background: #ffffff;
+  border: none;
+  border-radius: 4px;
+  color: #121212;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.button.secondary {
+  background: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+}
