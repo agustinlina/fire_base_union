@@ -1,5 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
+import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAe42aV5wu28NddRCxFL1dz5xps-04XxMk',
@@ -12,8 +13,13 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
+const db = getFirestore(app)
 
-function allowRender () { document.documentElement.classList.remove('auth-pending') }
+let unsubSession = null
+
+function allowRender () {
+  document.documentElement.classList.remove('auth-pending')
+}
 
 function mountHeader (user) {
   const header = document.getElementById('auth-header')
@@ -22,10 +28,33 @@ function mountHeader (user) {
     <div class="d-flex justify-content-between align-items-center p-2 bg-dark text-light">
       <span>Hola, <b>${user.email}</b></span>
       <button id="logout" class="btn btn-sm btn-danger">Cerrar sesión</button>
-    </div>`
+    </div>
+  `
   document.getElementById('logout')?.addEventListener('click', async () => {
-    await signOut(auth)
-    window.location.replace('/login.html')
+    try { await signOut(auth) } finally {
+      window.location.replace('./login.html')
+    }
+  })
+}
+
+async function handleKickIfSessionChanged(user) {
+  // Escucha el doc de sesión y compara
+  const mySessionId = localStorage.getItem('sessionId') || ''
+  const ref = doc(db, 'userSessions', user.uid)
+
+  if (unsubSession) unsubSession()
+  unsubSession = onSnapshot(ref, async (snap) => {
+    const serverSessionId = snap.exists() ? snap.data()?.sessionId : null
+    if (!serverSessionId) return // aún no seteado
+
+    if (serverSessionId !== mySessionId) {
+      // Mi pestaña/dispositivo ya no es la sesión activa → cerrar
+      await signOut(auth).catch(() => {})
+      // Mensaje opcional
+      const url = new URL('./login.html', location.href)
+      url.searchParams.set('msg', 'Tu cuenta se abrió en otro dispositivo.')
+      window.location.replace(url.toString())
+    }
   })
 }
 
@@ -35,17 +64,17 @@ onAuthStateChanged(auth, (user) => {
 
   if (user) {
     if (isAuthPage) {
-      // si ya está logueado y entra a login/register, mandalo al home
-      window.location.replace('/')
+      window.location.replace('./')
       return
     }
     mountHeader(user)
+    handleKickIfSessionChanged(user)
     allowRender()
   } else {
     if (!isAuthPage) {
-      window.location.replace('/login.html')
+      window.location.replace('./login.html')
       return
     }
-    allowRender() // en login/register sí mostramos
+    allowRender()
   }
 })
