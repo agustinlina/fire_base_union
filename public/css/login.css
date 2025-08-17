@@ -1,0 +1,51 @@
+:root {
+  --text: rgb(225, 233, 242);
+  --background: rgb(10, 19, 28);
+  --primary: rgb(143, 185, 226);
+  --secondary: rgb(24, 77, 129);
+  --accent: rgb(60, 146, 231);
+  --accent_selected: rgb(100, 146, 231);
+  --card: hsl(210, 59%, 72%, 5%);
+  --selected: hsl(210, 59%, 72%, 20%);
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  padding: 0 16px;
+  background-color: var(--background) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: hidden;
+}
+
+.card {
+  background: hsl(210, 59%, 72%, 5%);
+  border: 1px solid #222838;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+  width: 100%;
+  max-width: 420px;
+}
+
+input {
+  background-color: hsl(210, 59%, 100%, 5%) !important;
+  font-weight: 400 !important;
+  color: white !important;
+}
+
+.form-control,
+.btn {
+  background-color: var(--accent);
+  border: none !important;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.btn:hover {
+  background-color: var(--accent_selected);
+  color: var(--text);
+}
