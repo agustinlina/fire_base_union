@@ -1,7 +1,9 @@
 // public/login.js
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
-import { getAuth, signInWithCustomToken, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
+import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
+// ---------- CONFIG ----------
 const firebaseConfig = {
   apiKey: 'AIzaSyAe42aV5wu28NddRCxFL1dz5xps-04XxMk',
   authDomain: 'union-user-live.firebaseapp.com',
@@ -10,46 +12,76 @@ const firebaseConfig = {
   messagingSenderId: '279782141524',
   appId: '1:279782141524:web:f7579e44b2848d990e87c1'
 }
+
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
+const db = getFirestore(app)
 
+// ---------- UI ----------
 const form = document.getElementById('login-form')
 const emailInput = document.getElementById('email')
 const passwordInput = document.getElementById('password')
 const msg = document.getElementById('msg')
 
+// Si ya hay sesión, ir al home
 onAuthStateChanged(auth, (user) => {
   if (user) window.location.replace('./')
 })
 
+function makeSessionId () {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
+  return Math.random().toString(36).slice(2) + Date.now().toString(36)
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault()
   msg.style.display = 'none'
-  const email = emailInput.value.trim()
-  const password = passwordInput.value
 
   try {
-    const resp = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ email, password })
+    const email = emailInput.value.trim()
+    const password = passwordInput.value
+
+    // 1) Autenticar
+    const cred = await signInWithEmailAndPassword(auth, email, password)
+    const uid = cred.user.uid
+
+    // 2) Intentar tomar lock en transacción (ANTES de escribir nada)
+    const mySessionId = makeSessionId()
+
+    await runTransaction(db, async (tx) => {
+      const ref = doc(db, 'userSessions', uid)
+      const snap = await tx.get(ref)
+
+      if (snap.exists()) {
+        const data = snap.data() || {}
+        const serverSessionId = data.sessionId || ''
+        const active = !!data.active
+
+        // Si ya hay una sesión activa → BLOQUEAR
+        if (active && serverSessionId) {
+          throw new Error('LOCK_HELD')
+        }
+      }
+
+      // Tomo el lock para mí
+      tx.set(ref, {
+        sessionId: mySessionId,
+        active: true,
+        updatedAt: serverTimestamp()
+      }, { merge: true })
     })
 
-    if (resp.status === 409) {
-      window.location.replace('./login.html?msg=Usuario%20en%20uso')
-      return
-    }
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}))
-      throw new Error(err.error || 'Error al iniciar sesión')
-    }
-
-    const { customToken, sessionId } = await resp.json()
-    await signInWithCustomToken(auth, customToken)
-    localStorage.setItem('sessionId', sessionId)
+    // 3) Guardar mi sessionId local y entrar
+    localStorage.setItem('sessionId', mySessionId)
     window.location.replace('./')
-  } catch (error) {
-    msg.textContent = error.message || 'Error al iniciar sesión'
+  } catch (err) {
+    if (err && err.message === 'LOCK_HELD') {
+      try { await signOut(auth) } catch {}
+      msg.textContent = 'Actualmente hay alguien conectado con ese usuario.'
+    } else {
+      msg.textContent = err?.message || 'Error al iniciar sesión'
+    }
     msg.style.display = 'block'
+    localStorage.removeItem('sessionId')
   }
 })

@@ -1,4 +1,4 @@
-// app.js
+// app.js (añadido)
 const express = require('express');
 const path = require('path');
 const fetch = require('node-fetch');
@@ -10,56 +10,50 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ====== CONFIG DIRECTA AQUÍ ======
-const FIREBASE_WEB_API_KEY = 'AIzaSyAe42aV5wu28NddRCxFL1dz5xps-04XxMk'; // tu apiKey web
-
-// Pega aquí tu JSON de Service Account (Firebase Console > Config del proyecto > Cuentas de servicio)
-const SERVICE_ACCOUNT = {
-  "type": "service_account",
-  "project_id": "union-user-live",
-  "private_key_id": "REEMPLAZA_POR_TU_ID",
-  "private_key": `-----BEGIN PRIVATE KEY-----
-PEGA_TU_LLAVE_PRIVADA_AQUÍ
------END PRIVATE KEY-----\n`,
-  "client_email": "firebase-adminsdk-xxxxx@union-user-live.iam.gserviceaccount.com",
-  "client_id": "REEMPLAZA_POR_TU_CLIENT_ID",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xxxxx%40union-user-live.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-};
-// =================================
-
+// --- Firebase Admin init ---
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(SERVICE_ACCOUNT),
+    credential: admin.credential.cert({
+      project_id: process.env.FIREBASE_PROJECT_ID,
+      client_email: process.env.FIREBASE_CLIENT_EMAIL,
+      // IMPORTANTE: reemplazar \n en la private key
+      private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    }),
   });
 }
 const db = admin.firestore();
 
+// Helpers
 function makeSessionId() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
+// Middleware: verifica cuerpo
 function requireEmailPassword(req, res, next) {
   const { email, password } = req.body || {};
-  if (!email || !password) return res.status(400).json({ error: 'email y password requeridos' });
+  if (!email || !password) {
+    return res.status(400).json({ error: 'email y password requeridos' });
+  }
   next();
 }
 
-// Bloquea el 2º login si ya hay lock activo
+// POST /api/login  -> verifica password y toma lock atómico
 app.post('/api/login', requireEmailPassword, async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1) Verificar credenciales contra Firebase Auth (REST)
+    // 1) Verificar credenciales con la API REST de Firebase Auth
+    const key = process.env.FIREBASE_WEB_API_KEY;
     const resp = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_WEB_API_KEY}`,
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`,
       {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email, password, returnSecureToken: true }),
+        body: JSON.stringify({
+          email,
+          password,
+          returnSecureToken: true,
+        }),
       }
     );
 
@@ -70,7 +64,7 @@ app.post('/api/login', requireEmailPassword, async (req, res) => {
     const data = await resp.json();
     const uid = data.localId;
 
-    // 2) Intentar tomar lock (transacción)
+    // 2) Intentar tomar lock en transacción
     const sessionId = makeSessionId();
     await db.runTransaction(async (tx) => {
       const ref = db.collection('userSessions').doc(uid);
@@ -78,10 +72,14 @@ app.post('/api/login', requireEmailPassword, async (req, res) => {
 
       if (snap.exists) {
         const cur = snap.data() || {};
-        if (cur.active && cur.sessionId) {
-          throw new Error('LOCK_HELD'); // ya hay uno conectado
+        const active = !!cur.active;
+        const serverSessionId = cur.sessionId || '';
+        if (active && serverSessionId) {
+          // YA hay alguien conectado -> denegar
+          throw new Error('LOCK_HELD');
         }
       }
+      // Tomar el lock para esta sesión
       tx.set(ref, {
         sessionId,
         active: true,
@@ -89,9 +87,10 @@ app.post('/api/login', requireEmailPassword, async (req, res) => {
       }, { merge: true });
     });
 
-    // 3) Custom token con claim (opcional) sessionId
+    // 3) Crear custom token con claim (opcional) sessionId
     const customToken = await admin.auth().createCustomToken(uid, { sessionId });
 
+    // 4) Devolver token y sessionId (el front hará signInWithCustomToken)
     return res.json({ customToken, sessionId });
   } catch (err) {
     if (err.message === 'LOCK_HELD') {
@@ -102,12 +101,13 @@ app.post('/api/login', requireEmailPassword, async (req, res) => {
   }
 });
 
-// Libera lock si el sessionId coincide
+// POST /api/logout  -> libera lock (solo si sessionId coincide)
 app.post('/api/logout', async (req, res) => {
   try {
     const { uid, sessionId } = req.body || {};
-    if (!uid || !sessionId) return res.status(400).json({ error: 'uid y sessionId requeridos' });
-
+    if (!uid || !sessionId) {
+      return res.status(400).json({ error: 'uid y sessionId requeridos' });
+    }
     const ref = db.collection('userSessions').doc(uid);
     const snap = await ref.get();
     const cur = snap.exists ? (snap.data() || {}) : {};
@@ -124,13 +124,8 @@ app.post('/api/logout', async (req, res) => {
   }
 });
 
-// Rutas HTML
+// ...tus rutas a HTML sin extensión...
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-app.get('/comercial', (req, res) => res.sendFile(path.join(__dirname, 'public', 'comercial.html')));
-app.get('/stock', (req, res) => res.sendFile(path.join(__dirname, 'public', 'stock.html')));
-app.get('/calculadora', (req, res) => res.sendFile(path.join(__dirname, 'public', 'calculadora.html')));
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
-app.get('/login.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
-app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
+// etc...
 
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));

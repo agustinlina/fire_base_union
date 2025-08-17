@@ -1,8 +1,9 @@
 // public/auth.js
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
-import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
+import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp, getDoc } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
+// ---------- CONFIG ----------
 const firebaseConfig = {
   apiKey: 'AIzaSyAe42aV5wu28NddRCxFL1dz5xps-04XxMk',
   authDomain: 'union-user-live.firebaseapp.com',
@@ -11,11 +12,12 @@ const firebaseConfig = {
   messagingSenderId: '279782141524',
   appId: '1:279782141524:web:f7579e44b2848d990e87c1'
 }
+
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const db = getFirestore(app)
 
-let unsub = null
+let unsubSessionDoc = null
 
 function allowRender () {
   document.documentElement.classList.remove('auth-pending')
@@ -29,55 +31,70 @@ function mountHeader (user) {
   const header = document.getElementById('auth-header')
   if (!header) return
   header.innerHTML = `
-    <div class="d-flex justify-content-between align-items-center p-2 bg-dark text-light">
-      <span>Hola, <b>${user.email}</b></span>
+    <div class="d-flex justify-content-between align-items-center p-2 bg-dark text-light" style="gap:12px;">
+      <span class="small m-0">Hola, <b>${user.email}</b></span>
       <button id="logout" class="btn btn-sm btn-danger">Cerrar sesión</button>
-    </div>`
+    </div>
+  `
   document.getElementById('logout')?.addEventListener('click', async () => {
-    await doLogout()
+    await safeReleaseAndSignOut()
   })
 }
 
-async function doLogout () {
+async function safeReleaseAndSignOut () {
   try {
     const user = auth.currentUser
-    const sessionId = localStorage.getItem('sessionId') || ''
-    if (user && sessionId) {
-      await fetch('/api/logout', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ uid: user.uid, sessionId })
-      }).catch(() => {})
+    const mySessionId = localStorage.getItem('sessionId') || ''
+    if (user && mySessionId) {
+      const ref = doc(db, 'userSessions', user.uid)
+      const snap = await getDoc(ref)
+      const data = snap.data() || {}
+      // Solo libero si sigo siendo yo el dueño del lock
+      if (data.sessionId === mySessionId) {
+        await setDoc(ref, { active: false, updatedAt: serverTimestamp() }, { merge: true })
+      }
     }
-  } finally {
-    localStorage.removeItem('sessionId')
-    try { await signOut(auth) } catch {}
-    window.location.replace('./login.html')
-  }
+  } catch {}
+  try { await signOut(auth) } catch {}
+  localStorage.removeItem('sessionId')
+  window.location.replace('./login.html')
 }
 
-// Defensivo: si por algún motivo el lock cambia a otro sessionId activo, cerramos esta pestaña.
+// Observación defensiva: si (por un bug) otra sesión tomara el lock, me cierro.
+// En el flujo normal NO debería ocurrir porque el segundo login queda bloqueado.
 function watchLock (user) {
-  if (unsub) unsub()
   const mySessionId = localStorage.getItem('sessionId') || ''
-  unsub = onSnapshot(doc(db, 'userSessions', user.uid), (snap) => {
-    const data = snap.exists() ? (snap.data() || {}) : {}
-    const active = !!data.active
+  const ref = doc(db, 'userSessions', user.uid)
+
+  if (unsubSessionDoc) unsubSessionDoc()
+  unsubSessionDoc = onSnapshot(ref, async (snap) => {
+    if (!snap.exists()) return
+    const data = snap.data() || {}
     const serverSessionId = data.sessionId || ''
+    const active = !!data.active
+
     if (active && serverSessionId && serverSessionId !== mySessionId) {
-      doLogout()
+      // Otro tiene el lock → me voy
+      await safeReleaseAndSignOut()
     }
   })
 }
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    if (isAuthPage()) { window.location.replace('./'); return }
+    if (isAuthPage()) {
+      window.location.replace('./')
+      return
+    }
     mountHeader(user)
     watchLock(user)
     allowRender()
   } else {
-    if (!isAuthPage()) { window.location.replace('./login.html'); return }
+    if (!isAuthPage()) {
+      window.location.replace('./login.html')
+      return
+    }
     allowRender()
   }
 })
+
