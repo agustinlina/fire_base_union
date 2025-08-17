@@ -1,27 +1,31 @@
 /* Dark & Minimalist CSS para stock.html */
-/* Dark & Minimalist CSS para stock.html */
 :root {
   --text: rgb(225, 233, 242);
   --background: rgb(10, 19, 28);
   --primary: rgb(143, 185, 226);
   --secondary: rgb(24, 77, 129);
   --accent: rgb(60, 146, 231);
-  --card:hsl(210, 59%, 72%, 5%);
-  --accent_selected:rgb(100, 146, 231);
+  --card: hsl(210, 59%, 72%, 5%);
+  --accent_selected: rgb(100, 146, 231);
 }
 
-#header_auth button{
-    background-color: transparent;
-    border: 3px solid var(--accent);
-    border-radius: 6px;
-    color: #3C92E7!important;
-    font-weight: bold;
+#header_auth{
+  border-bottom: 2px solid var(--card);
 }
 
+#header_auth button {
+  background-color: transparent;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  color: #3c92e7 !important;
+  font-weight: bold;
+  white-space: nowrap;
+}
 
-#header_auth button:hover, button:active{
-    opacity: 0.5;
-    transition: 100ms;
+#header_auth button:hover,
+button:active {
+  opacity: 0.5;
+  transition: 100ms;
 }
 
 

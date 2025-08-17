@@ -33,7 +33,7 @@ function mountHeader (user) {
   header.innerHTML = `
     <div id="header_auth" class="p-3 d-flex justify-content-between align-items-center p-2" style="gap:12px;">
       <span class="small m-0">Hola, <b>${user.email}</b></span>
-      <button class="d-flex gap-2 p-1" id="logout" class="btn"><img width="26px" src="./media/exit.svg">Cerrar sesión</button>
+      <button class="d-flex gap-2 p-1" id="logout" class="btn"><img width="18px" src="./media/exit.svg">Cerrar sesión</button>
     </div>
   `
   document.getElementById('logout')?.addEventListener('click', async () => {
