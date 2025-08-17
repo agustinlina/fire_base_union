@@ -33,6 +33,26 @@ function makeSessionId () {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
 }
 
+// Traductor de errores de Firebase Auth → mensajes en español
+function traducirErrorAuth (err) {
+  const code = (err && err.code) || ''
+  switch (code) {
+    case 'auth/invalid-credential':
+    case 'auth/invalid-login-credentials': // algunas versiones usan este
+    case 'auth/wrong-password':
+    case 'auth/user-not-found':
+      return 'Usuario o contraseña incorrectos.'
+    case 'auth/invalid-email':
+      return 'El correo electrónico no es válido.'
+    case 'auth/too-many-requests':
+      return 'Demasiados intentos. Intenta nuevamente más tarde.'
+    case 'auth/network-request-failed':
+      return 'Error de red. Revisa tu conexión a Internet.'
+    default:
+      return 'No se pudo iniciar sesión.'
+  }
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault()
   msg.style.display = 'none'
@@ -76,10 +96,12 @@ form.addEventListener('submit', async (e) => {
     window.location.replace('./')
   } catch (err) {
     if (err && err.message === 'LOCK_HELD') {
+      // Caso de “usuario en uso”
       try { await signOut(auth) } catch {}
       msg.textContent = 'Actualmente hay alguien conectado con ese usuario.'
     } else {
-      msg.textContent = err?.message || 'Error al iniciar sesión'
+      // Errores de credenciales, email inválido, etc.
+      msg.textContent = traducirErrorAuth(err)
     }
     msg.style.display = 'block'
     localStorage.removeItem('sessionId')
