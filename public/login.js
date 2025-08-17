@@ -1,7 +1,9 @@
 // public/login.js
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
-import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
+import {
+  getFirestore, doc, runTransaction, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
 // --- CONFIG FIREBASE ---
 const firebaseConfig = {
@@ -23,17 +25,18 @@ const emailInput = document.getElementById('email')
 const passwordInput = document.getElementById('password')
 const msg = document.getElementById('msg')
 
-// Si ya hay sesión, mandá al home
+// Si ya hay sesión, al home
 onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window.location.replace('./')
-  }
+  if (user) window.location.replace('./')
 })
 
 function makeSessionId () {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
 }
+
+// Consideramos "activa" si tuvo heartbeat en los últimos N ms
+const SESSION_TTL_MS = 2 * 60 * 1000; // 2 minutos
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault()
@@ -43,21 +46,50 @@ form.addEventListener('submit', async (e) => {
     const password = passwordInput.value
 
     const cred = await signInWithEmailAndPassword(auth, email, password)
-
-    // Generar y guardar sessionId local + publicar en Firestore
+    const uid = cred.user.uid
     const sessionId = makeSessionId()
+
+    // Guardamos temporalmente por si logramos tomar el lock
     localStorage.setItem('sessionId', sessionId)
 
-    await setDoc(
-      doc(db, 'userSessions', cred.user.uid),
-      { sessionId, updatedAt: serverTimestamp() },
-      { merge: true }
-    )
+    // Intentar tomar el "lock" en Firestore: si existe y está fresco → denegar
+    await runTransaction(db, async (tx) => {
+      const ref = doc(db, 'userSessions', uid)
+      const snap = await tx.get(ref)
 
-    // Ir al home (replace para no volver con "atrás")
+      const now = Date.now()
+      if (snap.exists()) {
+        const data = snap.data() || {}
+        const serverSessionId = data.sessionId || ''
+        const updatedAt = data.updatedAt?.toMillis?.() || 0
+        const fresh = (now - updatedAt) < SESSION_TTL_MS
+        const active = data.active === true
+
+        // Si hay una sesión activa y fresca que NO es la mía → denegar
+        if (active && fresh && serverSessionId && serverSessionId !== sessionId) {
+          throw new Error('LOCK_HELD') // otro conectado
+        }
+      }
+
+      // Tomar/renovar lock para esta sesión
+      tx.set(ref, {
+        sessionId,
+        active: true,
+        updatedAt: serverTimestamp()
+      }, { merge: true })
+    })
+
+    // Lock tomado → entrar
     window.location.replace('./')
   } catch (err) {
-    msg.textContent = err.message || 'Error al iniciar sesión'
+    // Si falló por lock, cerrar auth (estaba autenticado pero sin lock)
+    if (err && err.message === 'LOCK_HELD') {
+      try { await signOut(auth) } catch {}
+      msg.textContent = 'Actualmente hay alguien conectado con ese usuario.'
+    } else {
+      msg.textContent = err?.message || 'Error al iniciar sesión'
+    }
     msg.style.display = 'block'
+    localStorage.removeItem('sessionId') // limpiar si no conseguimos lock
   }
 })

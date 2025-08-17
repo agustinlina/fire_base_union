@@ -1,7 +1,9 @@
 // public/auth.js
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
-import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
+import {
+  getFirestore, doc, onSnapshot, updateDoc, setDoc, serverTimestamp, getDoc
+} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
 // --- CONFIG FIREBASE ---
 const firebaseConfig = {
@@ -18,6 +20,10 @@ const auth = getAuth(app)
 const db = getFirestore(app)
 
 let unsubSessionDoc = null
+let heartbeatTimer = null
+
+const SESSION_TTL_MS = 2 * 60 * 1000; // 2 minutos
+const HEARTBEAT_MS = 30 * 1000; // cada 30s
 
 function allowRender () {
   document.documentElement.classList.remove('auth-pending')
@@ -38,48 +44,108 @@ function mountHeader (user) {
     </div>
   `
   document.getElementById('logout')?.addEventListener('click', async () => {
-    try { await signOut(auth) } finally {
-      // Al cerrar sesión invalidamos nuestro sessionId local
-      localStorage.removeItem('sessionId')
-      window.location.replace('./login.html')
-    }
+    await safeReleaseAndSignOut()
   })
 }
 
-function watchUniqueSession (user) {
-  // Escucha el doc userSessions/{uid} y se auto-cierra si cambia el sessionId
+async function safeReleaseAndSignOut () {
+  try {
+    const user = auth.currentUser
+    const mySessionId = localStorage.getItem('sessionId') || ''
+    if (user && mySessionId) {
+      const ref = doc(db, 'userSessions', user.uid)
+      const snap = await getDoc(ref)
+      const data = snap.data() || {}
+      // Solo libero si sigo siendo yo el dueño del lock
+      if (data.sessionId === mySessionId) {
+        await setDoc(ref, { active: false, updatedAt: serverTimestamp() }, { merge: true })
+      }
+    }
+  } catch {}
+  try { await signOut(auth) } catch {}
+  localStorage.removeItem('sessionId')
+  window.location.replace('./login.html')
+}
+
+function startHeartbeat (user) {
+  stopHeartbeat()
+  const ref = doc(db, 'userSessions', user.uid)
+  const mySessionId = localStorage.getItem('sessionId') || ''
+
+  heartbeatTimer = setInterval(async () => {
+    try {
+      const snap = await getDoc(ref)
+      const data = snap.data() || {}
+      // Solo refresco si sigo teniendo el lock
+      if (data.sessionId === mySessionId && data.active === true) {
+        await updateDoc(ref, { updatedAt: serverTimestamp() })
+      } else {
+        // Perdí el lock → cerrar
+        await safeReleaseAndSignOut()
+      }
+    } catch {
+      // Si falla, intento cerrar sesión limpia
+      await safeReleaseAndSignOut()
+    }
+  }, HEARTBEAT_MS)
+}
+
+function stopHeartbeat () {
+  if (heartbeatTimer) {
+    clearInterval(heartbeatTimer)
+    heartbeatTimer = null
+  }
+}
+
+function watchLock (user) {
   const mySessionId = localStorage.getItem('sessionId') || ''
   const ref = doc(db, 'userSessions', user.uid)
 
   if (unsubSessionDoc) unsubSessionDoc()
   unsubSessionDoc = onSnapshot(ref, async (snap) => {
-    if (!snap.exists()) return
-    const serverSessionId = snap.data()?.sessionId || ''
-    if (!serverSessionId) return
+    if (!snap.exists()) {
+      // Si desaparece el doc, mejor salir
+      await safeReleaseAndSignOut()
+      return
+    }
+    const data = snap.data() || {}
+    const serverSessionId = data.sessionId || ''
+    const active = data.active === true
+    const updatedAt = data.updatedAt?.toMillis?.() || 0
+    const fresh = (Date.now() - updatedAt) < SESSION_TTL_MS
 
-    if (serverSessionId !== mySessionId) {
-      // Otra sesión tomó el control → nos vamos
-      try { await signOut(auth) } catch {}
-      localStorage.removeItem('sessionId')
-      const url = new URL('./login.html', location.href)
-      url.searchParams.set('msg', 'Tu cuenta se abrió en otro dispositivo.')
-      window.location.replace(url.toString())
+    // Si el lock no es mío y está activo y fresco → expulsar
+    if (serverSessionId !== mySessionId && active && fresh) {
+      await safeReleaseAndSignOut()
     }
   })
 }
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     if (isAuthPage()) {
-      // Si ya está logueado y viene al login/register, lo mandamos al home
       window.location.replace('./')
       return
     }
     mountHeader(user)
-    watchUniqueSession(user)
+    watchLock(user)
+    startHeartbeat(user)
     allowRender()
+
+    // Protección extra al cerrar pestaña
+    window.addEventListener('beforeunload', () => {
+      // No confiable 100%, pero ayuda a marcar inactive
+      const uid = user?.uid
+      const mySessionId = localStorage.getItem('sessionId') || ''
+      if (uid && mySessionId) {
+        navigator.sendBeacon?.(
+          '/__noop', // endpoint dummy (no hace falta que exista)
+          '' // solo para disparar el evento de salida
+        )
+      }
+    })
   } else {
-    // Sin sesión → a login (excepto si ya estamos en login/register)
+    stopHeartbeat()
     if (!isAuthPage()) {
       window.location.replace('./login.html')
       return
