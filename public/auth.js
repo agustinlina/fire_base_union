@@ -1,4 +1,3 @@
-// public/auth.js
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
 
@@ -14,40 +13,39 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 
-// Mostrar UI segura
-function allowRender() {
-  document.documentElement.classList.remove('auth-pending')
-}
+function allowRender () { document.documentElement.classList.remove('auth-pending') }
 
-// Inyecta header con usuario y logout
-function mountHeader(user) {
+function mountHeader (user) {
   const header = document.getElementById('auth-header')
   if (!header) return
   header.innerHTML = `
     <div class="d-flex justify-content-between align-items-center p-2 bg-dark text-light">
       <span>Hola, <b>${user.email}</b></span>
       <button id="logout" class="btn btn-sm btn-danger">Cerrar sesión</button>
-    </div>
-  `
+    </div>`
   document.getElementById('logout')?.addEventListener('click', async () => {
     await signOut(auth)
-    // Tras cerrar sesión, volvemos al login
     window.location.replace('/login.html')
   })
 }
 
-// Escucha cambios de auth
 onAuthStateChanged(auth, (user) => {
+  const path = location.pathname
+  const isAuthPage = path.endsWith('/login.html') || path.endsWith('/register.html')
+
   if (user) {
+    if (isAuthPage) {
+      // si ya está logueado y entra a login/register, mandalo al home
+      window.location.replace('/')
+      return
+    }
     mountHeader(user)
     allowRender()
   } else {
-    // Si estoy en una página protegida, redirijo al login
-    if (!location.pathname.endsWith('/login.html')) {
+    if (!isAuthPage) {
       window.location.replace('/login.html')
-    } else {
-      // en la página de login sí permitimos renderizar
-      allowRender()
+      return
     }
+    allowRender() // en login/register sí mostramos
   }
 })

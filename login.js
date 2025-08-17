@@ -26,7 +26,7 @@ form.addEventListener('submit', async (event) => {
     const email = emailInput.value.trim()
     const password = passwordInput.value
     const cred = await signInWithEmailAndPassword(auth, email, password)
-    window.location.href = 'index.html'
+    window.location.replace('/')
     // acá puedes redirigir si quieres
     // location.href = '/index.html'
   } catch (error) {
