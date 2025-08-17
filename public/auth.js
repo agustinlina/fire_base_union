@@ -1,100 +1,68 @@
-// public/auth.js
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
-import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp, getDoc } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
-// ---------- CONFIG ----------
-const firebaseConfig = {
-  apiKey: 'AIzaSyAe42aV5wu28NddRCxFL1dz5xps-04XxMk',
-  authDomain: 'union-user-live.firebaseapp.com',
-  projectId: 'union-user-live',
-  storageBucket: 'union-user-live.appspot.com',
-  messagingSenderId: '279782141524',
-  appId: '1:279782141524:web:f7579e44b2848d990e87c1'
-}
-
+const firebaseConfig = { /* igual al de arriba */ }
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const db = getFirestore(app)
 
-let unsubSessionDoc = null
+function allowRender(){ document.documentElement.classList.remove('auth-pending') }
+function isAuthPage(){ const p = location.pathname; return p.endsWith('/login.html') || p.endsWith('/register.html') }
 
-function allowRender () {
-  document.documentElement.classList.remove('auth-pending')
-}
-function isAuthPage () {
-  const p = location.pathname
-  return p.endsWith('/login.html') || p.endsWith('/register.html')
-}
-
-function mountHeader (user) {
+function mountHeader(user){
   const header = document.getElementById('auth-header')
   if (!header) return
   header.innerHTML = `
-    <div class="d-flex justify-content-between align-items-center p-2 bg-dark text-light" style="gap:12px;">
-      <span class="small m-0">Hola, <b>${user.email}</b></span>
+    <div class="d-flex justify-content-between align-items-center p-2 bg-dark text-light">
+      <span>Hola, <b>${user.email}</b></span>
       <button id="logout" class="btn btn-sm btn-danger">Cerrar sesión</button>
-    </div>
-  `
-  document.getElementById('logout')?.addEventListener('click', async () => {
-    await safeReleaseAndSignOut()
-  })
+    </div>`
+  document.getElementById('logout')?.addEventListener('click', doLogout)
 }
 
-async function safeReleaseAndSignOut () {
+async function doLogout(){
   try {
     const user = auth.currentUser
-    const mySessionId = localStorage.getItem('sessionId') || ''
-    if (user && mySessionId) {
+    const sid = localStorage.getItem('sessionId') || ''
+    if (user && sid) {
       const ref = doc(db, 'userSessions', user.uid)
       const snap = await getDoc(ref)
       const data = snap.data() || {}
-      // Solo libero si sigo siendo yo el dueño del lock
-      if (data.sessionId === mySessionId) {
-        await setDoc(ref, { active: false, updatedAt: serverTimestamp() }, { merge: true })
+      if (data.sessionId === sid) {
+        await setDoc(ref, { active:false, updatedAt: serverTimestamp() }, { merge:true })
       }
     }
-  } catch {}
-  try { await signOut(auth) } catch {}
-  localStorage.removeItem('sessionId')
-  window.location.replace('./login.html')
+  } finally {
+    localStorage.removeItem('sessionId')
+    try { await signOut(auth) } catch {}
+    window.location.replace('./login.html')
+  }
 }
 
-// Observación defensiva: si (por un bug) otra sesión tomara el lock, me cierro.
-// En el flujo normal NO debería ocurrir porque el segundo login queda bloqueado.
-function watchLock (user) {
-  const mySessionId = localStorage.getItem('sessionId') || ''
+// Defensivo: si (raro) el lock cambia a otro sessionId, cierro esta pestaña.
+let unsub = null
+function watchLock(user){
+  if (unsub) unsub()
+  const mySid = localStorage.getItem('sessionId') || ''
   const ref = doc(db, 'userSessions', user.uid)
-
-  if (unsubSessionDoc) unsubSessionDoc()
-  unsubSessionDoc = onSnapshot(ref, async (snap) => {
+  unsub = onSnapshot(ref, (snap)=>{
     if (!snap.exists()) return
-    const data = snap.data() || {}
-    const serverSessionId = data.sessionId || ''
-    const active = !!data.active
-
-    if (active && serverSessionId && serverSessionId !== mySessionId) {
-      // Otro tiene el lock → me voy
-      await safeReleaseAndSignOut()
+    const d = snap.data() || {}
+    if (d.active && d.sessionId && d.sessionId !== mySid) {
+      doLogout()
     }
   })
 }
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    if (isAuthPage()) {
-      window.location.replace('./')
-      return
-    }
+    if (isAuthPage()) { window.location.replace('./'); return }
     mountHeader(user)
     watchLock(user)
     allowRender()
   } else {
-    if (!isAuthPage()) {
-      window.location.replace('./login.html')
-      return
-    }
+    if (!isAuthPage()) { window.location.replace('./login.html'); return }
     allowRender()
   }
 })
-
