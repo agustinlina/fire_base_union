@@ -28,9 +28,6 @@ onAuthStateChanged(auth, (user) => {
   if (user) window.location.replace('./')
 })
 
-// Tiempo que consideramos una sesión "activa/fresca"
-const SESSION_TTL_MS = 2 * 60 * 1000 // 2 minutos
-
 function makeSessionId () {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
@@ -55,21 +52,18 @@ form.addEventListener('submit', async (e) => {
       const ref = doc(db, 'userSessions', uid)
       const snap = await tx.get(ref)
 
-      const now = Date.now()
       if (snap.exists()) {
         const data = snap.data() || {}
-        const updatedAt = data.updatedAt?.toMillis?.() || 0
-        const fresh = (now - updatedAt) < SESSION_TTL_MS
-        const active = !!data.active
         const serverSessionId = data.sessionId || ''
+        const active = !!data.active
 
-        // Si hay otra sesión activa y fresca distinta de la mía → BLOQUEAR
-        if (active && fresh && serverSessionId) {
+        // Si ya hay una sesión activa → BLOQUEAR
+        if (active && serverSessionId) {
           throw new Error('LOCK_HELD')
         }
       }
 
-      // Si no hay lock activo (o está vencido), tomarlo para mí
+      // Tomo el lock para mí
       tx.set(ref, {
         sessionId: mySessionId,
         active: true,
@@ -82,7 +76,6 @@ form.addEventListener('submit', async (e) => {
     window.location.replace('./')
   } catch (err) {
     if (err && err.message === 'LOCK_HELD') {
-      // Había alguien conectado → me deslogueo y muestro aviso
       try { await signOut(auth) } catch {}
       msg.textContent = 'Actualmente hay alguien conectado con ese usuario.'
     } else {
