@@ -1,11 +1,24 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
+import { getFirestore, doc, onSnapshot, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
-const firebaseConfig = { /* igual al de arriba */ }
+// 🔴 Reemplaza TODO este objeto por el snippet EXACTO de tu consola
+const firebaseConfig = {
+  apiKey: 'TU_API_KEY_EXACTA',
+  authDomain: 'union-user-live.firebaseapp.com',
+  projectId: 'union-user-live',
+  storageBucket: 'union-user-live.appspot.com',
+  messagingSenderId: '279782141524',
+  appId: '1:279782141524:web:f7579e44b2848d990e87c1'
+}
+
 const app = initializeApp(firebaseConfig)
+console.log('API KEY:', app.options.apiKey) // debe verse la key real
 const auth = getAuth(app)
 const db = getFirestore(app)
+
+// ... (tu mismo código de protección sin TTL, logout que libera lock, etc.)
+
 
 function allowRender(){ document.documentElement.classList.remove('auth-pending') }
 function isAuthPage(){ const p = location.pathname; return p.endsWith('/login.html') || p.endsWith('/register.html') }
