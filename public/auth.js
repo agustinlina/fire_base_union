@@ -1,10 +1,9 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js'
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js'
-import { getFirestore, doc, onSnapshot, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js'
 
-// 🔴 Reemplaza TODO este objeto por el snippet EXACTO de tu consola
 const firebaseConfig = {
-  apiKey: 'TU_API_KEY_EXACTA',
+  apiKey: 'AIzaSyAe42aV5wu28NddRCxFL1dz5xps-04XxMk',
   authDomain: 'union-user-live.firebaseapp.com',
   projectId: 'union-user-live',
   storageBucket: 'union-user-live.appspot.com',
@@ -13,12 +12,8 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
-console.log('API KEY:', app.options.apiKey) // debe verse la key real
 const auth = getAuth(app)
 const db = getFirestore(app)
-
-// ... (tu mismo código de protección sin TTL, logout que libera lock, etc.)
-
 
 function allowRender(){ document.documentElement.classList.remove('auth-pending') }
 function isAuthPage(){ const p = location.pathname; return p.endsWith('/login.html') || p.endsWith('/register.html') }
@@ -43,7 +38,7 @@ async function doLogout(){
       const snap = await getDoc(ref)
       const data = snap.data() || {}
       if (data.sessionId === sid) {
-        await setDoc(ref, { active:false, updatedAt: serverTimestamp() }, { merge:true })
+        await setDoc(ref, { active: false, updatedAt: serverTimestamp() }, { merge: true })
       }
     }
   } finally {
@@ -53,7 +48,7 @@ async function doLogout(){
   }
 }
 
-// Defensivo: si (raro) el lock cambia a otro sessionId, cierro esta pestaña.
+// Defensivo: si (raro) el lock pasa a otro sessionId activo, cierro esta pestaña
 let unsub = null
 function watchLock(user){
   if (unsub) unsub()
