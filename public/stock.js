@@ -161,11 +161,21 @@ function renderTable (data) {
     const tr = document.createElement('tr')
 
     const codigoDisplay = primaryCode(item.codigo)
+    const precioFmt = formatPrecio(item.precio)
+
+    // Texto que se copiará: "CODIGO DESCRIPCION PRECIO"
+    const copyText = [codigoDisplay, item.descripcion || '', precioFmt]
+      .filter(Boolean)
+      .join(' ')
+      .trim()
+
     const buttonHTML = `
       <button 
         class="copy-btn" 
-        title="Copiar código: ${codigoDisplay}" 
-        data-codigo="${codigoDisplay}"
+        title="Copiar: ${copyText.replace(/"/g, '&quot;')}" 
+        data-code="${(codigoDisplay || '').replace(/"/g, '&quot;')}"
+        data-desc="${((item.descripcion || '')).replace(/"/g, '&quot;')}"
+        data-precio="${(precioFmt || '').replace(/"/g, '&quot;')}"
         style="background:none;border:none;cursor:pointer;padding:0;">
         <img width="18px" src="./media/content-copy.svg" alt="Copiar">
       </button>
@@ -175,18 +185,24 @@ function renderTable (data) {
       <td>${buttonHTML} ${item.descripcion || ''}</td>
       <td>${item.rubro || ''}</td>
       <td>${item.stock ?? ''}</td>
-      <td style="white-space: nowrap;">${formatPrecio(item.precio)}</td>
+      <td style="white-space: nowrap;">${precioFmt}</td>
     `
 
     tableBody.appendChild(tr)
   })
 
+  // Copia: código + descripción + precio (todo junto)
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const codigo = btn.getAttribute('data-codigo')
+      const payload = [
+        btn.dataset.code || '',
+        btn.dataset.desc || '',
+        btn.dataset.precio || ''
+      ].filter(Boolean).join(' ').trim()
+
       navigator.clipboard
-        .writeText(codigo)
-        .then(() => console.log(`Código ${codigo} copiado al portapapeles`))
+        .writeText(payload)
+        .then(() => console.log(`Copiado: ${payload}`))
         .catch(err => console.error('Error al copiar:', err))
     })
   })
@@ -244,8 +260,7 @@ function mergeStocksSum (arrA, arrB) {
       curr.stock = parseStock(curr.stock) + stockNum
       if (!curr.descripcion && it.descripcion) curr.descripcion = it.descripcion
       if (!curr.rubro && it.rubro) curr.rubro = it.rubro
-      // mantener el "codigo" visible como el primer código original
-      // (sin cambios)
+      // mantenemos el "codigo" visible como el primer código original
     }
   }
 

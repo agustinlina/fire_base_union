@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./css/union_style.css">
   <link rel="shortcut icon" href="./media/icon.png" type="image/x-icon">
   <link rel="stylesheet" href="./css/stock.css">
-<script type="module" src="./auth.js"></script>
+  <script type="module" src="./auth.js"></script>
   <style>
     html.auth-pending body {
       display: none;
@@ -76,11 +76,13 @@
       <button class="filtro-btn" id="filtro-camion">Camión</button>
       <button class="filtro-btn" id="filtro-auto">Auto importado</button>
       <button class="filtro-btn" id="filtro-todos">Todos</button>
-      <br>
-      <h3>Busca cubiertas por medida o código</h3>
-      <input type="text" class="buscador" id="buscador" placeholder="🔎 Buscar por código o descripción...">
     </div>
-
+    <br><br><br>
+    <h3>Busca cubiertas por medida o código</h3>
+    <input type="text" class="buscador" id="buscador" placeholder="🔎 Buscar por código o descripción...">
+    <div class="d-flex gap-3">Presiona <img src="./media/content-copy.svg" alt=""> para copiar la descripción de la
+      cubierta</div>
+      <br>
     <table id="stock-table">
       <thead>
         <tr>
