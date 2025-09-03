@@ -151,6 +151,19 @@ function parseStock (s) {
   return Number.isFinite(n) ? n : 0
 }
 
+// ---------- Mini alerta "Copiado" ----------
+let __copyToastTimer = null
+function showCopied (text = 'Copiado') {
+  const toast = document.getElementById('copy-toast')
+  if (!toast) return
+  toast.textContent = text
+  toast.classList.add('show')
+  clearTimeout(__copyToastTimer)
+  __copyToastTimer = setTimeout(() => {
+    toast.classList.remove('show')
+  }, 1200)
+}
+
 // -------------------- Render --------------------
 
 function renderTable (data) {
@@ -177,7 +190,7 @@ function renderTable (data) {
         data-desc="${((item.descripcion || '')).replace(/"/g, '&quot;')}"
         data-precio="${(precioFmt || '').replace(/"/g, '&quot;')}"
         style="background:none;border:none;cursor:pointer;padding:0;">
-        <img width="18px" src="./media/content-copy.svg" alt="Copiar">
+        <img width="18" height="18" src="./media/content-copy.svg" alt="Copiar">
       </button>
     `
 
@@ -193,17 +206,33 @@ function renderTable (data) {
 
   // Copia: código + descripción + precio (todo junto)
   document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const payload = [
         btn.dataset.code || '',
         btn.dataset.desc || '',
         btn.dataset.precio || ''
       ].filter(Boolean).join(' ').trim()
 
-      navigator.clipboard
-        .writeText(payload)
-        .then(() => console.log(`Copiado: ${payload}`))
-        .catch(err => console.error('Error al copiar:', err))
+      try {
+        await navigator.clipboard.writeText(payload)
+        showCopied('Copiado')
+      } catch (err) {
+        // Fallback básico para navegadores viejos
+        try {
+          const ta = document.createElement('textarea')
+          ta.value = payload
+          ta.style.position = 'fixed'
+          ta.style.opacity = '0'
+          document.body.appendChild(ta)
+          ta.select()
+          document.execCommand('copy')
+          document.body.removeChild(ta)
+          showCopied('Copiado')
+        } catch (e) {
+          showCopied('No se pudo copiar')
+          console.error('Error al copiar:', err)
+        }
+      }
     })
   })
 }
