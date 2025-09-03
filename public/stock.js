@@ -175,6 +175,8 @@ function renderTable (data) {
 
     const codigoDisplay = primaryCode(item.codigo)
     const precioFmt = formatPrecio(item.precio)
+    const stockNum = parseStock(item.stock)
+    const stockDisplay = stockNum > 100 ? 100 : stockNum  // <<< TOPE VISUAL A 100
 
     // Texto que se copiará: "CODIGO DESCRIPCION PRECIO"
     const copyText = [codigoDisplay, item.descripcion || '', precioFmt]
@@ -197,7 +199,7 @@ function renderTable (data) {
     tr.innerHTML = `
       <td>${buttonHTML} ${item.descripcion || ''}</td>
       <td>${item.rubro || ''}</td>
-      <td>${item.stock ?? ''}</td>
+      <td>${stockDisplay}</td>
       <td style="white-space: nowrap;">${precioFmt}</td>
     `
 
