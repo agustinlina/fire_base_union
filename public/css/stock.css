@@ -161,20 +161,20 @@ a:hover {
 }
 
 /* Estilo para la barra buscadora */
-.buscador {
+#buscador {
   width: 100%;
   padding: 10px 16px;
   background-color: #161616;
-  border: 1.5px solid var(--border-color);
+  border: 1.5px solid none;
   color: var(--fg-color);
   border-radius: 8px;
   margin: 0 auto 18px auto;
   font-size: 1em;
 }
 
-.buscador:focus {
+#buscador:focus {
   outline: none;
-  border-color: white;
+   outline: 2px solid rgb(60, 146, 231);
 }
 
 /* Contenedor de los controles (filtros y buscador juntos) */
@@ -215,6 +215,8 @@ a:hover {
   font-size: 1.15em;
   color: #757575;
 }
+
+
 
 .copy-btn:hover,
 .copy-btn:active {
@@ -258,16 +260,13 @@ td {
   background-color: #16245a;
 }
 
-th {
-  background-color: #16245a !important;
-  text-align: left;
-  font-weight: 400;
-  color: var(--accent-color);
+.titulos tr{
+  border: 1px solid rgb(24, 77, 129);
 }
 
 tbody tr {
   border-bottom: 1px solid var(--secondary);
-  border: 1px solid var(--secondary);
+  border:0.5px solid var(--secondary);
 }
 
 tbody tr:nth-child(even) {
