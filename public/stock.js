@@ -56,37 +56,63 @@ function primaryCode (raw) {
 
 /**
  * Variantes equivalentes para un único código.
- * Cubre: quitar separadores, T#### ↔ ####, letra+num → num, y normaliza ceros.
+ * - Quita separadores
+ * - T#### ↔ ####
+ * - Letra+num → num
+ * - Normaliza ceros
+ * - ***Sufijo "COPIA" se trata como el homónimo sin "COPIA"*** (F51COPIA → F51 → 51 / T51)
+ * - ***Prefijo "LANDE" se trata como el homónimo sin "LANDE"*** (LANDE17525L2 → 17525L2 → T.../num)
  */
 function codeKeysOne (raw) {
-  const c = clean(raw)
-  const keys = new Set([c])
+  const keys = new Set()
 
-  const noSep = c.replace(/[\s\-_.]/g, '')
-  if (noSep !== c) keys.add(noSep)
+  // Agrega variantes a partir de un string base (con y sin separadores)
+  function addVariants (base) {
+    const c = clean(base)
+    if (!c) return
 
-  // T + dígitos
-  let m = /^T(\d+)$/.exec(c)
-  if (m) {
-    const num = (m[1] || '').replace(/^0+/, '') || '0'
-    keys.add(num)
-    keys.add('T' + num)
-    return Array.from(keys)
-  }
+    // 1) Original y sin separadores
+    keys.add(c)
+    const noSep = c.replace(/[\s\-_.]/g, '')
+    keys.add(noSep)
 
-  // Letra + dígitos
-  m = /^([A-Z])(\d+)$/.exec(c)
-  if (m) {
-    const num = (m[2] || '').replace(/^0+/, '') || '0'
-    keys.add(num)
-  } else {
-    // Solo dígitos
-    m = /^(\d+)$/.exec(c)
+    // 2) Patrones T####, Letra+####, #### (usar noSep para robustez)
+    let m = /^T(\d+)$/.exec(noSep)
     if (m) {
       const num = (m[1] || '').replace(/^0+/, '') || '0'
       keys.add(num)
       keys.add('T' + num)
+      return
     }
+
+    m = /^([A-Z])(\d+)$/.exec(noSep)
+    if (m) {
+      const num = (m[2] || '').replace(/^0+/, '') || '0'
+      keys.add(num)
+    } else {
+      m = /^(\d+)$/.exec(noSep)
+      if (m) {
+        const num = (m[1] || '').replace(/^0+/, '') || '0'
+        keys.add(num)
+        keys.add('T' + num)
+      }
+    }
+  }
+
+  // a) Variantes del código tal cual
+  addVariants(raw)
+
+  // b) Si termina en "COPIA" (con/sin separadores), generar variantes del homónimo sin "COPIA"
+  const noSepRaw = clean(raw).replace(/[\s\-_.]/g, '')
+  if (noSepRaw.endsWith('COPIA')) {
+    const baseNoSep = noSepRaw.slice(0, -5) // quita "COPIA"
+    addVariants(baseNoSep)
+  }
+
+  // c) Si empieza con "LANDE" (con/sin separadores), generar variantes del homónimo sin "LANDE"
+  if (noSepRaw.startsWith('LANDE')) {
+    const baseNoSep2 = noSepRaw.slice(5) // quita "LANDE"
+    addVariants(baseNoSep2)
   }
 
   return Array.from(keys)
@@ -112,6 +138,7 @@ function codeKeys (raw) {
 }
 
 // Clave canónica de un item para fusionar (la primera variante del primer código)
+// *No* alteramos merge por "COPIA"/"LANDE": la regla es solo de precios.
 function canonicalKey (raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
@@ -331,6 +358,7 @@ async function cargarDatos (stock) {
     const priceMap = new Map()
     ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
       const precio = p?.precio ?? null
+      // IMPORTANTE: codeKeysOne ahora también genera variantes sin "COPIA" y sin "LANDE"
       codeKeysOne(p?.codigo).forEach(k => {
         if (!priceMap.has(k)) priceMap.set(k, precio)
       })
