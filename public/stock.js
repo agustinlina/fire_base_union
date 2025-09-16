@@ -60,13 +60,12 @@ function primaryCode (raw) {
  * - T#### ↔ ####
  * - Letra+num → num
  * - Normaliza ceros
- * - ***Sufijo "COPIA" se trata como el homónimo sin "COPIA"*** (F51COPIA → F51 → 51 / T51)
- * - ***Prefijo "LANDE" se trata como el homónimo sin "LANDE"*** (LANDE17525L2 → 17525L2 → T.../num)
+ * - Sufijo "COPIA" se trata como el homónimo sin "COPIA" (F51COPIA → F51 → 51 / T51)
+ * - Prefijo "LANDE" se trata como el homónimo sin "LANDE" (LANDE17525L2 → 17525L2 → T.../num)
  */
 function codeKeysOne (raw) {
   const keys = new Set()
 
-  // Agrega variantes a partir de un string base (con y sin separadores)
   function addVariants (base) {
     const c = clean(base)
     if (!c) return
@@ -76,7 +75,7 @@ function codeKeysOne (raw) {
     const noSep = c.replace(/[\s\-_.]/g, '')
     keys.add(noSep)
 
-    // 2) Patrones T####, Letra+####, #### (usar noSep para robustez)
+    // 2) Patrones T####, Letra+####, ####
     let m = /^T(\d+)$/.exec(noSep)
     if (m) {
       const num = (m[1] || '').replace(/^0+/, '') || '0'
@@ -102,16 +101,16 @@ function codeKeysOne (raw) {
   // a) Variantes del código tal cual
   addVariants(raw)
 
-  // b) Si termina en "COPIA" (con/sin separadores), generar variantes del homónimo sin "COPIA"
+  // b) Quitar "COPIA"
   const noSepRaw = clean(raw).replace(/[\s\-_.]/g, '')
   if (noSepRaw.endsWith('COPIA')) {
-    const baseNoSep = noSepRaw.slice(0, -5) // quita "COPIA"
+    const baseNoSep = noSepRaw.slice(0, -5)
     addVariants(baseNoSep)
   }
 
-  // c) Si empieza con "LANDE" (con/sin separadores), generar variantes del homónimo sin "LANDE"
+  // c) Quitar "LANDE"
   if (noSepRaw.startsWith('LANDE')) {
-    const baseNoSep2 = noSepRaw.slice(5) // quita "LANDE"
+    const baseNoSep2 = noSepRaw.slice(5)
     addVariants(baseNoSep2)
   }
 
@@ -120,7 +119,6 @@ function codeKeysOne (raw) {
 
 /**
  * Claves en orden de prioridad para un campo "F42 / F68".
- * Primero F42 (con sus variantes), luego F68, etc.
  */
 function codeKeys (raw) {
   const parts = splitCandidates(raw)
@@ -137,8 +135,7 @@ function codeKeys (raw) {
   return out
 }
 
-// Clave canónica de un item para fusionar (la primera variante del primer código)
-// *No* alteramos merge por "COPIA"/"LANDE": la regla es solo de precios.
+// Clave canónica para merge
 function canonicalKey (raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
@@ -191,11 +188,27 @@ function showCopied (text = 'Copiado') {
   }, 1200)
 }
 
+// ---------- Placeholder en la tabla ----------
+function renderPlaceholder (message = 'Escribí para buscar') {
+  tableBody.innerHTML = `
+    <tr class="placeholder-row">
+      <td colspan="4" style="text-align:center; opacity:.7; padding:16px;">
+        ${message}
+      </td>
+    </tr>
+  `
+}
+
 // -------------------- Render --------------------
 
 function renderTable (data) {
   tableBody.innerHTML = ''
-  if (!data || data.length === 0) return
+
+  // Si no hay datos, mostrar “Sin resultados”
+  if (!data || data.length === 0) {
+    renderPlaceholder('Sin resultados. Refiná tu búsqueda.')
+    return
+  }
 
   data.forEach(item => {
     const tr = document.createElement('tr')
@@ -203,9 +216,9 @@ function renderTable (data) {
     const codigoDisplay = primaryCode(item.codigo)
     const precioFmt = formatPrecio(item.precio)
     const stockNum = parseStock(item.stock)
-    const stockDisplay = stockNum > 100 ? 100 : stockNum  // <<< TOPE VISUAL A 100
+    const stockDisplay = stockNum > 100 ? 100 : stockNum  // TOPE VISUAL A 100
 
-    // Texto que se copiará: "CODIGO DESCRIPCION PRECIO"
+    // Texto a copiar: CODIGO DESCRIPCION PRECIO
     const copyText = [codigoDisplay, item.descripcion || '', precioFmt]
       .filter(Boolean)
       .join(' ')
@@ -233,7 +246,7 @@ function renderTable (data) {
     tableBody.appendChild(tr)
   })
 
-  // Copia: código + descripción + precio (todo junto)
+  // Copia al portapapeles
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const payload = [
@@ -246,7 +259,7 @@ function renderTable (data) {
         await navigator.clipboard.writeText(payload)
         showCopied('Copiado')
       } catch (err) {
-        // Fallback básico para navegadores viejos
+        // Fallback
         try {
           const ta = document.createElement('textarea')
           ta.value = payload
@@ -274,10 +287,11 @@ function setActiveBtn (btn) {
 }
 
 function aplicarFiltros () {
-  // Si el buscador está vacío, NO mostramos nada
   const valor = buscador.value.trim().toLowerCase()
+
+  // Si el buscador está vacío, mostramos placeholder
   if (!valor) {
-    renderTable([])
+    renderPlaceholder('Utiliza la barra de búsqueda para obtener algún resultado.')
     return
   }
 
@@ -311,14 +325,11 @@ function mergeStocksSum (arrA, arrB) {
     const stockNum = parseStock(it?.stock)
 
     if (!curr) {
-      // guardamos el primero que aparece
       map.set(key, { ...it, stock: stockNum })
     } else {
-      // sumamos stock y completamos descripciones vacías si hace falta
       curr.stock = parseStock(curr.stock) + stockNum
       if (!curr.descripcion && it.descripcion) curr.descripcion = it.descripcion
       if (!curr.rubro && it.rubro) curr.rubro = it.rubro
-      // mantenemos el "codigo" visible como el primer código original
     }
   }
 
@@ -348,23 +359,22 @@ async function cargarDatos (stock) {
       ])
       dataStock = mergeStocksSum(dataCba, dataPolo)
     } else {
-      // 2) Cualquier otro depósito: tal cual
+      // 2) Otros depósitos: tal cual
       dataStock = await fetch(ENDPOINTS[stock]).then(r => r.json())
     }
 
     const dataPrices = await pricesPromise
 
-    // 3) Construir mapa de precios por variantes
+    // 3) Mapa de precios por variantes
     const priceMap = new Map()
     ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
       const precio = p?.precio ?? null
-      // IMPORTANTE: codeKeysOne ahora también genera variantes sin "COPIA" y sin "LANDE"
       codeKeysOne(p?.codigo).forEach(k => {
         if (!priceMap.has(k)) priceMap.set(k, precio)
       })
     })
 
-    // 4) Merge de precios por orden de prioridad de claves
+    // 4) Merge de precios por prioridad de claves
     allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
       const keys = codeKeys(item?.codigo)
       let precio = null
@@ -378,12 +388,12 @@ async function cargarDatos (stock) {
     })
 
     loading.style.display = 'none'
-    aplicarFiltros() // solo muestra si hay búsqueda
+    aplicarFiltros() // mostrará placeholder si el buscador está vacío
   } catch (err) {
     console.error('Error al cargar datos:', err)
     loading.style.display = 'none'
     error.textContent = 'Error al cargar datos'
-    renderTable([]) // asegurar tabla vacía en error
+    renderPlaceholder('No pudimos cargar los datos.')
   }
 }
 
@@ -417,6 +427,7 @@ stockSelect.addEventListener('change', e => {
 // Inicial
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
-  renderTable([])     // tabla vacía de entrada
+  // Mensaje de bienvenida en la tabla
+  renderPlaceholder('Buscá "cubiertitis" para ver resultados')
   cargarDatos(stockActual)
 })
