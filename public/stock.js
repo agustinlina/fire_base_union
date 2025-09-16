@@ -20,13 +20,14 @@ const filtroCamion = document.getElementById('filtro-camion')
 const filtroAuto = document.getElementById('filtro-auto')
 const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
+const pinnedBar = document.getElementById('pinned-bar')
+
 const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 
 let allData = []
 let stockActual = 'cordoba'
 
-// -------------------- Utilidades --------------------
-
+// ====== Helpers generales ======
 function normalizar (str) {
   return (str || '')
     .toLowerCase()
@@ -34,12 +35,11 @@ function normalizar (str) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '')
 }
-
 function clean (str) {
-  return String(str || '').trim().toUpperCase()
+  return String(str || '')
+    .trim()
+    .toUpperCase()
 }
-
-// Divide "A/B/C" en ["A","B","C"]
 function splitCandidates (raw) {
   if (!raw) return []
   return String(raw)
@@ -47,35 +47,19 @@ function splitCandidates (raw) {
     .map(s => clean(s))
     .filter(Boolean)
 }
-
-// Primer código visible/copiable
 function primaryCode (raw) {
   const parts = splitCandidates(raw)
   return parts[0] || ''
 }
-
-/**
- * Variantes equivalentes para un único código.
- * - Quita separadores
- * - T#### ↔ ####
- * - Letra+num → num
- * - Normaliza ceros
- * - Sufijo "COPIA" se trata como el homónimo sin "COPIA" (F51COPIA → F51 → 51 / T51)
- * - Prefijo "LANDE" se trata como el homónimo sin "LANDE" (LANDE17525L2 → 17525L2 → T.../num)
- */
 function codeKeysOne (raw) {
   const keys = new Set()
-
   function addVariants (base) {
     const c = clean(base)
     if (!c) return
-
-    // 1) Original y sin separadores
     keys.add(c)
     const noSep = c.replace(/[\s\-_.]/g, '')
     keys.add(noSep)
 
-    // 2) Patrones T####, Letra+####, ####
     let m = /^T(\d+)$/.exec(noSep)
     if (m) {
       const num = (m[1] || '').replace(/^0+/, '') || '0'
@@ -83,7 +67,6 @@ function codeKeysOne (raw) {
       keys.add('T' + num)
       return
     }
-
     m = /^([A-Z])(\d+)$/.exec(noSep)
     if (m) {
       const num = (m[2] || '').replace(/^0+/, '') || '0'
@@ -97,58 +80,40 @@ function codeKeysOne (raw) {
       }
     }
   }
-
-  // a) Variantes del código tal cual
   addVariants(raw)
-
-  // b) Quitar "COPIA"
   const noSepRaw = clean(raw).replace(/[\s\-_.]/g, '')
-  if (noSepRaw.endsWith('COPIA')) {
-    const baseNoSep = noSepRaw.slice(0, -5)
-    addVariants(baseNoSep)
-  }
-
-  // c) Quitar "LANDE"
-  if (noSepRaw.startsWith('LANDE')) {
-    const baseNoSep2 = noSepRaw.slice(5)
-    addVariants(baseNoSep2)
-  }
-
+  if (noSepRaw.endsWith('COPIA')) addVariants(noSepRaw.slice(0, -5))
+  if (noSepRaw.startsWith('LANDE')) addVariants(noSepRaw.slice(5))
   return Array.from(keys)
 }
-
-/**
- * Claves en orden de prioridad para un campo "F42 / F68".
- */
 function codeKeys (raw) {
   const parts = splitCandidates(raw)
   const out = []
   const seen = new Set()
   for (const p of parts) {
-    for (const k of codeKeysOne(p)) {
+    for (const k of codeKeysOne(p))
       if (!seen.has(k)) {
         seen.add(k)
         out.push(k)
       }
-    }
   }
   return out
 }
-
-// Clave canónica para merge
 function canonicalKey (raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
   return variants[0] || clean(p) || ''
 }
-
-function esCamionImportado (rubro) {
-  const normal = normalizar(rubro)
-  return normal === 'direccion' || normal === 'traccion'
+function cssEscape (s) {
+  if (window.CSS && CSS.escape) return CSS.escape(s)
+  return String(s).replace(/[^a-zA-Z0-9_\-]/g, ch => '\\' + ch)
 }
-
+function esCamionImportado (rubro) {
+  const n = normalizar(rubro)
+  return n === 'direccion' || n === 'traccion'
+}
 function esAutoImportado (rubro) {
-  const normal = normalizar(rubro)
+  const n = normalizar(rubro)
   const exactos = [
     'touringh7',
     'royalcomfort',
@@ -156,17 +121,14 @@ function esAutoImportado (rubro) {
     'royaleco',
     'transerenuseco'
   ]
-  if (exactos.includes(normal)) return true
-  return normal.startsWith('royal') || normal.startsWith('trans')
+  if (exactos.includes(n)) return true
+  return n.startsWith('royal') || n.startsWith('trans')
 }
-
 function formatPrecio (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n)))
     return ''
   return '$ ' + Number(n).toLocaleString('es-AR')
 }
-
-// Convierte campo stock a número seguro
 function parseStock (s) {
   if (s === null || s === undefined) return 0
   if (typeof s === 'number' && !Number.isNaN(s)) return s
@@ -174,8 +136,12 @@ function parseStock (s) {
   const n = Number(cleaned)
   return Number.isFinite(n) ? n : 0
 }
+function shorten (t, max = 36) {
+  const s = String(t || '').trim()
+  return s.length > max ? s.slice(0, max - 1) + '…' : s
+}
 
-// ---------- Mini alerta "Copiado" ----------
+// ====== Toast copiar ======
 let __copyToastTimer = null
 function showCopied (text = 'Copiado') {
   const toast = document.getElementById('copy-toast')
@@ -183,32 +149,97 @@ function showCopied (text = 'Copiado') {
   toast.textContent = text
   toast.classList.add('show')
   clearTimeout(__copyToastTimer)
-  __copyToastTimer = setTimeout(() => {
-    toast.classList.remove('show')
-  }, 1200)
+  __copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1200)
 }
 
-// ---------- Placeholder en la tabla ----------
+// ====== Placeholder en tabla ======
 function renderPlaceholder (message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
-      <td colspan="4" style="text-align:center; opacity:.7; padding:16px;">
-        ${message}
-      </td>
-    </tr>
-  `
+      <td colspan="5" style="text-align:center; opacity:.7; padding:16px;">${message}</td>
+    </tr>`
 }
 
-// -------------------- Render --------------------
+// ====== Anclados ======
+const pinned = new Map() // key -> { codigo, descripcion, precio, rubro, stock }
+function renderPinnedBar () {
+  if (!pinnedBar) return
+  if (pinned.size === 0) {
+    pinnedBar.classList.remove('show')
+    pinnedBar.innerHTML = ''
+    return
+  }
+  pinnedBar.classList.add('show')
+  pinnedBar.innerHTML = Array.from(pinned.values())
+    .map(it => {
+      const code = primaryCode(it.codigo)
+      const price = formatPrecio(it.precio)
+      const text = `${code} — ${shorten(it.descripcion, 42)}${
+        price ? ' · ' + price : ''
+      }`
+      return `
+      <div class="pin-chip" data-key="${it.__key}">
+        <span class="pin-icon">⚓</span>
+       
+        <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
+        ${
+          price
+            ? `<span class="pin-price" style="white-space: nowrap;!important">${price}</span>`
+            : ''
+        }
+        <button class="remove" title="Quitar" style="color:red;">×</button>
+      </div>`
+    })
+    .join('')
 
+  // listeners para quitar
+  pinnedBar.querySelectorAll('.pin-chip .remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.closest('.pin-chip')?.dataset?.key
+      if (!key) return
+      pinned.delete(key)
+      renderPinnedBar()
+      // actualizar estado de botones ⚓ en la tabla
+      document
+        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
+        .forEach(b => {
+          b.classList.remove('active')
+          b.setAttribute('aria-pressed', 'false')
+          b.title = 'Anclar'
+        })
+    })
+  })
+}
+
+function togglePin (item) {
+  const key = canonicalKey(item?.codigo)
+  if (!key) return
+  if (pinned.has(key)) {
+    pinned.delete(key)
+  } else {
+    pinned.set(key, { ...item, __key: key })
+  }
+  renderPinnedBar()
+  // reflejar en todos los botones de esa key
+  document
+    .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
+    .forEach(b => {
+      const on = pinned.has(key)
+      b.classList.toggle('active', on)
+      b.setAttribute('aria-pressed', on ? 'true' : 'false')
+      b.title = on ? 'Desanclar' : 'Anclar'
+    })
+}
+
+// ====== Render tabla ======
 function renderTable (data) {
   tableBody.innerHTML = ''
-
-  // Si no hay datos, mostrar “Sin resultados”
   if (!data || data.length === 0) {
     renderPlaceholder('Sin resultados. Refiná tu búsqueda.')
     return
   }
+
+  const rowItemByKey = new Map()
 
   data.forEach(item => {
     const tr = document.createElement('tr')
@@ -216,50 +247,58 @@ function renderTable (data) {
     const codigoDisplay = primaryCode(item.codigo)
     const precioFmt = formatPrecio(item.precio)
     const stockNum = parseStock(item.stock)
-    const stockDisplay = stockNum > 100 ? 100 : stockNum  // TOPE VISUAL A 100
+    const stockDisplay = stockNum > 100 ? 100 : stockNum
+    const key = canonicalKey(item.codigo)
 
-    // Texto a copiar: CODIGO DESCRIPCION PRECIO
+    // Texto a copiar
     const copyText = [codigoDisplay, item.descripcion || '', precioFmt]
       .filter(Boolean)
       .join(' ')
       .trim()
 
-    const buttonHTML = `
-      <button 
-        class="copy-btn" 
-        title="Copiar: ${copyText.replace(/"/g, '&quot;')}" 
-        data-code="${(codigoDisplay || '').replace(/"/g, '&quot;')}"
-        data-desc="${((item.descripcion || '')).replace(/"/g, '&quot;')}"
-        data-precio="${(precioFmt || '').replace(/"/g, '&quot;')}"
-        style="background:none;border:none;cursor:pointer;padding:0;">
+    const copyBtnHTML = `
+      <button class="copy-btn" 
+              title="Copiar: ${copyText.replace(/"/g, '&quot;')}" 
+              data-code="${(codigoDisplay || '').replace(/"/g, '&quot;')}"
+              data-desc="${(item.descripcion || '').replace(/"/g, '&quot;')}"
+              data-precio="${(precioFmt || '').replace(/"/g, '&quot;')}">
         <img width="18" height="18" src="./media/content-copy.svg" alt="Copiar">
-      </button>
-    `
+      </button>`
+
+    const anchorBtnHTML = `
+      <button class="anchor-btn ${pinned.has(key) ? 'active' : ''}" 
+              title="${pinned.has(key) ? 'Desanclar' : 'Anclar'}" 
+              aria-pressed="${pinned.has(key) ? 'true' : 'false'}"
+              data-key="${key}">⚓</button>`
 
     tr.innerHTML = `
-      <td>${buttonHTML} ${item.descripcion || ''}</td>
+      <td>${copyBtnHTML}${anchorBtnHTML}${item.descripcion || ''}</td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
       <td style="white-space: nowrap;">${precioFmt}</td>
+      
     `
-
     tableBody.appendChild(tr)
+
+    // guardar para toggle
+    rowItemByKey.set(key, { ...item })
   })
 
-  // Copia al portapapeles
+  // Copiar
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const payload = [
         btn.dataset.code || '',
         btn.dataset.desc || '',
         btn.dataset.precio || ''
-      ].filter(Boolean).join(' ').trim()
-
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .trim()
       try {
         await navigator.clipboard.writeText(payload)
         showCopied('Copiado')
       } catch (err) {
-        // Fallback
         try {
           const ta = document.createElement('textarea')
           ta.value = payload
@@ -277,95 +316,86 @@ function renderTable (data) {
       }
     })
   })
+
+  // Anclar
+  document.querySelectorAll('.anchor-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.key
+      const it = rowItemByKey.get(key)
+      if (!it) return
+      togglePin(it)
+    })
+  })
 }
 
-// -------------------- Filtros --------------------
-
+// ====== Filtros ======
 function setActiveBtn (btn) {
-  filtroBtns.forEach(b => b.classList.remove('active'))
+  filtroBtns.forEach(b => b && b.classList.remove('active'))
   if (btn) btn.classList.add('active')
 }
-
 function aplicarFiltros () {
   const valor = buscador.value.trim().toLowerCase()
-
-  // Si el buscador está vacío, mostramos placeholder
   if (!valor) {
-    renderPlaceholder('Utiliza la barra de búsqueda para obtener algún resultado.')
+    renderPlaceholder('Utiliza la barra de búsqueda para ver resultados')
     return
   }
 
   let datos = [...allData]
-
-  if (window.filtroActivo === 'camion') {
-    datos = datos.filter(item => esCamionImportado(item.rubro))
-  } else if (window.filtroActivo === 'auto') {
-    datos = datos.filter(item => esAutoImportado(item.rubro))
-  }
+  if (window.filtroActivo === 'camion')
+    datos = datos.filter(it => esCamionImportado(it.rubro))
+  else if (window.filtroActivo === 'auto')
+    datos = datos.filter(it => esAutoImportado(it.rubro))
 
   datos = datos.filter(
-    item =>
-      (item.codigo && String(item.codigo).toLowerCase().includes(valor)) ||
-      (item.descripcion && item.descripcion.toLowerCase().includes(valor))
+    it =>
+      (it.codigo && String(it.codigo).toLowerCase().includes(valor)) ||
+      (it.descripcion && it.descripcion.toLowerCase().includes(valor))
   )
-
   renderTable(datos)
 }
 
-// -------------------- Carga y Merge --------------------
-
-// Fusiona arrays de stock sumando "stock" cuando coinciden por canonicalKey
+// ====== Carga y merge ======
 function mergeStocksSum (arrA, arrB) {
   const map = new Map()
-
   function upsert (it) {
     const key = canonicalKey(it?.codigo)
     if (!key) return
     const curr = map.get(key)
     const stockNum = parseStock(it?.stock)
-
-    if (!curr) {
-      map.set(key, { ...it, stock: stockNum })
-    } else {
+    if (!curr) map.set(key, { ...it, stock: stockNum })
+    else {
       curr.stock = parseStock(curr.stock) + stockNum
       if (!curr.descripcion && it.descripcion) curr.descripcion = it.descripcion
       if (!curr.rubro && it.rubro) curr.rubro = it.rubro
     }
   }
-
   ;(Array.isArray(arrA) ? arrA : []).forEach(upsert)
   ;(Array.isArray(arrB) ? arrB : []).forEach(upsert)
-
   return Array.from(map.values())
 }
 
 async function cargarDatos (stock) {
-  loading.style.display = ''
-  error.textContent = ''
+  loading && (loading.style.display = '')
+  if (error) error.textContent = ''
   window.filtroActivo = null
   setActiveBtn(null)
 
   try {
-    // 1) Traer precios siempre
     const pricesPromise = fetch(PRICES_URL).then(r => r.json())
 
     let dataStock
-
     if (stock === 'cordoba') {
-      // 2) Córdoba unificado: Córdoba + Polo (sumando duplicados)
       const [dataCba, dataPolo] = await Promise.all([
         fetch(ENDPOINTS.cordoba).then(r => r.json()),
         fetch(ENDPOINTS.polo).then(r => r.json())
       ])
       dataStock = mergeStocksSum(dataCba, dataPolo)
     } else {
-      // 2) Otros depósitos: tal cual
       dataStock = await fetch(ENDPOINTS[stock]).then(r => r.json())
     }
 
     const dataPrices = await pricesPromise
 
-    // 3) Mapa de precios por variantes
     const priceMap = new Map()
     ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
       const precio = p?.precio ?? null
@@ -374,60 +404,57 @@ async function cargarDatos (stock) {
       })
     })
 
-    // 4) Merge de precios por prioridad de claves
     allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
       const keys = codeKeys(item?.codigo)
       let precio = null
-      for (const k of keys) {
+      for (const k of keys)
         if (priceMap.has(k)) {
           precio = priceMap.get(k)
           break
         }
-      }
       return { ...item, precio }
     })
 
-    loading.style.display = 'none'
-    aplicarFiltros() // mostrará placeholder si el buscador está vacío
+    if (loading) loading.style.display = 'none'
+    aplicarFiltros()
   } catch (err) {
     console.error('Error al cargar datos:', err)
-    loading.style.display = 'none'
-    error.textContent = 'Error al cargar datos'
+    if (loading) loading.style.display = 'none'
+    if (error) error.textContent = 'Error al cargar datos'
     renderPlaceholder('No pudimos cargar los datos.')
   }
 }
 
-// -------------------- Listeners --------------------
+// ====== Listeners ======
+buscador && buscador.addEventListener('input', aplicarFiltros)
+filtroCamion &&
+  filtroCamion.addEventListener('click', () => {
+    window.filtroActivo = 'camion'
+    setActiveBtn(filtroCamion)
+    aplicarFiltros()
+  })
+filtroAuto &&
+  filtroAuto.addEventListener('click', () => {
+    window.filtroActivo = 'auto'
+    setActiveBtn(filtroAuto)
+    aplicarFiltros()
+  })
+filtroTodos &&
+  filtroTodos.addEventListener('click', () => {
+    window.filtroActivo = null
+    setActiveBtn(filtroTodos)
+    aplicarFiltros()
+  })
+stockSelect &&
+  stockSelect.addEventListener('change', e => {
+    stockActual = e.target.value
+    cargarDatos(stockActual)
+  })
 
-buscador.addEventListener('input', aplicarFiltros)
-
-filtroCamion.addEventListener('click', () => {
-  window.filtroActivo = 'camion'
-  setActiveBtn(filtroCamion)
-  aplicarFiltros()
-})
-
-filtroAuto.addEventListener('click', () => {
-  window.filtroActivo = 'auto'
-  setActiveBtn(filtroAuto)
-  aplicarFiltros()
-})
-
-filtroTodos.addEventListener('click', () => {
-  window.filtroActivo = null
-  setActiveBtn(filtroTodos)
-  aplicarFiltros()
-})
-
-stockSelect.addEventListener('change', e => {
-  stockActual = e.target.value
-  cargarDatos(stockActual)
-})
-
-// Inicial
+// ====== Inicial ======
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
-  // Mensaje de bienvenida en la tabla
-  renderPlaceholder('Buscá "cubiertitis" para ver resultados')
+  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
+  renderPinnedBar()
   cargarDatos(stockActual)
 })

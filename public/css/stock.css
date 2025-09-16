@@ -13,9 +13,88 @@
   border-bottom: 2px solid var(--card);
 }
 
+/* Barra superior con los anclados */
+#pinned-bar {
+  display: none; /* se muestra solo si hay anclados */
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 8px 0 12px;
+}
+
+/* Si hay, se vuelve flex */
+#pinned-bar.show {
+  display: flex;
+}
+
+/* “Chips” de cubiertas ancladas */
+.pin-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(2px);
+  font-size: 0.9rem;
+ 
+}
+
+
+.pin-desc{
+    overflow-wrap: break-word;
+
+}
+.pin-chip .pin-code {
+  font-weight: 600;
+}
+.pin-chip .pin-desc {
+  opacity: 0.85;
+}
+.pin-chip .pin-price {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* Botón para quitar del anclado */
+.pin-chip .remove {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.7;
+}
+.pin-chip .remove:hover {
+  opacity: 1;
+}
+
+/* Botón ⚓ en la tabla */
+.anchor-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.8;
+  /* position: absolute; */
+}
+.anchor-btn:hover {
+  opacity: 1;
+}
+.anchor-btn.active {
+  transform: scale(1.05);
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+}
 
 html.auth-pending body {
   display: none;
+}
+
+.lupita_searchbar {
+  position: absolute;
+  transform: translate();
 }
 
 /* Mini alerta de copiado */
@@ -31,10 +110,10 @@ html.auth-pending body {
   border-radius: 999px;
   font-weight: 600;
   font-size: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .18s ease, transform .18s ease;
+  transition: opacity 0.18s ease, transform 0.18s ease;
   z-index: 9999;
 }
 
@@ -42,7 +121,6 @@ html.auth-pending body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-
 
 #header_auth button {
   background-color: transparent;
@@ -58,7 +136,6 @@ button:active {
   opacity: 0.5;
   transition: 100ms;
 }
-
 
 body {
   background-color: var(--background) !important;
@@ -174,7 +251,7 @@ a:hover {
 
 #buscador:focus {
   outline: none;
-   outline: 2px solid rgb(60, 146, 231);
+  outline: 2px solid rgb(60, 146, 231);
 }
 
 /* Contenedor de los controles (filtros y buscador juntos) */
@@ -216,7 +293,10 @@ a:hover {
   color: #757575;
 }
 
-
+.copy-btn{
+  background-color: transparent;
+  border: none!important;
+}
 
 .copy-btn:hover,
 .copy-btn:active {
@@ -246,7 +326,6 @@ a:hover {
   }
 }
 
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -260,13 +339,13 @@ td {
   background-color: #16245a;
 }
 
-.titulos tr{
+.titulos tr {
   border: 1px solid rgb(24, 77, 129);
 }
 
 tbody tr {
   border-bottom: 1px solid var(--secondary);
-  border:0.5px solid var(--secondary);
+  border: 0.5px solid var(--secondary);
 }
 
 tbody tr:nth-child(even) {
@@ -321,6 +400,5 @@ tbody tr:hover {
 
   table {
     font-size: 12px;
-
   }
 }

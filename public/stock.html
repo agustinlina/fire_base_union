@@ -51,7 +51,7 @@
 
   <div class="container d-flex flex-column align-items-center">
     <h3>Busca cubiertas por medida o código</h3>
-    <input type="text" class="buscador" id="buscador" placeholder="🔎 Prueba buscando ej: 175/70R13. . .">
+    <input type="text" class="buscador sticky-top" id="buscador" placeholder="🔎 Prueba buscando ej: 175/70R13. . .">
     <div class="controles_buscador">
       <span>Deposito:</span>
       <select style="background-color: #16245a;" id="stock-select" class="stock-select">
@@ -66,9 +66,14 @@
     </div>
     <div class="text-start">
       Presiona "<img src="./media/content-copy.svg" alt="">" para copiar la descripción de la cubierta
+      <br><br>
+      Presiona "⚓" para anclar una cubierta
+    </div>
+    <!-- Barra de anclados -->
+    <div class="container p-0 m-0">
+      <div id="pinned-bar" aria-live="polite"></div>
     </div>
     <br>
-
     <table id="stock-table">
       <thead class="titulos">
         <tr>
