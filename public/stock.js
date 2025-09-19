@@ -16,6 +16,7 @@ const tableBody = document.querySelector('#stock-table tbody')
 const loading = document.getElementById('loading')
 const error = document.getElementById('error')
 const buscador = document.getElementById('buscador')
+const clearBuscador = document.getElementById('clear-buscador') // NUEVO
 const filtroCamion = document.getElementById('filtro-camion')
 const filtroAuto = document.getElementById('filtro-auto')
 const filtroTodos = document.getElementById('filtro-todos')
@@ -561,7 +562,25 @@ async function cargarDatos (stock) {
 }
 
 // ====== Listeners ======
-buscador && buscador.addEventListener('input', aplicarFiltros)
+// Mostrar/ocultar botón X del buscador (NUEVO)
+function updateClearBtn () {
+  if (!clearBuscador) return
+  const has = (buscador?.value || '').length > 0
+  clearBuscador.style.display = has ? 'block' : 'none'
+}
+
+buscador && buscador.addEventListener('input', () => {
+  updateClearBtn()
+  aplicarFiltros()
+})
+
+clearBuscador && clearBuscador.addEventListener('click', () => {
+  buscador.value = ''
+  updateClearBtn()
+  aplicarFiltros()
+  buscador.focus()
+})
+
 filtroCamion &&
   filtroCamion.addEventListener('click', () => {
     window.filtroActivo = 'camion'
@@ -592,4 +611,5 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
   renderPinnedBar()
   cargarDatos(stockActual)
+  updateClearBtn() // inicializar visibilidad de la X
 })

@@ -51,7 +51,16 @@
 
   <div class="container d-flex flex-column align-items-center">
     <h3>Busca cubiertas por medida o código</h3>
-    <input type="text" class="buscador sticky-top" id="buscador" placeholder="🔎 Prueba buscando ej: 175/70R13. . .">
+    <div class="position-relative w-100">
+      <input type="text" class="buscador sticky-top pe-5" id="buscador"
+        placeholder="🔎 Prueba buscando ej: 175/70R13. . .">
+      <!-- Botón limpiar -->
+      <button id="clear-buscador" type="button" aria-label="Borrar búsqueda" style="z-index:9999;position:absolute; right:12px; top:38%; transform:translateY(-50%);
+           background:transparent; border:none; color:var(--text);
+           padding:0; line-height:1; font-size:18px; display:none; cursor:pointer;">
+        ×
+      </button>
+    </div>
     <div class="controles_buscador">
       <span>Deposito:</span>
       <select style="background-color: #16245a;" id="stock-select" class="stock-select">
@@ -65,10 +74,7 @@
       </div>
     </div>
     <div class="text-start">
-      Para copiar una cubierta solo haz click sobre su descripción, codigo o precio.
-      <br>
-      <br>
-      Presiona "⚓" para anclar una cubierta
+      Presiona " <img src="./media/3dots.png"> " para copiar o anclar una cubierta.
     </div>
     <!-- Barra de anclados -->
     <div class="container p-0 m-0">
