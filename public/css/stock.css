@@ -146,6 +146,12 @@ body {
   color: var(--fg-color);
 }
 
+.lupita{
+  width: 40px;
+  position: absolute;
+  transform: translate(-8px,-54px);
+  z-index: 99999;
+}
 .controls_buscador {
   display: flex;
   width: fit-content;
@@ -238,7 +244,7 @@ a:hover {
 /* Estilo para la barra buscadora */
 #buscador {
   width: 100%;
-  padding: 10px 16px;
+  padding: 12px 40px;
   background-color: #161616;
   border: 1.5px solid none;
   color: var(--fg-color);
