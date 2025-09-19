@@ -244,6 +244,125 @@ function togglePin (item) {
     })
 }
 
+// ====== Mini-menú / Modal responsive (popover en desktop, modal centrada en phone) ======
+let anchorMenuOverlay = null
+let anchorMenuPanel = null
+
+function ensureAnchorMenu () {
+  if (anchorMenuOverlay && anchorMenuPanel) return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
+
+  // Overlay
+  const overlay = document.createElement('div')
+  overlay.id = 'anchor-menu-overlay'
+  overlay.style.position = 'fixed'
+  overlay.style.inset = '0'
+  overlay.style.display = 'none'
+  overlay.style.zIndex = '10000'
+  overlay.style.background = 'transparent' // en desktop será transparente; en phone, semi
+  overlay.style.alignItems = 'center'
+  overlay.style.justifyContent = 'center'
+
+  // Panel
+  const panel = document.createElement('div')
+  panel.id = 'anchor-menu-panel'
+  panel.style.minWidth = '180px'
+  panel.style.maxWidth = '92vw'
+  panel.style.background = 'var(--background)'
+  panel.style.border = '1px solid var(--card)'
+  panel.style.borderRadius = '12px'
+  panel.style.boxShadow = '0 10px 28px rgba(0,0,0,.45)'
+  panel.style.padding = '6px'
+  panel.style.display = 'flex'
+  panel.style.flexDirection = 'column'
+  panel.style.gap = '4px'
+
+  panel.innerHTML = `
+    <button data-action="copy" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">📋 Copiar cubierta</button>
+    <button data-action="pin"  style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">⚓ Anclar</button>
+  `
+
+  // Hover con --card
+  panel.addEventListener('mouseover', e => {
+    const b = e.target.closest('button')
+    if (b) b.style.background = 'var(--card)'
+  })
+  panel.addEventListener('mouseout', e => {
+    const b = e.target.closest('button')
+    if (b) b.style.background = 'transparent'
+  })
+
+  overlay.appendChild(panel)
+  document.body.appendChild(overlay)
+
+  // cerrar con click fuera o ESC
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) hideAnchorMenu()
+  })
+  window.addEventListener('keydown', e => {
+    if (overlay.style.display === 'flex' && e.key === 'Escape') hideAnchorMenu()
+  })
+
+  anchorMenuOverlay = overlay
+  anchorMenuPanel = panel
+  return { overlay, panel }
+}
+
+function showAnchorMenu (btn, { item, copyText }) {
+  const { overlay, panel } = ensureAnchorMenu()
+  const key = canonicalKey(item.codigo)
+  overlay.dataset.key = key
+  overlay.dataset.copy = copyText
+
+  // label dinámico pin
+  const isPinned = pinned.has(key)
+  const pinBtn = panel.querySelector('[data-action="pin"]')
+  pinBtn.textContent = isPinned ? '✖ Desanclar' : '⚓ Anclar'
+
+  // Decide layout: phone (≤ 640) => modal centrada; desktop => popover cerca del botón
+  const isPhone = window.innerWidth <= 640
+
+  if (isPhone) {
+    // Modal centrada
+    overlay.style.background = 'rgba(0,0,0,.45)'
+    overlay.style.display = 'flex'
+    panel.style.position = 'static'
+    panel.style.transform = 'none'
+  } else {
+    // Popover anclado al botón
+    overlay.style.background = 'transparent'
+    overlay.style.display = 'block' // solo para “contener” el panel y cerrar al click fuera
+    const r = btn.getBoundingClientRect()
+    const margin = 6
+    panel.style.position = 'fixed'
+    panel.style.left = Math.min(window.innerWidth - panel.offsetWidth - 8, Math.max(8, r.left)) + 'px'
+    panel.style.top = (r.bottom + margin) + 'px'
+    panel.style.transform = 'none'
+  }
+
+  // manejar acciones
+  panel.onclick = e => {
+    const actionBtn = e.target.closest('button[data-action]')
+    if (!actionBtn) return
+    const action = actionBtn.dataset.action
+    const key = overlay.dataset.key
+    const copy = overlay.dataset.copy || ''
+    hideAnchorMenu()
+    if (action === 'copy') {
+      writeToClipboard(copy)
+      return
+    }
+    if (action === 'pin') {
+      const it = (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) || item
+      togglePin(it)
+    }
+  }
+}
+
+function hideAnchorMenu () {
+  if (!anchorMenuOverlay) return
+  anchorMenuOverlay.style.display = 'none'
+}
+
 // ====== Render tabla ======
 function renderTable (data) {
   tableBody.innerHTML = ''
@@ -256,8 +375,8 @@ function renderTable (data) {
 
   data.forEach(item => {
     const tr = document.createElement('tr')
-    tr.classList.add('copy-row')         // para estilos y señal de copiable
-    tr.tabIndex = 0                      // foco accesible con teclado
+    tr.classList.add('copy-row')
+    tr.tabIndex = 0
 
     const codigoDisplay = primaryCode(item.codigo)
     const precioFmt = formatPrecio(item.precio)
@@ -265,13 +384,9 @@ function renderTable (data) {
     const stockDisplay = stockNum > 100 ? 100 : stockNum
     const key = canonicalKey(item.codigo)
 
-    // Texto a copiar al clickear la fila
     const copyText = [codigoDisplay, item.descripcion || '', precioFmt]
-      .filter(Boolean)
-      .join(' ')
-      .trim()
+      .filter(Boolean).join(' ').trim()
 
-    // guardo payload en dataset de la fila
     tr.dataset.copy = copyText
     tr.dataset.key = key
 
@@ -279,21 +394,19 @@ function renderTable (data) {
       <button class="anchor-btn ${pinned.has(key) ? 'active' : ''}" 
               title="${pinned.has(key) ? 'Desanclar' : 'Anclar'}" 
               aria-pressed="${pinned.has(key) ? 'true' : 'false'}"
-              data-key="${key}">⚓</button>`
+              data-key="${key}"><img src="./media/3dots.png"></button>`
 
     tr.innerHTML = `
-      <td>${anchorBtnHTML}${item.descripcion || ''}</td>
+      <td>${item.descripcion || ''}</td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
-      <td style="white-space: nowrap;">${precioFmt}</td>
+      <td style="white-space: nowrap;">${precioFmt}${anchorBtnHTML}</td>
     `
     tableBody.appendChild(tr)
 
-    // guardar para toggle
     rowItemByKey.set(key, { ...item })
   })
 
-  // Delegación: clicks y teclado en la tabla
   if (!tableBody.__delegated) {
     tableBody.__delegated = true
 
@@ -303,10 +416,12 @@ function renderTable (data) {
       if (anchorBtn) {
         e.stopPropagation()
         const k = anchorBtn.dataset.key
+        const row = anchorBtn.closest('tr')
+        const copyText = row?.dataset?.copy || ''
         const it =
           (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
-          { codigo: k, descripcion: anchorBtn.closest('tr')?.querySelector('td')?.innerText || '', precio: null }
-        togglePin(it)
+          { codigo: k, descripcion: row?.querySelector('td')?.innerText || '', precio: null }
+        showAnchorMenu(anchorBtn, { item: it, copyText })
         return
       }
 
@@ -317,7 +432,7 @@ function renderTable (data) {
       tr.focus?.()
     })
 
-    // Teclado (Enter o Espacio)
+    // Teclado (Enter o Espacio) = copiar; M = abrir menú
     tableBody.addEventListener('keydown', e => {
       const tr = e.target.closest('tr.copy-row')
       if (!tr) return
@@ -326,10 +441,25 @@ function renderTable (data) {
         tr.classList.remove('copy-flash'); void tr.offsetWidth; tr.classList.add('copy-flash')
         writeToClipboard(tr.dataset.copy || '')
       }
+      if (e.key.toLowerCase() === 'm') {
+        const btn = tr.querySelector('.anchor-btn')
+        if (btn) {
+          const k = tr.dataset.key
+          const it =
+            (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
+            { codigo: k, descripcion: tr.querySelector('td')?.innerText || '', precio: null }
+          showAnchorMenu(btn, { item: it, copyText: tr.dataset.copy || '' })
+        }
+      }
+    })
+
+    // Re-posicionar/convertir menú al cambiar tamaño (si está abierto)
+    window.addEventListener('resize', () => {
+      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') return
+      hideAnchorMenu()
     })
   }
 
-  // guardo el map de la última render para la delegación
   tableBody._lastRowMap = rowItemByKey
 }
 
