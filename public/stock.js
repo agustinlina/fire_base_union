@@ -397,7 +397,7 @@ function renderTable (data) {
               data-key="${key}"><img src="./media/3dots.png"></button>`
 
     tr.innerHTML = `
-      <td>${item.descripcion || ''}</td>
+      <td class="descycode"><span>${item.descripcion || ''}</span><span style="height:16px"></span><span style="font-size:12px">Código:<code> ${item.codigo}</code></span></td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
       <td style="white-space: nowrap;">${precioFmt}${anchorBtnHTML}</td>
