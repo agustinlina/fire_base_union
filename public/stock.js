@@ -22,12 +22,6 @@ const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
 const pinnedBar = document.getElementById('pinned-bar')
 
-// Modal elementos
-const anchorModal = document.getElementById('anchor-modal')
-const anchorConfirmBtn = document.getElementById('anchor-confirm')
-const anchorCancelBtn = document.getElementById('anchor-cancel')
-const anchorModalDesc = document.getElementById('anchor-modal-desc')
-
 const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 
 let allData = []
@@ -218,6 +212,14 @@ function renderPinnedBar () {
       if (!key) return
       pinned.delete(key)
       renderPinnedBar()
+      // actualizar estado de botones ⚓ en la tabla
+      document
+        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
+        .forEach(b => {
+          b.classList.remove('active')
+          b.setAttribute('aria-pressed', 'false')
+          b.title = 'Anclar'
+        })
     })
   })
 }
@@ -231,34 +233,16 @@ function togglePin (item) {
     pinned.set(key, { ...item, __key: key })
   }
   renderPinnedBar()
+  // reflejar en todos los botones de esa key
+  document
+    .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
+    .forEach(b => {
+      const on = pinned.has(key)
+      b.classList.toggle('active', on)
+      b.setAttribute('aria-pressed', on ? 'true' : 'false')
+      b.title = on ? 'Desanclar' : 'Anclar'
+    })
 }
-
-// ====== Modal de anclado ======
-let __pendingPinItem = null
-function openAnchorModal (item) {
-  __pendingPinItem = item || null
-  anchorModalDesc.textContent = shorten(item?.descripcion || '', 80)
-  anchorModal.style.display = 'flex'
-  anchorModal.setAttribute('aria-hidden', 'false')
-  anchorConfirmBtn?.focus()
-}
-function closeAnchorModal () {
-  anchorModal.style.display = 'none'
-  anchorModal.setAttribute('aria-hidden', 'true')
-  __pendingPinItem = null
-}
-
-anchorCancelBtn?.addEventListener('click', closeAnchorModal)
-anchorConfirmBtn?.addEventListener('click', () => {
-  if (__pendingPinItem) togglePin(__pendingPinItem)
-  closeAnchorModal()
-})
-anchorModal?.addEventListener('click', (e) => {
-  if (e.target === anchorModal) closeAnchorModal()
-})
-window.addEventListener('keydown', (e) => {
-  if (anchorModal.style.display === 'flex' && e.key === 'Escape') closeAnchorModal()
-})
 
 // ====== Render tabla ======
 function renderTable (data) {
@@ -268,116 +252,85 @@ function renderTable (data) {
     return
   }
 
+  const rowItemByKey = new Map()
+
   data.forEach(item => {
     const tr = document.createElement('tr')
-    tr.classList.add('copy-row') // estilos hover/focus/flash
-    tr.tabIndex = 0
+    tr.classList.add('copy-row')         // para estilos y señal de copiable
+    tr.tabIndex = 0                      // foco accesible con teclado
 
     const codigoDisplay = primaryCode(item.codigo)
     const precioFmt = formatPrecio(item.precio)
     const stockNum = parseStock(item.stock)
     const stockDisplay = stockNum > 100 ? 100 : stockNum
+    const key = canonicalKey(item.codigo)
 
-    // Texto a copiar al tap/click
+    // Texto a copiar al clickear la fila
     const copyText = [codigoDisplay, item.descripcion || '', precioFmt]
       .filter(Boolean)
       .join(' ')
       .trim()
 
+    // guardo payload en dataset de la fila
     tr.dataset.copy = copyText
+    tr.dataset.key = key
+
+    const anchorBtnHTML = `
+      <button class="anchor-btn ${pinned.has(key) ? 'active' : ''}" 
+              title="${pinned.has(key) ? 'Desanclar' : 'Anclar'}" 
+              aria-pressed="${pinned.has(key) ? 'true' : 'false'}"
+              data-key="${key}">⚓</button>`
 
     tr.innerHTML = `
-      <td>${item.descripcion || ''}</td>
+      <td>${anchorBtnHTML}${item.descripcion || ''}</td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
       <td style="white-space: nowrap;">${precioFmt}</td>
     `
     tableBody.appendChild(tr)
 
-    // ===== Gestos: Swipe Right para anclar =====
-    let startX = 0
-    let startY = 0
-    let swiping = false
-    let swipeTriggered = false
-    const THRESH_X = 70      // distancia mínima horizontal para disparar
-    const MAX_ANGLE = 30     // tolerancia en grados respecto a horizontal
+    // guardar para toggle
+    rowItemByKey.set(key, { ...item })
+  })
 
-    const onPointerDown = (e) => {
-      const p = getPoint(e)
-      startX = p.x
-      startY = p.y
-      swiping = true
-      swipeTriggered = false
-      tr.setPointerCapture?.(e.pointerId ?? 0)
-    }
+  // Delegación: clicks y teclado en la tabla
+  if (!tableBody.__delegated) {
+    tableBody.__delegated = true
 
-    const onPointerMove = (e) => {
-      if (!swiping) return
-      const p = getPoint(e)
-      const dx = p.x - startX
-      const dy = p.y - startY
-      // ángulo aprox
-      const angle = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI)
-      if (dx > THRESH_X && angle < MAX_ANGLE && !swipeTriggered) {
-        swipeTriggered = true
-        // visual corto (opcional): micro desplazamiento que vuelve
-        tr.style.transform = 'translateX(10px)'
-        setTimeout(() => { tr.style.transform = '' }, 120)
-
-        // abrir modal con el item actual
-        openAnchorModal({
-          ...item,
-          __key: canonicalKey(item.codigo)
-        })
-      }
-    }
-
-    const onPointerUp = (e) => {
-      swiping = false
-      // si hubo swipe que abrió modal, NO copiar con el click subsecuente
-      if (swipeTriggered) {
-        swipeTriggered = false
+    // Click
+    tableBody.addEventListener('click', e => {
+      const anchorBtn = e.target.closest('.anchor-btn')
+      if (anchorBtn) {
+        e.stopPropagation()
+        const k = anchorBtn.dataset.key
+        const it =
+          (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
+          { codigo: k, descripcion: anchorBtn.closest('tr')?.querySelector('td')?.innerText || '', precio: null }
+        togglePin(it)
         return
       }
-      // click/tap normal -> copiar
+
+      const tr = e.target.closest('tr')
+      if (!tr || !tr.dataset.copy) return
       tr.classList.remove('copy-flash'); void tr.offsetWidth; tr.classList.add('copy-flash')
-      writeToClipboard(tr.dataset.copy || '')
+      writeToClipboard(tr.dataset.copy)
       tr.focus?.()
-    }
+    })
 
-    // Soporte mouse / touch / pen con Pointer Events si están disponibles
-    if (window.PointerEvent) {
-      tr.addEventListener('pointerdown', onPointerDown)
-      tr.addEventListener('pointermove', onPointerMove)
-      tr.addEventListener('pointerup', onPointerUp)
-      tr.addEventListener('pointercancel', () => { swiping = false })
-      tr.addEventListener('pointerleave', () => { swiping = false })
-    } else {
-      // Fallback táctil simple
-      tr.addEventListener('touchstart', (e) => onPointerDown(e.touches[0]))
-      tr.addEventListener('touchmove', (e) => onPointerMove(e.touches[0]))
-      tr.addEventListener('touchend', onPointerUp)
-      // Fallback mouse
-      tr.addEventListener('mousedown', (e) => { onPointerDown(e); const up = () => { onPointerUp(e); window.removeEventListener('mouseup', up)}; window.addEventListener('mouseup', up) })
-      tr.addEventListener('mousemove', onPointerMove)
-      tr.addEventListener('mouseleave', () => { swiping = false })
-    }
-
-    // Teclado: Enter/Barra = copiar (no ancla, el anclado es por gesto)
-    tr.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter' || ev.key === ' ') {
-        ev.preventDefault()
+    // Teclado (Enter o Espacio)
+    tableBody.addEventListener('keydown', e => {
+      const tr = e.target.closest('tr.copy-row')
+      if (!tr) return
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
         tr.classList.remove('copy-flash'); void tr.offsetWidth; tr.classList.add('copy-flash')
         writeToClipboard(tr.dataset.copy || '')
       }
     })
-  })
-}
+  }
 
-function getPoint(evt){
-  // admite MouseEvent | Touch | PointerEvent
-  if (evt?.clientX != null) return { x: evt.clientX, y: evt.clientY }
-  return { x: 0, y: 0 }
+  // guardo el map de la última render para la delegación
+  tableBody._lastRowMap = rowItemByKey
 }
 
 // ====== Filtros ======
