@@ -39,7 +39,7 @@
   font-size: 0.9rem;
 }
 
-.pin-desc{
+.pin-desc {
   overflow-wrap: break-word;
 }
 .pin-chip .pin-code {
@@ -146,10 +146,10 @@ body {
   color: var(--fg-color);
 }
 
-.lupita{
+.lupita {
   width: 40px;
   position: absolute;
-  transform: translate(-8px,-54px);
+  transform: translate(-8px, -54px);
   z-index: 99999;
 }
 .controls_buscador {
@@ -199,7 +199,6 @@ table {
   border-collapse: collapse;
   background-color: #1a1a1a;
 }
-
 
 th,
 td {
@@ -297,9 +296,9 @@ a:hover {
   color: #757575;
 }
 
-.copy-btn{
+.copy-btn {
   background-color: transparent;
-  border: none!important;
+  border: none !important;
 }
 
 .copy-btn:hover,
@@ -353,11 +352,14 @@ tbody tr {
 }
 
 tbody tr:nth-child(even) {
-  background-color: #e9c500;
+  background-color: #16245a !important;
+}
+tbody tr:nth-child(odd) {
+  background-color: #16245a !important;
 }
 
 tbody tr:hover {
-  background-color: #e9c500;
+  background-color: #16245a !important;
 }
 
 /* Responsive para filtros */
@@ -406,38 +408,38 @@ tbody tr:hover {
     font-size: 12px;
   }
 }
-.descycode{
+.descycode {
   display: flex;
   flex-direction: column;
-  
 }
 /* ========================================================= */
 /* === Feedback de fila copiable (override final con TU paleta) === */
 /* Pegar desde acá hacia abajo, mantiene tus colores/variables */
-#stock-table tbody tr:hover{
+#stock-table tbody tr:hover {
   /* neutraliza el hover genérico amarillo dentro de tu tabla de stock */
   background-color: inherit;
 }
 
 /* Base para filas copiables */
-#stock-table tbody tr.copy-row{
+#stock-table tbody tr.copy-row {
   cursor: copy;
-  transition: background-color .18s ease, box-shadow .18s ease, transform .08s ease;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease,
+    transform 0.08s ease;
   outline: none; /* manejamos el foco con :focus-visible */
 }
 
 /* Hover suave usando tu capa translúcida */
-#stock-table tbody tr.copy-row:hover{
+#stock-table tbody tr.copy-row:hover {
   background-color: var(--card);
 }
 
 /* “Press” mínimo al click */
-#stock-table tbody tr.copy-row:active{
+#stock-table tbody tr.copy-row:active {
   transform: scale(0.998);
 }
 
 /* Accesible al navegar con teclado */
-#stock-table tbody tr.copy-row:focus-visible{
+#stock-table tbody tr.copy-row:focus-visible {
   outline: 2px solid var(--accent_selected);
   outline-offset: -2px;
   background-color: var(--card);
@@ -445,30 +447,91 @@ tbody tr:hover {
 }
 
 /* Destello corto cuando se copia (usa tus colores) */
-#stock-table tbody tr.copy-row.copy-flash{
+#stock-table tbody tr.copy-row.copy-flash {
   animation: copyFlash 550ms ease-out;
 }
 
-@keyframes copyFlash{
-  0%   { background-color: var(--secondary); box-shadow: inset 0 0 0 2px var(--accent_selected); }
-  60%  { background-color: var(--secondary); box-shadow: inset 0 0 0 1px var(--accent_selected); }
-  100% { background-color: transparent;      box-shadow: none; }
+@keyframes copyFlash {
+  0% {
+    background-color: var(--secondary);
+    box-shadow: inset 0 0 0 2px var(--accent_selected);
+  }
+  60% {
+    background-color: var(--secondary);
+    box-shadow: inset 0 0 0 1px var(--accent_selected);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
 }
 
 /* El botón ⚓ mantiene su puntero y no “ensucia” el hover de copia */
-#stock-table .anchor-btn{
+#stock-table .anchor-btn {
   cursor: pointer;
   position: relative;
   z-index: 1;
 }
 
 /* Respeta usuarios con menos movimiento */
-@media (prefers-reduced-motion: reduce){
-  #stock-table tbody tr.copy-row{
-    transition: background-color .1s linear;
+@media (prefers-reduced-motion: reduce) {
+  #stock-table tbody tr.copy-row {
+    transition: background-color 0.1s linear;
   }
-  #stock-table tbody tr.copy-row.copy-flash{
+  #stock-table tbody tr.copy-row.copy-flash {
     animation: none;
     background-color: var(--secondary);
   }
+}
+.usd-card {
+  border: 1px solid var(--card, #2b2b2b);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--background, #111);
+  color: var(--text, #eee);
+  max-width: 520px;
+}
+.usd-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.usd-card__title {
+  font-weight: 700;
+}
+.usd-card__updated {
+  opacity: 0.7;
+}
+.usd-card__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+.usd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.usd-label {
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+.usd-value {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.usd-extra {
+  margin-top: 10px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  padding-top: 10px;
+}
+.usd-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 2px;
+  font-size: 0.85rem;
 }

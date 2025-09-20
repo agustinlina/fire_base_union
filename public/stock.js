@@ -8,10 +8,14 @@ const ENDPOINTS = {
   polo: 'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_polo'
 }
 
-// Endpoint de precios (via proxy CORS)
+// Endpoint de precios (via proxy CORS) -> USD
 const PRICES_URL =
   'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
 
+// Cotización USD Oficial (venta)
+const USD_API_URL = 'https://dolarapi.com/v1/dolares/oficial'
+
+// ====== Referencias DOM ======
 const tableBody = document.querySelector('#stock-table tbody')
 const loading = document.getElementById('loading')
 const error = document.getElementById('error')
@@ -27,6 +31,12 @@ const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 
 let allData = []
 let stockActual = 'cordoba'
+
+// ====== Estado de cotización ======
+let usdRate = null            // número (venta)
+let usdInfo = null            // objeto completo de la API
+let usdRateUpdatedAt = null
+let usdRateTimer = null       // setInterval id
 
 // ====== Helpers generales ======
 function normalizar (str) {
@@ -125,10 +135,17 @@ function esAutoImportado (rubro) {
   if (exactos.includes(n)) return true
   return n.startsWith('royal') || n.startsWith('trans')
 }
-function formatPrecio (n) {
+
+// Formateos de moneda
+function fmtARS (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n)))
     return ''
-  return '$ ' + Number(n).toLocaleString('es-AR')
+  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+}
+function fmtUSD (n) {
+  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n)))
+    return ''
+  return 'US$ ' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 function parseStock (s) {
   if (s === null || s === undefined) return 0
@@ -140,6 +157,12 @@ function parseStock (s) {
 function shorten (t, max = 36) {
   const s = String(t || '').trim()
   return s.length > max ? s.slice(0, max - 1) + '…' : s
+}
+const fmtISOToLocal = iso => {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  if (isNaN(d)) return '—'
+  return d.toLocaleString('es-AR', { dateStyle: 'medium', timeStyle: 'short' })
 }
 
 // ====== Toast copiar ======
@@ -184,7 +207,7 @@ function renderPlaceholder (message = 'Escribí para buscar') {
 }
 
 // ====== Anclados ======
-const pinned = new Map() // key -> { codigo, descripcion, precio, rubro, stock }
+const pinned = new Map() // key -> { codigo, descripcion, precioUsd, precioArs, rubro, stock }
 function renderPinnedBar () {
   if (!pinnedBar) return
   if (pinned.size === 0) {
@@ -195,25 +218,24 @@ function renderPinnedBar () {
   pinnedBar.classList.add('show')
   pinnedBar.innerHTML = Array.from(pinned.values())
     .map(it => {
-      const price = formatPrecio(it.precio)
+      const ars = it.precioArs != null ? fmtARS(it.precioArs) : ''
+      const usd = it.precioUsd != null ? ` <small style="opacity:.7">(${fmtUSD(it.precioUsd)})</small>` : ''
       return `
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
         <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
-        ${price ? `<span class="pin-price" style="white-space: nowrap;!important">${price}</span>` : ''}
+        ${ars ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>` : (usd ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>` : '')}
         <button class="remove" title="Quitar" style="color:red;">×</button>
       </div>`
     })
     .join('')
 
-  // listeners para quitar
   pinnedBar.querySelectorAll('.pin-chip .remove').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.closest('.pin-chip')?.dataset?.key
       if (!key) return
       pinned.delete(key)
       renderPinnedBar()
-      // actualizar estado de botones ⚓ en la tabla
       document
         .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
         .forEach(b => {
@@ -228,13 +250,16 @@ function renderPinnedBar () {
 function togglePin (item) {
   const key = canonicalKey(item?.codigo)
   if (!key) return
+  const toSave = { ...item, __key: key }
+  if (usdRate && item?.precioUsd != null) {
+    toSave.precioArs = Math.round(Number(item.precioUsd) * usdRate)
+  }
   if (pinned.has(key)) {
     pinned.delete(key)
   } else {
-    pinned.set(key, { ...item, __key: key })
+    pinned.set(key, toSave)
   }
   renderPinnedBar()
-  // reflejar en todos los botones de esa key
   document
     .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
     .forEach(b => {
@@ -245,25 +270,23 @@ function togglePin (item) {
     })
 }
 
-// ====== Mini-menú / Modal responsive (popover en desktop, modal centrada en phone) ======
+// ====== Mini-menú / Modal responsive ======
 let anchorMenuOverlay = null
 let anchorMenuPanel = null
 
 function ensureAnchorMenu () {
   if (anchorMenuOverlay && anchorMenuPanel) return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
 
-  // Overlay
   const overlay = document.createElement('div')
   overlay.id = 'anchor-menu-overlay'
   overlay.style.position = 'fixed'
   overlay.style.inset = '0'
   overlay.style.display = 'none'
   overlay.style.zIndex = '10000'
-  overlay.style.background = 'transparent' // en desktop será transparente; en phone, semi
+  overlay.style.background = 'transparent'
   overlay.style.alignItems = 'center'
   overlay.style.justifyContent = 'center'
 
-  // Panel
   const panel = document.createElement('div')
   panel.id = 'anchor-menu-panel'
   panel.style.minWidth = '180px'
@@ -282,7 +305,6 @@ function ensureAnchorMenu () {
     <button data-action="pin"  style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">⚓ Anclar</button>
   `
 
-  // Hover con --card
   panel.addEventListener('mouseover', e => {
     const b = e.target.closest('button')
     if (b) b.style.background = 'var(--card)'
@@ -295,7 +317,6 @@ function ensureAnchorMenu () {
   overlay.appendChild(panel)
   document.body.appendChild(overlay)
 
-  // cerrar con click fuera o ESC
   overlay.addEventListener('click', e => {
     if (e.target === overlay) hideAnchorMenu()
   })
@@ -314,24 +335,20 @@ function showAnchorMenu (btn, { item, copyText }) {
   overlay.dataset.key = key
   overlay.dataset.copy = copyText
 
-  // label dinámico pin
   const isPinned = pinned.has(key)
   const pinBtn = panel.querySelector('[data-action="pin"]')
   pinBtn.textContent = isPinned ? '✖ Desanclar' : '⚓ Anclar'
 
-  // Decide layout: phone (≤ 640) => modal centrada; desktop => popover cerca del botón
   const isPhone = window.innerWidth <= 640
 
   if (isPhone) {
-    // Modal centrada
     overlay.style.background = 'rgba(0,0,0,.45)'
     overlay.style.display = 'flex'
     panel.style.position = 'static'
     panel.style.transform = 'none'
   } else {
-    // Popover anclado al botón
     overlay.style.background = 'transparent'
-    overlay.style.display = 'block' // solo para “contener” el panel y cerrar al click fuera
+    overlay.style.display = 'block'
     const r = btn.getBoundingClientRect()
     const margin = 6
     panel.style.position = 'fixed'
@@ -340,7 +357,6 @@ function showAnchorMenu (btn, { item, copyText }) {
     panel.style.transform = 'none'
   }
 
-  // manejar acciones
   panel.onclick = e => {
     const actionBtn = e.target.closest('button[data-action]')
     if (!actionBtn) return
@@ -380,12 +396,24 @@ function renderTable (data) {
     tr.tabIndex = 0
 
     const codigoDisplay = primaryCode(item.codigo)
-    const precioFmt = formatPrecio(item.precio)
     const stockNum = parseStock(item.stock)
     const stockDisplay = stockNum > 100 ? 100 : stockNum
     const key = canonicalKey(item.codigo)
 
-    const copyText = [codigoDisplay, item.descripcion || '', precioFmt]
+    // Precios
+    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
+    const precioArs = (usdRate && precioUsd != null)
+      ? Math.round(precioUsd * usdRate)
+      : null
+
+    const priceHtml = (precioUsd != null)
+      ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
+           ${precioArs != null ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArs)}</span>` : ''}
+           <span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>
+         </div>`
+      : ''
+
+    const copyText = [codigoDisplay, item.descripcion || '', (precioArs != null ? fmtARS(precioArs) : fmtUSD(precioUsd))]
       .filter(Boolean).join(' ').trim()
 
     tr.dataset.copy = copyText
@@ -401,11 +429,12 @@ function renderTable (data) {
       <td class="descycode"><span>${item.descripcion || ''}</span><span style="height:16px"></span><span style="font-size:12px">Código:<code> ${item.codigo}</code></span></td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
-      <td style="white-space: nowrap;">${precioFmt}${anchorBtnHTML}</td>
+      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${anchorBtnHTML}</td>
     `
     tableBody.appendChild(tr)
 
-    rowItemByKey.set(key, { ...item })
+    // Guardar item enriquecido para pin/menu
+    rowItemByKey.set(key, { ...item, precioUsd, precioArs })
   })
 
   if (!tableBody.__delegated) {
@@ -421,7 +450,7 @@ function renderTable (data) {
         const copyText = row?.dataset?.copy || ''
         const it =
           (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
-          { codigo: k, descripcion: row?.querySelector('td')?.innerText || '', precio: null }
+          { codigo: k, descripcion: row?.querySelector('td')?.innerText || '', precioUsd: null, precioArs: null }
         showAnchorMenu(anchorBtn, { item: it, copyText })
         return
       }
@@ -443,18 +472,17 @@ function renderTable (data) {
         writeToClipboard(tr.dataset.copy || '')
       }
       if (e.key.toLowerCase() === 'm') {
-        const btn = tr.querySelector('.anchor-btn')
+        const btn = tr.querySelector(' .anchor-btn')
         if (btn) {
           const k = tr.dataset.key
           const it =
             (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
-            { codigo: k, descripcion: tr.querySelector('td')?.innerText || '', precio: null }
+            { codigo: k, descripcion: tr.querySelector('td')?.innerText || '', precioUsd: null, precioArs: null }
           showAnchorMenu(btn, { item: it, copyText: tr.dataset.copy || '' })
         }
       }
     })
 
-    // Re-posicionar/convertir menú al cambiar tamaño (si está abierto)
     window.addEventListener('resize', () => {
       if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') return
       hideAnchorMenu()
@@ -487,6 +515,8 @@ function aplicarFiltros () {
       (it.codigo && String(it.codigo).toLowerCase().includes(valor)) ||
       (it.descripcion && it.descripcion.toLowerCase().includes(valor))
   )
+
+  // Al render, se recalcula precio ARS con usdRate actual
   renderTable(datos)
 }
 
@@ -517,7 +547,11 @@ async function cargarDatos (stock) {
   setActiveBtn(null)
 
   try {
-    const pricesPromise = fetch(PRICES_URL).then(r => r.json())
+    // Traer precios USD y cotización oficial en paralelo
+    const [dataPrices] = await Promise.all([
+      fetch(PRICES_URL).then(r => r.json()),
+      (async () => { await fetchUsdRate() })()
+    ])
 
     let dataStock
     if (stock === 'cordoba') {
@@ -530,25 +564,25 @@ async function cargarDatos (stock) {
       dataStock = await fetch(ENDPOINTS[stock]).then(r => r.json())
     }
 
-    const dataPrices = await pricesPromise
-
+    // Price map por claves (USD)
     const priceMap = new Map()
     ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
-      const precio = p?.precio ?? null
+      const precio = p?.precio ?? null // USD
       codeKeysOne(p?.codigo).forEach(k => {
         if (!priceMap.has(k)) priceMap.set(k, precio)
       })
     })
 
+    // Unificar dataset y agregar precioUsd
     allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
       const keys = codeKeys(item?.codigo)
-      let precio = null
+      let precioUsd = null
       for (const k of keys)
         if (priceMap.has(k)) {
-          precio = priceMap.get(k)
+          precioUsd = priceMap.get(k)
           break
         }
-      return { ...item, precio }
+      return { ...item, precioUsd }
     })
 
     if (loading) loading.style.display = 'none'
@@ -558,7 +592,97 @@ async function cargarDatos (stock) {
     if (loading) loading.style.display = 'none'
     if (error) error.textContent = 'Error al cargar datos'
     renderPlaceholder('No pudimos cargar los datos.')
+  } finally {
+    // Iniciar auto-refresh de cotización
+    startUsdAutorefresh()
   }
+}
+
+// ====== UI Cotización (línea compacta) ======
+let usdLineRef = null
+
+function ensureUsdInline () {
+  if (usdLineRef) return usdLineRef
+
+  // contenedor preferido
+  const container = document.querySelector('main') || document.body
+
+  // estilos mínimos
+  if (!document.getElementById('usd-inline-styles')) {
+    const style = document.createElement('style')
+    style.id = 'usd-inline-styles'
+    style.textContent = `
+      .usd-inline {
+        display:block; width:100%;
+        font-size:.95rem; line-height:1.3;
+        padding:6px 0; margin: 4px 0 10px 0;
+        color:var(--text,#eee);
+      }
+      .usd-inline .muted { opacity:.75 }
+      .usd-inline .strong { font-weight:700 }
+      .usd-inline .sep { opacity:.5; padding:0 6px }
+    `
+    document.head.appendChild(style)
+  }
+
+  const line = document.createElement('div')
+  line.className = 'usd-inline'
+  line.id = 'usd-inline'
+  line.innerHTML = `<div class="px-3">
+  
+    <span class="muted">Dólar:</span>
+    <span id="usd-inline-precio" class="strong">—</span>
+    <span class="muted">(Oficial)</span>
+    <span class="sep">—</span>
+    <span class="muted">Actualizado:</span>
+    <span id="usd-inline-updated">—</span></div>
+  `
+  container.prepend(line)
+
+  usdLineRef = {
+    precio: line.querySelector('#usd-inline-precio'),
+    updated: line.querySelector('#usd-inline-updated')
+  }
+  return usdLineRef
+}
+
+function updateUsdInlineUI (data) {
+  const refs = ensureUsdInline()
+  if (!data || !refs) return
+  const venta = (typeof data?.venta === 'number') ? data.venta : null
+  refs.precio.textContent = venta != null ? fmtARS(venta) : '—'
+  refs.updated.textContent = fmtISOToLocal(data?.fechaActualizacion)
+}
+
+// ====== Cotización: fetch + auto-refresh ======
+async function fetchUsdRate () {
+  try {
+    const res = await fetch(USD_API_URL, { cache: 'no-store' })
+    const json = await res.json()
+    const venta = Number(json?.venta)
+    if (Number.isFinite(venta) && venta > 0) {
+      usdRate = venta
+      usdInfo = json
+      usdRateUpdatedAt = json?.fechaActualizacion || new Date().toISOString()
+      updateUsdInlineUI(usdInfo)
+    }
+  } catch (e) {
+    console.warn('No se pudo obtener la cotización oficial:', e)
+    const refs = usdLineRef || ensureUsdInline()
+    if (refs?.updated) refs.updated.textContent = 'No se pudo actualizar'
+  }
+}
+
+function startUsdAutorefresh () {
+  if (usdRateTimer) clearInterval(usdRateTimer)
+  usdRateTimer = setInterval(async () => {
+    const prev = usdRate
+    await fetchUsdRate()
+    if (usdRate && usdRate !== prev) {
+      aplicarFiltros()
+      renderPinnedBar()
+    }
+  }, 10 * 60 * 1000)
 }
 
 // ====== Listeners ======
@@ -610,6 +734,9 @@ window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
   renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
   renderPinnedBar()
+  ensureUsdInline()    // crea/inserta la línea del dólar
+  fetchUsdRate()       // primera carga de cotización y UI
   cargarDatos(stockActual)
-  updateClearBtn() // inicializar visibilidad de la X
+  startUsdAutorefresh()// refresco de cotización y UI
+  updateClearBtn()     // inicializar visibilidad de la X
 })
