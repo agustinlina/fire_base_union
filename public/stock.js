@@ -1,5 +1,10 @@
 // stock.js
 
+// ====== Dólar manual (override) ======
+// Si querés fijar el dólar manualmente, poné acá un número (e.g., 950).
+// Si es 0, toma el valor desde la API (Oficial) y se actualiza a las 19:01 AR.
+let DOLAR_TOTAL = 1470
+
 const ENDPOINTS = {
   olavarria:
     'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_olav',
@@ -32,12 +37,16 @@ const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 let allData = []
 let stockActual = 'cordoba'
 
-// ====== Estado de cotización ======
-let usdRate = null            // número (venta)
+// ====== Estado de cotización (API) ======
+let usdRate = null            // número (venta) desde API
 let usdInfo = null            // objeto completo de la API
 let usdRateUpdatedAt = null
 
-// ==== Scheduler: actualizar SOLO 19:01 AR ====
+// ====== Utilidad override/manual ======
+const isManualDollar = () => Number(DOLAR_TOTAL) !== 0 && Number.isFinite(Number(DOLAR_TOTAL))
+const effectiveUsdRate = () => (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
+
+// ==== Scheduler: actualizar SOLO 19:01 AR (si NO hay manual) ====
 const AR_TZ = 'America/Argentina/Buenos_Aires'
 let lastScheduledFetchDay = null // 'YYYY-MM-DD' en zona AR
 let schedulerInterval = null
@@ -52,7 +61,6 @@ function getARDateParts (d = new Date()) {
     if (p.type !== 'literal') acc[p.type] = p.value
     return acc
   }, {})
-  // asegurar números
   const num = k => Number(parts[k])
   return {
     year: parts.year,
@@ -69,12 +77,11 @@ function startUsdDailyScheduler () {
   if (schedulerInterval) clearInterval(schedulerInterval)
 
   const check = () => {
+    if (isManualDollar()) return // con manual NO se actualiza por API
     const nowAR = getARDateParts()
-    // Disparar una sola vez por día a partir de 19:01 (19h y minuto >= 1)
     const isAfter1901 = (nowAR.hour > 19) || (nowAR.hour === 19 && nowAR.minute >= 1)
     if (isAfter1901 && lastScheduledFetchDay !== nowAR.ymd) {
       fetchUsdRate().then(() => {
-        // re-render para recalcular ARS
         aplicarFiltros()
         renderPinnedBar()
       })
@@ -82,9 +89,7 @@ function startUsdDailyScheduler () {
     }
   }
 
-  // chequeo cada 15s (liviano y confiable)
   schedulerInterval = setInterval(check, 15000)
-  // correr una vez ahora (por si ya pasó la hora al cargar)
   check()
 }
 
@@ -301,8 +306,9 @@ function togglePin (item) {
   const key = canonicalKey(item?.codigo)
   if (!key) return
   const toSave = { ...item, __key: key }
-  if (usdRate && item?.precioUsd != null) {
-    toSave.precioArs = Math.round(Number(item.precioUsd) * usdRate)
+  const rate = effectiveUsdRate()
+  if (rate && item?.precioUsd != null) {
+    toSave.precioArs = Math.round(Number(item.precioUsd) * rate)
   }
   if (pinned.has(key)) {
     pinned.delete(key)
@@ -439,6 +445,7 @@ function renderTable (data) {
   }
 
   const rowItemByKey = new Map()
+  const rate = effectiveUsdRate()
 
   data.forEach(item => {
     const tr = document.createElement('tr')
@@ -452,8 +459,8 @@ function renderTable (data) {
 
     // Precios
     const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
-    const precioArs = (usdRate && precioUsd != null)
-      ? Math.round(precioUsd * usdRate)
+    const precioArs = (rate && precioUsd != null)
+      ? Math.round(precioUsd * rate)
       : null
 
     const priceHtml = (precioUsd != null)
@@ -483,14 +490,12 @@ function renderTable (data) {
     `
     tableBody.appendChild(tr)
 
-    // Guardar item enriquecido para pin/menu
     rowItemByKey.set(key, { ...item, precioUsd, precioArs })
   })
 
   if (!tableBody.__delegated) {
     tableBody.__delegated = true
 
-    // Click
     tableBody.addEventListener('click', e => {
       const anchorBtn = e.target.closest('.anchor-btn')
       if (anchorBtn) {
@@ -512,7 +517,6 @@ function renderTable (data) {
       tr.focus?.()
     })
 
-    // Teclado (Enter o Espacio) = copiar; M = abrir menú
     tableBody.addEventListener('keydown', e => {
       const tr = e.target.closest('tr.copy-row')
       if (!tr) return
@@ -522,7 +526,7 @@ function renderTable (data) {
         writeToClipboard(tr.dataset.copy || '')
       }
       if (e.key.toLowerCase() === 'm') {
-        const btn = tr.querySelector(' .anchor-btn')
+        const btn = tr.querySelector('.anchor-btn')
         if (btn) {
           const k = tr.dataset.key
           const it =
@@ -566,8 +570,7 @@ function aplicarFiltros () {
       (it.descripcion && it.descripcion.toLowerCase().includes(valor))
   )
 
-  // Al render, se recalcula precio ARS con usdRate actual
-  renderTable(datos)
+  renderTable(datos) // recalcula ARS con effectiveUsdRate()
 }
 
 // ====== Carga y merge ======
@@ -597,10 +600,10 @@ async function cargarDatos (stock) {
   setActiveBtn(null)
 
   try {
-    // Traer precios USD y (en paralelo) intentar cotización inicial
+    // Traer precios USD y, si no hay manual, intentar cotización inicial
     const [dataPrices] = await Promise.all([
       fetch(PRICES_URL).then(r => r.json()),
-      (async () => { if (!usdRate) await fetchUsdRate() })()
+      (async () => { if (!isManualDollar() && !usdRate) await fetchUsdRate() })()
     ])
 
     let dataStock
@@ -651,10 +654,8 @@ let usdLineRef = null
 function ensureUsdInline () {
   if (usdLineRef) return usdLineRef
 
-  // contenedor preferido
   const container = document.querySelector('main') || document.body
 
-  // estilos mínimos
   if (!document.getElementById('usd-inline-styles')) {
     const style = document.createElement('style')
     style.id = 'usd-inline-styles'
@@ -678,7 +679,7 @@ function ensureUsdInline () {
   line.innerHTML = `
     <span class="muted">Dólar:</span>
     <span id="usd-inline-precio" class="strong">—</span>
-    <span class="muted">(Oficial)</span>
+    <span class="muted">(<span id="usd-inline-label">Oficial</span>)</span>
     <span class="sep">—</span>
     <span class="muted">Actualizado:</span>
     <span id="usd-inline-updated">—</span>
@@ -687,22 +688,37 @@ function ensureUsdInline () {
 
   usdLineRef = {
     precio: line.querySelector('#usd-inline-precio'),
-    updated: line.querySelector('#usd-inline-updated')
+    updated: line.querySelector('#usd-inline-updated'),
+    label: line.querySelector('#usd-inline-label')
   }
   return usdLineRef
 }
 
+function updateUsdInlineUIFromManual () {
+  const refs = ensureUsdInline()
+  refs.precio.textContent = fmtARS(Number(DOLAR_TOTAL))
+  refs.label.textContent = 'Absoluto'
+  refs.updated.textContent = fmtISOToLocal(new Date().toISOString())
+}
+
 function updateUsdInlineUI (data) {
   const refs = ensureUsdInline()
-  if (!data || !refs) return
+  if (isManualDollar()) return updateUsdInlineUIFromManual()
   const venta = (typeof data?.venta === 'number') ? data.venta : null
   refs.precio.textContent = venta != null ? fmtARS(venta) : '—'
+  refs.label.textContent = 'Oficial'
   refs.updated.textContent = fmtISOToLocal(data?.fechaActualizacion)
 }
 
-// ====== Cotización: fetch (sincroniza UI) ======
+// ====== Cotización: fetch (sincroniza UI si NO manual) ======
 async function fetchUsdRate () {
   try {
+    if (isManualDollar()) {
+      // Usar valor manual y actualizar UI acorde
+      usdRate = Number(DOLAR_TOTAL)
+      updateUsdInlineUIFromManual()
+      return
+    }
     const res = await fetch(USD_API_URL, { cache: 'no-store' })
     const json = await res.json()
     const venta = Number(json?.venta)
@@ -720,7 +736,6 @@ async function fetchUsdRate () {
 }
 
 // ====== Listeners ======
-// Mostrar/ocultar botón X del buscador (NUEVO)
 function updateClearBtn () {
   if (!clearBuscador) return
   const has = (buscador?.value || '').length > 0
@@ -769,10 +784,18 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
   renderPinnedBar()
 
-  ensureUsdInline()    // crea/inserta la línea del dólar
-  fetchUsdRate()       // 1) carga inicial para no mostrar vacíos
-  startUsdDailyScheduler() // 2) luego, SOLO actualiza a las 19:01 AR
+  ensureUsdInline()    
+
+  // 1) Si hay dólar manual, usarlo y mostrar "Manual".
+  //    Si no, traer una vez de API para no mostrar vacío.
+  if (isManualDollar()) {
+    usdRate = Number(DOLAR_TOTAL)
+    updateUsdInlineUIFromManual()
+  } else {
+    fetchUsdRate()
+    startUsdDailyScheduler() // actualiza solo 19:01 AR
+  }
 
   cargarDatos(stockActual)
-  updateClearBtn()     // inicializar visibilidad de la X
+  updateClearBtn()
 })
