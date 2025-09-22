@@ -36,7 +36,57 @@ let stockActual = 'cordoba'
 let usdRate = null            // número (venta)
 let usdInfo = null            // objeto completo de la API
 let usdRateUpdatedAt = null
-let usdRateTimer = null       // setInterval id
+
+// ==== Scheduler: actualizar SOLO 19:01 AR ====
+const AR_TZ = 'America/Argentina/Buenos_Aires'
+let lastScheduledFetchDay = null // 'YYYY-MM-DD' en zona AR
+let schedulerInterval = null
+
+function getARDateParts (d = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: AR_TZ,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false
+  }).formatToParts(d).reduce((acc, p) => {
+    if (p.type !== 'literal') acc[p.type] = p.value
+    return acc
+  }, {})
+  // asegurar números
+  const num = k => Number(parts[k])
+  return {
+    year: parts.year,
+    month: parts.month,
+    day: parts.day,
+    hour: num('hour'),
+    minute: num('minute'),
+    second: num('second'),
+    ymd: `${parts.year}-${parts.month}-${parts.day}`
+  }
+}
+
+function startUsdDailyScheduler () {
+  if (schedulerInterval) clearInterval(schedulerInterval)
+
+  const check = () => {
+    const nowAR = getARDateParts()
+    // Disparar una sola vez por día a partir de 19:01 (19h y minuto >= 1)
+    const isAfter1901 = (nowAR.hour > 19) || (nowAR.hour === 19 && nowAR.minute >= 1)
+    if (isAfter1901 && lastScheduledFetchDay !== nowAR.ymd) {
+      fetchUsdRate().then(() => {
+        // re-render para recalcular ARS
+        aplicarFiltros()
+        renderPinnedBar()
+      })
+      lastScheduledFetchDay = nowAR.ymd
+    }
+  }
+
+  // chequeo cada 15s (liviano y confiable)
+  schedulerInterval = setInterval(check, 15000)
+  // correr una vez ahora (por si ya pasó la hora al cargar)
+  check()
+}
 
 // ====== Helpers generales ======
 function normalizar (str) {
@@ -547,10 +597,10 @@ async function cargarDatos (stock) {
   setActiveBtn(null)
 
   try {
-    // Traer precios USD y cotización oficial en paralelo
+    // Traer precios USD y (en paralelo) intentar cotización inicial
     const [dataPrices] = await Promise.all([
       fetch(PRICES_URL).then(r => r.json()),
-      (async () => { await fetchUsdRate() })()
+      (async () => { if (!usdRate) await fetchUsdRate() })()
     ])
 
     let dataStock
@@ -592,9 +642,6 @@ async function cargarDatos (stock) {
     if (loading) loading.style.display = 'none'
     if (error) error.textContent = 'Error al cargar datos'
     renderPlaceholder('No pudimos cargar los datos.')
-  } finally {
-    // Iniciar auto-refresh de cotización
-    startUsdAutorefresh()
   }
 }
 
@@ -628,14 +675,13 @@ function ensureUsdInline () {
   const line = document.createElement('div')
   line.className = 'usd-inline'
   line.id = 'usd-inline'
-  line.innerHTML = `<div class="px-3">
-  
+  line.innerHTML = `
     <span class="muted">Dólar:</span>
     <span id="usd-inline-precio" class="strong">—</span>
     <span class="muted">(Oficial)</span>
     <span class="sep">—</span>
     <span class="muted">Actualizado:</span>
-    <span id="usd-inline-updated">—</span></div>
+    <span id="usd-inline-updated">—</span>
   `
   container.prepend(line)
 
@@ -654,7 +700,7 @@ function updateUsdInlineUI (data) {
   refs.updated.textContent = fmtISOToLocal(data?.fechaActualizacion)
 }
 
-// ====== Cotización: fetch + auto-refresh ======
+// ====== Cotización: fetch (sincroniza UI) ======
 async function fetchUsdRate () {
   try {
     const res = await fetch(USD_API_URL, { cache: 'no-store' })
@@ -671,18 +717,6 @@ async function fetchUsdRate () {
     const refs = usdLineRef || ensureUsdInline()
     if (refs?.updated) refs.updated.textContent = 'No se pudo actualizar'
   }
-}
-
-function startUsdAutorefresh () {
-  if (usdRateTimer) clearInterval(usdRateTimer)
-  usdRateTimer = setInterval(async () => {
-    const prev = usdRate
-    await fetchUsdRate()
-    if (usdRate && usdRate !== prev) {
-      aplicarFiltros()
-      renderPinnedBar()
-    }
-  }, 10 * 60 * 1000)
 }
 
 // ====== Listeners ======
@@ -734,9 +768,11 @@ window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
   renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
   renderPinnedBar()
+
   ensureUsdInline()    // crea/inserta la línea del dólar
-  fetchUsdRate()       // primera carga de cotización y UI
+  fetchUsdRate()       // 1) carga inicial para no mostrar vacíos
+  startUsdDailyScheduler() // 2) luego, SOLO actualiza a las 19:01 AR
+
   cargarDatos(stockActual)
-  startUsdAutorefresh()// refresco de cotización y UI
   updateClearBtn()     // inicializar visibilidad de la X
 })
