@@ -3,7 +3,11 @@
 // ====== Dólar manual (override) ======
 // Si querés fijar el dólar manualmente, poné acá un número (e.g., 950).
 // Si es 0, toma el valor desde la API (Oficial) y se actualiza a las 19:01 AR.
+<<<<<<< HEAD
 let DOLAR_TOTAL = 1385
+=======
+let DOLAR_TOTAL = 1430
+>>>>>>> ca9ba161a2aafd8ccb63fe6207081fc251c5c217
 
 const ENDPOINTS = {
   olavarria:
