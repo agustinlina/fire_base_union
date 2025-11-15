@@ -165,6 +165,17 @@ function codeKeys (raw) {
   }
   return out
 }
+
+// ====== Códigos que deben mostrarse SOLO en pesos (ocultar USD) ======
+const noMostrarPesos = ['3147', '3148', '7500584', '7500589'] // agregá/quita códigos acá
+
+const SOLO_PESOS_SET = new Set(noMostrarPesos.map(c => clean(c)))
+
+function isSoloPesosByCodigo (codigoRaw) {
+  const keys = codeKeys(codigoRaw)
+  return keys.some(k => SOLO_PESOS_SET.has(clean(k)))
+}
+
 function canonicalKey (raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
@@ -273,8 +284,11 @@ function renderPinnedBar () {
   pinnedBar.classList.add('show')
   pinnedBar.innerHTML = Array.from(pinned.values())
     .map(it => {
+      const soloPesos = isSoloPesosByCodigo(it.codigo || it.__key)
       const ars = it.precioArs != null ? fmtARS(it.precioArs) : ''
-      const usd = it.precioUsd != null ? ` <small style="opacity:.7">(${fmtUSD(it.precioUsd)})</small>` : ''
+      const usd = (!soloPesos && it.precioUsd != null)
+        ? ` <small style="opacity:.7">(${fmtUSD(it.precioUsd)})</small>`
+        : ''
       return `
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
@@ -463,10 +477,12 @@ function renderTable (data) {
       ? Math.round(precioUsd * rate)
       : null
 
+    const soloPesos = isSoloPesosByCodigo(item.codigo)
+
     const priceHtml = (precioUsd != null)
       ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
            ${precioArs != null ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArs)}</span>` : ''}
-           <span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>
+           ${soloPesos ? '' : `<span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>`}
          </div>`
       : ''
 
