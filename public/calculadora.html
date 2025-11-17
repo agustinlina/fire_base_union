@@ -8,7 +8,6 @@
   <title>Calculadora de Cheques</title>
   <link rel="stylesheet" href="css/styles_index.css">
   <link rel="stylesheet" href="/css/protect.css">
-
   <link rel="stylesheet" href="./css/union_style.css">
   <script type="module" src="./auth.js"></script>
 
@@ -29,16 +28,17 @@
   <header class="w-100 header_color">
     <nav class="navbar position-static w-100 header_color">
       <div class="container-fluid header_color">
-        <a class="navbar-brand d-flex gap-3 align-items-center" href="./index.html"><img src="./media/logo.svg"
-            width="48px" alt=""></a>
+        <a class="navbar-brand d-flex gap-3 align-items-center" href="./index.html">
+          <img src="./media/logo.svg" width="48px" alt="">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
           aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title d-flex gap-3 align-items-center" id="offcanvasNavbarLabel"><img width="48px"
-                src="./media/logo.svg" alt="">
+            <h5 class="offcanvas-title d-flex gap-3 align-items-center" id="offcanvasNavbarLabel">
+              <img width="48px" src="./media/logo.svg" alt="">
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
@@ -50,10 +50,8 @@
               <li class="nav-item">
                 <a class="nav-link active" href="./calculadora.html">Calculadora</a>
               </li>
-
               <li class="nav-item">
-                <a class="nav-link" href="./comercial.html">Condiciones
-                  Comerciales</a>
+                <a class="nav-link" href="./comercial.html">Condiciones Comerciales</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="./stock.html">Stock</a>
@@ -64,53 +62,52 @@
       </div>
     </nav>
   </header>
+
   <div class="container">
-    <h1 style="display:flex;gap:6px;align-items:center;font-weight:bold" class="active">Calculadora de
-      fechas</h1>
-    <label for="invoiceDate">Fecha de Factura:</label><br>
-    <input type="date" id="invoiceDate" />
+
+    <div class="d-flex align-items-center flex-column">
+      <h1 style="display:flex;gap:6px;align-items:center;font-weight:bold" class="active">
+        Calculadora de fechas
+      </h1>
+      <label for="invoiceDate">Fecha de Factura:</label><br>
+      <input class="" type="date" id="invoiceDate" />
+
+    </div>
+    <!-- Tabla de resumen por plazos -->
+    <div id="summary-container" style="margin-top:12px;" class="d-flex flex-column align-items-center">
+      <table style="width: 80%!important;" id="summary-table" class="table table-sm table-dark"
+        style="text-align:center; ">
+        <thead>
+          <tr>
+            <th>0-30</th>
+            <th>31-60</th>
+            <th>61-90</th>
+            <th>91-120</th>
+            <th>121-150</th>
+            <th>151-180</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="sum-0-30">$ 0</td>
+            <td id="sum-31-60">$ 0</td>
+            <td id="sum-61-90">$ 0</td>
+            <td id="sum-91-120">$ 0</td>
+            <td id="sum-121-150">$ 0</td>
+            <td id="sum-151-180">$ 0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div id="chequeList">
-      <!-- Casilleros de cheque -->
-      <div class="cheque-item" data-index="1">
-        <label>Cheque 1:</label>
-        <input type="date" class="cheque-date" />
-        <span class="days-remaining"></span>
-      </div>
-      <div class="cheque-item" data-index="2">
-        <label>Cheque 2:</label>
-        <input type="date" class="cheque-date" />
-        <span class="days-remaining"></span>
-      </div>
-      <div class="cheque-item" data-index="3">
-        <label>Cheque 3:</label>
-        <input type="date" class="cheque-date" />
-        <span class="days-remaining"></span>
-      </div>
-      <div class="cheque-item" data-index="4">
-        <label>Cheque 4:</label>
-        <input type="date" class="cheque-date" />
-        <span class="days-remaining"></span>
-      </div>
-      <div class="cheque-item" data-index="5">
-        <label>Cheque 5:</label>
-        <input type="date" class="cheque-date" />
-        <span class="days-remaining"></span>
-      </div>
-      <div class="cheque-item" data-index="6">
-        <label>Cheque 6:</label>
-        <input type="date" class="cheque-date" />
-        <span class="days-remaining"></span>
-      </div>
-      <div class="cheque-item" data-index="7">
-        <label>Cheque 7:</label>
-        <input type="date" class="cheque-date" />
-        <span class="days-remaining"></span>
-      </div>
+      <!-- Los cheques se crean por JS -->
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
 </html>

@@ -110,6 +110,19 @@ input[type='date'] {
   background-color: #b31414;
 }
 
+.cheque-amount{
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+#summary-table tr td {
+  background-color: var(--accent)
+}
+#summary-table tr th{
+  background-color: var(--secondary);
+}
+
 input {
   background-color: #16245a !important;
 }
