@@ -234,6 +234,32 @@ const fmtISOToLocal = iso => {
   return d.toLocaleString('es-AR', { dateStyle: 'medium', timeStyle: 'short' })
 }
 
+// === Helper: texto de copiado (Descripción – Precio – Código al final) ===
+function buildCopyTextForItem (item = {}) {
+  const desc = (item.descripcion || '').trim()
+  let price = ''
+  if (item.precioArs != null && !Number.isNaN(Number(item.precioArs))) {
+    price = fmtARS(item.precioArs)
+  } else if (item.precioUsd != null && !Number.isNaN(Number(item.precioUsd))) {
+    price = fmtUSD(item.precioUsd)
+  }
+  const code = primaryCode(item.codigo || item.__key || '')
+  const parts = []
+  if (desc) parts.push(desc)
+  if (price) parts.push(price)
+  if (code) parts.push(`Código: ${code}`)
+  return parts.join(' ').trim()
+}
+
+// === Helper: texto de TODAS las ancladas, una por línea ===
+function buildPinnedListText () {
+  if (!pinned.size) return ''
+  return Array.from(pinned.values())
+    .map(it => buildCopyTextForItem(it))
+    .filter(Boolean)
+    .join('\n')
+}
+
 // ====== Toast copiar ======
 let __copyToastTimer = null
 function showCopied (text = 'Copiado') {
@@ -302,8 +328,10 @@ function renderPinnedBar () {
     })
     .join('')
 
+  // Botón ✕: borrar sin copiar
   pinnedBar.querySelectorAll('.pin-chip .remove').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation() // para que NO dispare el click del chip
       const key = btn.closest('.pin-chip')?.dataset?.key
       if (!key) return
       pinned.delete(key)
@@ -315,6 +343,18 @@ function renderPinnedBar () {
           b.setAttribute('aria-pressed', 'false')
           b.title = 'Anclar'
         })
+    })
+  })
+
+  // Click en cualquier producto anclado -> copiar TODA la lista (una por línea)
+  pinnedBar.querySelectorAll('.pin-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const payload = buildPinnedListText()
+      if (!payload) {
+        showCopied('No hay productos anclados')
+        return
+      }
+      writeToClipboard(payload)
     })
   })
 }
@@ -375,6 +415,7 @@ function ensureAnchorMenu () {
 
   panel.innerHTML = `
     <button data-action="copy" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">📋 Copiar cubierta</button>
+    <button data-action="copy-all" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">📋 Copiar ancladas</button>
     <button data-action="pin"  style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">⚓ Anclar</button>
   `
 
@@ -441,8 +482,16 @@ function showAnchorMenu (btn, { item, copyText }) {
       writeToClipboard(copy)
       return
     }
+    if (action === 'copy-all') {
+      const payload = buildPinnedListText()
+      if (payload) writeToClipboard(payload)
+      else showCopied('No hay productos anclados')
+      return
+    }
     if (action === 'pin') {
-      const it = (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) || item
+      const it =
+        (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) ||
+        item
       togglePin(it)
     }
   }
@@ -469,7 +518,6 @@ function renderTable (data) {
     tr.classList.add('copy-row')
     tr.tabIndex = 0
 
-    const codigoDisplay = primaryCode(item.codigo)
     const stockNum = parseStock(item.stock)
     const stockDisplay = stockNum > 100 ? 100 : stockNum
     const key = canonicalKey(item.codigo)
@@ -489,8 +537,13 @@ function renderTable (data) {
          </div>`
       : ''
 
-    const copyText = [codigoDisplay, item.descripcion || '', (precioArs != null ? fmtARS(precioArs) : fmtUSD(precioUsd))]
-      .filter(Boolean).join(' ').trim()
+    // Texto que se copia al hacer click en la fila (código al final)
+    const copyText = buildCopyTextForItem({
+      codigo: item.codigo,
+      descripcion: item.descripcion,
+      precioUsd,
+      precioArs
+    })
 
     tr.dataset.copy = copyText
     tr.dataset.key = key
@@ -808,7 +861,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
   renderPinnedBar()
 
-  ensureUsdInline()    
+  ensureUsdInline()
 
   // 1) Si hay dólar manual, usarlo y mostrar "Manual".
   //    Si no, traer una vez de API para no mostrar vacío.
