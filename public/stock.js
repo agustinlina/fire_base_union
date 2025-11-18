@@ -12,6 +12,8 @@ const ENDPOINTS = {
     'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_cba',
   polo:
     'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_polo',
+  camaras:
+    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_camaras'
 }
 
 // Endpoint de precios (via proxy CORS) -> USD
@@ -679,13 +681,14 @@ async function cargarDatos (stock) {
     let dataStock
     if (stock === 'cordoba') {
       // Depósito 1: CBA + POLO + CAMARAS
-      const [dataCba, dataPolo] = await Promise.all([
+      const [dataCba, dataPolo, dataCamaras] = await Promise.all([
         fetch(ENDPOINTS.cordoba).then(r => r.json()),
         fetch(ENDPOINTS.polo).then(r => r.json()),
+        fetch(ENDPOINTS.camaras).then(r => r.json())
       ])
 
       const cbaMasPolo = mergeStocksSum(dataCba, dataPolo)
-      dataStock = mergeStocksSum(cbaMasPolo)
+      dataStock = mergeStocksSum(cbaMasPolo, dataCamaras)
     } else {
       // Depósito 2: Olavarría
       dataStock = await fetch(ENDPOINTS[stock]).then(r => r.json())
