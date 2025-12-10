@@ -3,7 +3,7 @@
 // ====== Dólar manual (override) ======
 // Si querés fijar el dólar manualmente, poné acá un número (e.g., 950).
 // Si es 0, toma el valor desde la API (Oficial) y se actualiza a las 19:01 AR.
-let DOLAR_TOTAL = 1475
+let DOLAR_TOTAL = 1460
 
 const ENDPOINTS = {
   olavarria:
@@ -35,13 +35,12 @@ const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
 const pinnedBar = document.getElementById('pinned-bar')
 
-
-
+// ====== Override de cantidades ======
 // Array de códigos cuya cantidad querés pisar
-const CODIGOS_OVERRIDE = ['3147', 'code2']  // acá ponés los códigos reales
+const CODIGOS_OVERRIDE = ['3147', 'code2'] // acá ponés los códigos reales
 
 // Cantidad que querés mostrar para esos códigos
-let CANTIDAD_OVERRIDE = 1  // esto lo podés cambiar dinámicamente
+let CANTIDAD_OVERRIDE = 1 // esto lo podés cambiar dinámicamente
 
 /**
  * data: array de productos [{ codigo, stock, ... }]
@@ -56,7 +55,9 @@ function aplicarOverrideCantidad (data) {
   )
 
   return (Array.isArray(data) ? data : []).map(item => {
-    const codigoNormalizado = String(item.codigo || '').trim().toUpperCase()
+    const codigoNormalizado = String(item.codigo || '')
+      .trim()
+      .toUpperCase()
 
     if (setCodigos.has(codigoNormalizado)) {
       // pisamos el stock para esos códigos
@@ -71,21 +72,21 @@ function aplicarOverrideCantidad (data) {
   })
 }
 
-
-
 const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 
 let allData = []
 let stockActual = 'cordoba'
 
 // ====== Estado de cotización (API) ======
-let usdRate = null            // número (venta) desde API
-let usdInfo = null            // objeto completo de la API
+let usdRate = null // número (venta) desde API
+let usdInfo = null // objeto completo de la API
 let usdRateUpdatedAt = null
 
 // ====== Utilidad override/manual ======
-const isManualDollar = () => Number(DOLAR_TOTAL) !== 0 && Number.isFinite(Number(DOLAR_TOTAL))
-const effectiveUsdRate = () => (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
+const isManualDollar = () =>
+  Number(DOLAR_TOTAL) !== 0 && Number.isFinite(Number(DOLAR_TOTAL))
+const effectiveUsdRate = () =>
+  (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
 
 // ==== Scheduler: actualizar SOLO 19:01 AR (si NO hay manual) ====
 const AR_TZ = 'America/Argentina/Buenos_Aires'
@@ -95,13 +96,19 @@ let schedulerInterval = null
 function getARDateParts (d = new Date()) {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: AR_TZ,
-    year: 'numeric', month: '2-digit', day: '2-digit',
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
     hour12: false
-  }).formatToParts(d).reduce((acc, p) => {
-    if (p.type !== 'literal') acc[p.type] = p.value
-    return acc
-  }, {})
+  })
+    .formatToParts(d)
+    .reduce((acc, p) => {
+      if (p.type !== 'literal') acc[p.type] = p.value
+      return acc
+    }, {})
   const num = k => Number(parts[k])
   return {
     year: parts.year,
@@ -120,7 +127,8 @@ function startUsdDailyScheduler () {
   const check = () => {
     if (isManualDollar()) return // con manual NO se actualiza por API
     const nowAR = getARDateParts()
-    const isAfter1901 = (nowAR.hour > 19) || (nowAR.hour === 19 && nowAR.minute >= 1)
+    const isAfter1901 =
+      nowAR.hour > 19 || (nowAR.hour === 19 && nowAR.minute >= 1)
     if (isAfter1901 && lastScheduledFetchDay !== nowAR.ymd) {
       fetchUsdRate().then(() => {
         aplicarFiltros()
@@ -198,11 +206,12 @@ function codeKeys (raw) {
   const out = []
   const seen = new Set()
   for (const p of parts) {
-    for (const k of codeKeysOne(p))
+    for (const k of codeKeysOne(p)) {
       if (!seen.has(k)) {
         seen.add(k)
         out.push(k)
       }
+    }
   }
   return out
 }
@@ -245,22 +254,40 @@ function esAutoImportado (rubro) {
 
 // Formateos de moneda
 function fmtARS (n) {
-  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n)))
+  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
-  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+  }
+  return (
+    '$ ' +
+    Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+  )
 }
 function fmtUSD (n) {
-  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n)))
+  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
-  return 'US$ ' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  }
+  return (
+    'US$ ' +
+    Number(n).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+  )
 }
+
+// 🔧 NUEVA parseStock: toma 3,000 / 3.000 / 3000 como 3000
 function parseStock (s) {
   if (s === null || s === undefined) return 0
-  if (typeof s === 'number' && !Number.isNaN(s)) return s
-  const cleaned = String(s).replace(/\./g, '').replace(',', '.').trim()
+  if (typeof s === 'number' && Number.isFinite(s)) return s
+
+  // Dejar solo dígitos (sacamos puntos, comas, espacios, etc.)
+  const cleaned = String(s).replace(/[^\d]/g, '').trim()
+  if (!cleaned) return 0
+
   const n = Number(cleaned)
   return Number.isFinite(n) ? n : 0
 }
+
 function shorten (t, max = 36) {
   const s = String(t || '').trim()
   return s.length > max ? s.slice(0, max - 1) + '…' : s
@@ -269,7 +296,10 @@ const fmtISOToLocal = iso => {
   if (!iso) return '—'
   const d = new Date(iso)
   if (isNaN(d)) return '—'
-  return d.toLocaleString('es-AR', { dateStyle: 'medium', timeStyle: 'short' })
+  return d.toLocaleString('es-AR', {
+    dateStyle: 'medium',
+    timeStyle: 'short'
+  })
 }
 
 // === Helper: texto de copiado (Descripción – Precio – Código al final) ===
@@ -306,7 +336,10 @@ function showCopied (text = 'Copiado') {
   toast.textContent = text
   toast.classList.add('show')
   clearTimeout(__copyToastTimer)
-  __copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1200)
+  __copyToastTimer = setTimeout(
+    () => toast.classList.remove('show'),
+    1200
+  )
 }
 
 async function writeToClipboard (payload) {
@@ -353,14 +386,21 @@ function renderPinnedBar () {
     .map(it => {
       const soloPesos = isSoloPesosByCodigo(it.codigo || it.__key)
       const ars = it.precioArs != null ? fmtARS(it.precioArs) : ''
-      const usd = (!soloPesos && it.precioUsd != null)
-        ? ` <small style="opacity:.7">(${fmtUSD(it.precioUsd)})</small>`
-        : ''
+      const usd =
+        !soloPesos && it.precioUsd != null
+          ? ` <small style="opacity:.7">(${fmtUSD(it.precioUsd)})</small>`
+          : ''
       return `
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
         <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
-        ${ars ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>` : (usd ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>` : '')}
+        ${
+          ars
+            ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
+            : usd
+              ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
+              : ''
+        }
         <button class="remove" title="Quitar" style="color:red;">×</button>
       </div>`
     })
@@ -368,14 +408,16 @@ function renderPinnedBar () {
 
   // Botón ✕: borrar sin copiar
   pinnedBar.querySelectorAll('.pin-chip .remove').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', e => {
       e.stopPropagation() // para que NO dispare el click del chip
       const key = btn.closest('.pin-chip')?.dataset?.key
       if (!key) return
       pinned.delete(key)
       renderPinnedBar()
       document
-        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
+        .querySelectorAll(
+          `.anchor-btn[data-key="${cssEscape(key)}"]`
+        )
         .forEach(b => {
           b.classList.remove('active')
           b.setAttribute('aria-pressed', 'false')
@@ -426,7 +468,9 @@ let anchorMenuOverlay = null
 let anchorMenuPanel = null
 
 function ensureAnchorMenu () {
-  if (anchorMenuOverlay && anchorMenuPanel) return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
+  if (anchorMenuOverlay && anchorMenuPanel) {
+    return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
+  }
 
   const overlay = document.createElement('div')
   overlay.id = 'anchor-menu-overlay'
@@ -473,7 +517,9 @@ function ensureAnchorMenu () {
     if (e.target === overlay) hideAnchorMenu()
   })
   window.addEventListener('keydown', e => {
-    if (overlay.style.display === 'flex' && e.key === 'Escape') hideAnchorMenu()
+    if (overlay.style.display === 'flex' && e.key === 'Escape') {
+      hideAnchorMenu()
+    }
   })
 
   anchorMenuOverlay = overlay
@@ -504,8 +550,12 @@ function showAnchorMenu (btn, { item, copyText }) {
     const r = btn.getBoundingClientRect()
     const margin = 6
     panel.style.position = 'fixed'
-    panel.style.left = Math.min(window.innerWidth - panel.offsetWidth - 8, Math.max(8, r.left)) + 'px'
-    panel.style.top = (r.bottom + margin) + 'px'
+    panel.style.left =
+      Math.min(
+        window.innerWidth - panel.offsetWidth - 8,
+        Math.max(8, r.left)
+      ) + 'px'
+    panel.style.top = r.bottom + margin + 'px'
     panel.style.transform = 'none'
   }
 
@@ -528,7 +578,8 @@ function showAnchorMenu (btn, { item, copyText }) {
     }
     if (action === 'pin') {
       const it =
-        (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) ||
+        (tableBody._lastRowMap &&
+          tableBody._lastRowMap.get(key)) ||
         item
       togglePin(it)
     }
@@ -557,23 +608,41 @@ function renderTable (data) {
     tr.tabIndex = 0
 
     const stockNum = parseStock(item.stock)
+
+    // 👇 si querés ver el número real, cambiá por: const stockDisplay = stockNum;
     const stockDisplay = stockNum > 100 ? 100 : stockNum
+
     const key = canonicalKey(item.codigo)
 
     // Precios
-    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
-    const precioArs = (rate && precioUsd != null)
-      ? Math.round(precioUsd * rate)
-      : null
+    const precioUsd =
+      item.precioUsd != null ? Number(item.precioUsd) : null
+    const precioArs =
+      rate && precioUsd != null
+        ? Math.round(precioUsd * rate)
+        : null
 
     const soloPesos = isSoloPesosByCodigo(item.codigo)
 
-    const priceHtml = (precioUsd != null)
-      ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
-           ${precioArs != null ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArs)}</span>` : ''}
-           ${soloPesos ? '' : `<span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>`}
+    const priceHtml =
+      precioUsd != null
+        ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
+           ${
+             precioArs != null
+               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
+                   precioArs
+                 )}</span>`
+               : ''
+           }
+           ${
+             soloPesos
+               ? ''
+               : `<span class="price-usd" style="opacity:.8;">${fmtUSD(
+                   precioUsd
+                 )}</span>`
+           }
          </div>`
-      : ''
+        : ''
 
     // Texto que se copia al hacer click en la fila (código al final)
     const copyText = buildCopyTextForItem({
@@ -614,15 +683,23 @@ function renderTable (data) {
         const row = anchorBtn.closest('tr')
         const copyText = row?.dataset?.copy || ''
         const it =
-          (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
-          { codigo: k, descripcion: row?.querySelector('td')?.innerText || '', precioUsd: null, precioArs: null }
+          (tableBody._lastRowMap &&
+            tableBody._lastRowMap.get(k)) || {
+            codigo: k,
+            descripcion:
+              row?.querySelector('td')?.innerText || '',
+            precioUsd: null,
+            precioArs: null
+          }
         showAnchorMenu(anchorBtn, { item: it, copyText })
         return
       }
 
       const tr = e.target.closest('tr')
       if (!tr || !tr.dataset.copy) return
-      tr.classList.remove('copy-flash'); void tr.offsetWidth; tr.classList.add('copy-flash')
+      tr.classList.remove('copy-flash')
+      void tr.offsetWidth
+      tr.classList.add('copy-flash')
       writeToClipboard(tr.dataset.copy)
       tr.focus?.()
     })
@@ -632,7 +709,9 @@ function renderTable (data) {
       if (!tr) return
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault()
-        tr.classList.remove('copy-flash'); void tr.offsetWidth; tr.classList.add('copy-flash')
+        tr.classList.remove('copy-flash')
+        void tr.offsetWidth
+        tr.classList.add('copy-flash')
         writeToClipboard(tr.dataset.copy || '')
       }
       if (e.key.toLowerCase() === 'm') {
@@ -640,15 +719,29 @@ function renderTable (data) {
         if (btn) {
           const k = tr.dataset.key
           const it =
-            (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
-            { codigo: k, descripcion: tr.querySelector('td')?.innerText || '', precioUsd: null, precioArs: null }
-          showAnchorMenu(btn, { item: it, copyText: tr.dataset.copy || '' })
+            (tableBody._lastRowMap &&
+              tableBody._lastRowMap.get(k)) || {
+              codigo: k,
+              descripcion:
+                tr.querySelector('td')?.innerText || '',
+              precioUsd: null,
+              precioArs: null
+            }
+          showAnchorMenu(btn, {
+            item: it,
+            copyText: tr.dataset.copy || ''
+          })
         }
       }
     })
 
     window.addEventListener('resize', () => {
-      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') return
+      if (
+        !anchorMenuOverlay ||
+        anchorMenuOverlay.style.display === 'none'
+      ) {
+        return
+      }
       hideAnchorMenu()
     })
   }
@@ -664,20 +757,25 @@ function setActiveBtn (btn) {
 function aplicarFiltros () {
   const valor = buscador.value.trim().toLowerCase()
   if (!valor) {
-    renderPlaceholder('Utiliza la barra de búsqueda para ver resultados')
+    renderPlaceholder(
+      'Utiliza la barra de búsqueda para ver resultados'
+    )
     return
   }
 
   let datos = [...allData]
-  if (window.filtroActivo === 'camion')
+  if (window.filtroActivo === 'camion') {
     datos = datos.filter(it => esCamionImportado(it.rubro))
-  else if (window.filtroActivo === 'auto')
+  } else if (window.filtroActivo === 'auto') {
     datos = datos.filter(it => esAutoImportado(it.rubro))
+  }
 
   datos = datos.filter(
     it =>
-      (it.codigo && String(it.codigo).toLowerCase().includes(valor)) ||
-      (it.descripcion && it.descripcion.toLowerCase().includes(valor))
+      (it.codigo &&
+        String(it.codigo).toLowerCase().includes(valor)) ||
+      (it.descripcion &&
+        it.descripcion.toLowerCase().includes(valor))
   )
 
   renderTable(datos) // recalcula ARS con effectiveUsdRate()
@@ -694,7 +792,9 @@ function mergeStocksSum (arrA, arrB) {
     if (!curr) map.set(key, { ...it, stock: stockNum })
     else {
       curr.stock = parseStock(curr.stock) + stockNum
-      if (!curr.descripcion && it.descripcion) curr.descripcion = it.descripcion
+      if (!curr.descripcion && it.descripcion) {
+        curr.descripcion = it.descripcion
+      }
       if (!curr.rubro && it.rubro) curr.rubro = it.rubro
     }
   }
@@ -713,7 +813,9 @@ async function cargarDatos (stock) {
     // Traer precios USD y, si no hay manual, intentar cotización inicial
     const [dataPrices] = await Promise.all([
       fetch(PRICES_URL).then(r => r.json()),
-      (async () => { if (!isManualDollar() && !usdRate) await fetchUsdRate() })()
+      (async () => {
+        if (!isManualDollar() && !usdRate) await fetchUsdRate()
+      })()
     ])
 
     let dataStock
@@ -729,8 +831,13 @@ async function cargarDatos (stock) {
       dataStock = mergeStocksSum(cbaMasPolo, dataCamaras)
     } else {
       // Depósito 2: Olavarría
-      dataStock = await fetch(ENDPOINTS[stock]).then(r => r.json())
+      dataStock = await fetch(ENDPOINTS[stock]).then(r =>
+        r.json()
+      )
     }
+
+    // 👉 Aplicamos override de cantidad (3147, etc.)
+    dataStock = aplicarOverrideCantidad(dataStock)
 
     // Price map por claves (USD)
     const priceMap = new Map()
@@ -742,16 +849,19 @@ async function cargarDatos (stock) {
     })
 
     // Unificar dataset y agregar precioUsd
-    allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
-      const keys = codeKeys(item?.codigo)
-      let precioUsd = null
-      for (const k of keys)
-        if (priceMap.has(k)) {
-          precioUsd = priceMap.get(k)
-          break
+    allData = (Array.isArray(dataStock) ? dataStock : []).map(
+      item => {
+        const keys = codeKeys(item?.codigo)
+        let precioUsd = null
+        for (const k of keys) {
+          if (priceMap.has(k)) {
+            precioUsd = priceMap.get(k)
+            break
+          }
         }
-      return { ...item, precioUsd }
-    })
+        return { ...item, precioUsd }
+      }
+    )
 
     if (loading) loading.style.display = 'none'
     aplicarFiltros()
@@ -813,16 +923,22 @@ function updateUsdInlineUIFromManual () {
   const refs = ensureUsdInline()
   refs.precio.textContent = fmtARS(Number(DOLAR_TOTAL))
   refs.label.textContent = 'Absoluto'
-  refs.updated.textContent = fmtISOToLocal(new Date().toISOString())
+  refs.updated.textContent = fmtISOToLocal(
+    new Date().toISOString()
+  )
 }
 
 function updateUsdInlineUI (data) {
   const refs = ensureUsdInline()
   if (isManualDollar()) return updateUsdInlineUIFromManual()
-  const venta = (typeof data?.venta === 'number') ? data.venta : null
-  refs.precio.textContent = venta != null ? fmtARS(venta) : '—'
+  const venta =
+    typeof data?.venta === 'number' ? data.venta : null
+  refs.precio.textContent =
+    venta != null ? fmtARS(venta) : '—'
   refs.label.textContent = 'Oficial'
-  refs.updated.textContent = fmtISOToLocal(data?.fechaActualizacion)
+  refs.updated.textContent = fmtISOToLocal(
+    data?.fechaActualizacion
+  )
 }
 
 // ====== Cotización: fetch (sincroniza UI si NO manual) ======
@@ -840,13 +956,16 @@ async function fetchUsdRate () {
     if (Number.isFinite(venta) && venta > 0) {
       usdRate = venta
       usdInfo = json
-      usdRateUpdatedAt = json?.fechaActualizacion || new Date().toISOString()
+      usdRateUpdatedAt =
+        json?.fechaActualizacion || new Date().toISOString()
       updateUsdInlineUI(usdInfo)
     }
   } catch (e) {
     console.warn('No se pudo obtener la cotización oficial:', e)
     const refs = usdLineRef || ensureUsdInline()
-    if (refs?.updated) refs.updated.textContent = 'No se pudo actualizar'
+    if (refs?.updated) {
+      refs.updated.textContent = 'No se pudo actualizar'
+    }
   }
 }
 
@@ -857,17 +976,19 @@ function updateClearBtn () {
   clearBuscador.style.display = has ? 'block' : 'none'
 }
 
-buscador && buscador.addEventListener('input', () => {
-  updateClearBtn()
-  aplicarFiltros()
-})
+buscador &&
+  buscador.addEventListener('input', () => {
+    updateClearBtn()
+    aplicarFiltros()
+  })
 
-clearBuscador && clearBuscador.addEventListener('click', () => {
-  buscador.value = ''
-  updateClearBtn()
-  aplicarFiltros()
-  buscador.focus()
-})
+clearBuscador &&
+  clearBuscador.addEventListener('click', () => {
+    buscador.value = ''
+    updateClearBtn()
+    aplicarFiltros()
+    buscador.focus()
+  })
 
 filtroCamion &&
   filtroCamion.addEventListener('click', () => {
@@ -896,12 +1017,14 @@ stockSelect &&
 // ====== Inicial ======
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
-  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
+  renderPlaceholder(
+    'Utiliza la barra de busqueda para en encontrar cubiertas'
+  )
   renderPinnedBar()
 
   ensureUsdInline()
 
-  // 1) Si hay dólar manual, usarlo y mostrar "Manual".
+  // 1) Si hay dólar manual, usarlo y mostrar "Absoluto".
   //    Si no, traer una vez de API para no mostrar vacío.
   if (isManualDollar()) {
     usdRate = Number(DOLAR_TOTAL)
