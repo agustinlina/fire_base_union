@@ -23,13 +23,6 @@ const PRICES_URL =
 // Cotización USD Oficial (venta)
 const USD_API_URL = 'https://dolarapi.com/v1/dolares/oficial'
 
-// ====== Config y OFERTAS (overrides de precio) ======
-const CONFIG_URL = './config.json' // ruta al config.json (mismo directorio)
-
-// ofertasMap: key normalizado -> { valor: number, moneda: 'usd'|'ars' }
-let ofertasMap = new Map()
-let configLoaded = false
-
 // ====== Referencias DOM ======
 const tableBody = document.querySelector('#stock-table tbody')
 const loading = document.getElementById('loading')
@@ -42,21 +35,57 @@ const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
 const pinnedBar = document.getElementById('pinned-bar')
 
+
+
+// Array de códigos cuya cantidad querés pisar
+const CODIGOS_OVERRIDE = ['3147', 'code2']  // acá ponés los códigos reales
+
+// Cantidad que querés mostrar para esos códigos
+let CANTIDAD_OVERRIDE = 1  // esto lo podés cambiar dinámicamente
+
+/**
+ * data: array de productos [{ codigo, stock, ... }]
+ * Devuelve un NUEVO array donde los códigos del array CODIGOS_OVERRIDE
+ * tienen su campo "stock" igualado a CANTIDAD_OVERRIDE.
+ */
+function aplicarOverrideCantidad (data) {
+  const setCodigos = new Set(
+    CODIGOS_OVERRIDE.map(c =>
+      String(c || '').trim().toUpperCase()
+    )
+  )
+
+  return (Array.isArray(data) ? data : []).map(item => {
+    const codigoNormalizado = String(item.codigo || '').trim().toUpperCase()
+
+    if (setCodigos.has(codigoNormalizado)) {
+      // pisamos el stock para esos códigos
+      return {
+        ...item,
+        stock: CANTIDAD_OVERRIDE
+      }
+    }
+
+    // resto queda igual
+    return item
+  })
+}
+
+
+
 const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 
 let allData = []
 let stockActual = 'cordoba'
 
 // ====== Estado de cotización (API) ======
-let usdRate = null // número (venta) desde API
-let usdInfo = null // objeto completo de la API
+let usdRate = null            // número (venta) desde API
+let usdInfo = null            // objeto completo de la API
 let usdRateUpdatedAt = null
 
 // ====== Utilidad override/manual ======
-const isManualDollar = () =>
-  Number(DOLAR_TOTAL) !== 0 && Number.isFinite(Number(DOLAR_TOTAL))
-const effectiveUsdRate = () =>
-  (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
+const isManualDollar = () => Number(DOLAR_TOTAL) !== 0 && Number.isFinite(Number(DOLAR_TOTAL))
+const effectiveUsdRate = () => (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
 
 // ==== Scheduler: actualizar SOLO 19:01 AR (si NO hay manual) ====
 const AR_TZ = 'America/Argentina/Buenos_Aires'
@@ -66,19 +95,13 @@ let schedulerInterval = null
 function getARDateParts (d = new Date()) {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: AR_TZ,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
     hour12: false
-  })
-    .formatToParts(d)
-    .reduce((acc, p) => {
-      if (p.type !== 'literal') acc[p.type] = p.value
-      return acc
-    }, {})
+  }).formatToParts(d).reduce((acc, p) => {
+    if (p.type !== 'literal') acc[p.type] = p.value
+    return acc
+  }, {})
   const num = k => Number(parts[k])
   return {
     year: parts.year,
@@ -97,8 +120,7 @@ function startUsdDailyScheduler () {
   const check = () => {
     if (isManualDollar()) return // con manual NO se actualiza por API
     const nowAR = getARDateParts()
-    const isAfter1901 =
-      nowAR.hour > 19 || (nowAR.hour === 19 && nowAR.minute >= 1)
+    const isAfter1901 = (nowAR.hour > 19) || (nowAR.hour === 19 && nowAR.minute >= 1)
     if (isAfter1901 && lastScheduledFetchDay !== nowAR.ymd) {
       fetchUsdRate().then(() => {
         aplicarFiltros()
@@ -176,14 +198,23 @@ function codeKeys (raw) {
   const out = []
   const seen = new Set()
   for (const p of parts) {
-    for (const k of codeKeysOne(p)) {
+    for (const k of codeKeysOne(p))
       if (!seen.has(k)) {
         seen.add(k)
         out.push(k)
       }
-    }
   }
   return out
+}
+
+// ====== Códigos que deben mostrarse SOLO en pesos (ocultar USD) ======
+const noMostrarPesos = ['3147', '3148', '7500584', '7500589'] // agregá/quita códigos acá
+
+const SOLO_PESOS_SET = new Set(noMostrarPesos.map(c => clean(c)))
+
+function isSoloPesosByCodigo (codigoRaw) {
+  const keys = codeKeys(codigoRaw)
+  return keys.some(k => SOLO_PESOS_SET.has(clean(k)))
 }
 
 function canonicalKey (raw) {
@@ -212,91 +243,16 @@ function esAutoImportado (rubro) {
   return n.startsWith('royal') || n.startsWith('trans')
 }
 
-// ====== Códigos que deben mostrarse SOLO en pesos (ocultar USD) ======
-const noMostrarPesos = ['3147', '3148', '7500584', '7500589'] // agregá/quita códigos acá
-
-const SOLO_PESOS_SET = new Set(noMostrarPesos.map(c => clean(c)))
-
-function isSoloPesosByCodigo (codigoRaw) {
-  const keys = codeKeys(codigoRaw)
-  return keys.some(k => SOLO_PESOS_SET.has(clean(k)))
-}
-
-// ====== Config: aplicar ofertas desde config.json ======
-function applyOffersFromConfig (config) {
-  const map = new Map()
-
-  if (config && Array.isArray(config.ofertas)) {
-    config.ofertas.forEach(entry => {
-      if (!Array.isArray(entry) || entry.length < 2) return
-
-      const [codigoRaw, precioRaw, tipoRaw] = entry
-      const precioNum = Number(precioRaw)
-      if (!codigoRaw || !Number.isFinite(precioNum)) return
-
-      // Si no viene tipo, por compatibilidad asumimos USD
-      const tipoNorm = (tipoRaw || 'usd')
-        .toString()
-        .trim()
-        .toLowerCase()
-
-      let moneda = 'usd'
-      if (
-        tipoNorm === 'ar' ||
-        tipoNorm === 'ars' ||
-        tipoNorm === 'peso' ||
-        tipoNorm === 'pesos'
-      ) {
-        moneda = 'ars'
-      }
-
-      // Normalizamos códigos igual que en los precios normales
-      codeKeysOne(codigoRaw).forEach(k => {
-        const ck = clean(k)
-        map.set(ck, { valor: precioNum, moneda }) // valor y moneda ('usd' | 'ars')
-      })
-    })
-  }
-
-  ofertasMap = map
-}
-
-// Cargamos config.json una sola vez
-async function loadConfig () {
-  if (configLoaded) return
-  configLoaded = true
-
-  try {
-    const res = await fetch(CONFIG_URL, { cache: 'no-store' })
-    if (!res.ok) return
-    const json = await res.json()
-    applyOffersFromConfig(json)
-  } catch (e) {
-    console.warn('No se pudo cargar config.json:', e)
-  }
-}
-
 // Formateos de moneda
 function fmtARS (n) {
-  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
+  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n)))
     return ''
-  }
-  return (
-    '$ ' +
-    Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
-  )
+  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
 }
 function fmtUSD (n) {
-  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
+  if (n === null || n === undefined || n === '' || Number.isNaN(Number(n)))
     return ''
-  }
-  return (
-    'US$ ' +
-    Number(n).toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    })
-  )
+  return 'US$ ' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 function parseStock (s) {
   if (s === null || s === undefined) return 0
@@ -313,25 +269,19 @@ const fmtISOToLocal = iso => {
   if (!iso) return '—'
   const d = new Date(iso)
   if (isNaN(d)) return '—'
-  return d.toLocaleString('es-AR', {
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  })
+  return d.toLocaleString('es-AR', { dateStyle: 'medium', timeStyle: 'short' })
 }
 
 // === Helper: texto de copiado (Descripción – Precio – Código al final) ===
 function buildCopyTextForItem (item = {}) {
   const desc = (item.descripcion || '').trim()
-
   let price = ''
   if (item.precioArs != null && !Number.isNaN(Number(item.precioArs))) {
     price = fmtARS(item.precioArs)
   } else if (item.precioUsd != null && !Number.isNaN(Number(item.precioUsd))) {
     price = fmtUSD(item.precioUsd)
   }
-
   const code = primaryCode(item.codigo || item.__key || '')
-
   const parts = []
   if (desc) parts.push(desc)
   if (price) parts.push(price)
@@ -356,10 +306,7 @@ function showCopied (text = 'Copiado') {
   toast.textContent = text
   toast.classList.add('show')
   clearTimeout(__copyToastTimer)
-  __copyToastTimer = setTimeout(
-    () => toast.classList.remove('show'),
-    1200
-  )
+  __copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1200)
 }
 
 async function writeToClipboard (payload) {
@@ -405,28 +352,15 @@ function renderPinnedBar () {
   pinnedBar.innerHTML = Array.from(pinned.values())
     .map(it => {
       const soloPesos = isSoloPesosByCodigo(it.codigo || it.__key)
-      const ars =
-        it.precioArs != null ? fmtARS(it.precioArs) : ''
-      const usd =
-        !soloPesos && it.precioUsd != null
-          ? ` <small style="opacity:.7">(${fmtUSD(
-              it.precioUsd
-            )})</small>`
-          : ''
+      const ars = it.precioArs != null ? fmtARS(it.precioArs) : ''
+      const usd = (!soloPesos && it.precioUsd != null)
+        ? ` <small style="opacity:.7">(${fmtUSD(it.precioUsd)})</small>`
+        : ''
       return `
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
-        <span class="pin-desc">${shorten(
-          it.descripcion,
-          34
-        )}</span>
-        ${
-          ars
-            ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
-            : usd
-              ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
-              : ''
-        }
+        <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
+        ${ars ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>` : (usd ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>` : '')}
         <button class="remove" title="Quitar" style="color:red;">×</button>
       </div>`
     })
@@ -434,16 +368,14 @@ function renderPinnedBar () {
 
   // Botón ✕: borrar sin copiar
   pinnedBar.querySelectorAll('.pin-chip .remove').forEach(btn => {
-    btn.addEventListener('click', e => {
+    btn.addEventListener('click', (e) => {
       e.stopPropagation() // para que NO dispare el click del chip
       const key = btn.closest('.pin-chip')?.dataset?.key
       if (!key) return
       pinned.delete(key)
       renderPinnedBar()
       document
-        .querySelectorAll(
-          `.anchor-btn[data-key="${cssEscape(key)}"]`
-        )
+        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
         .forEach(b => {
           b.classList.remove('active')
           b.setAttribute('aria-pressed', 'false')
@@ -470,21 +402,9 @@ function togglePin (item) {
   if (!key) return
   const toSave = { ...item, __key: key }
   const rate = effectiveUsdRate()
-
-  // Si viene precioArs en el item (por oferta ARS), se respeta tal cual.
-  if (
-    item?.precioArs != null &&
-    !Number.isNaN(Number(item.precioArs))
-  ) {
-    toSave.precioArs = Number(item.precioArs)
-  } else if (rate && item?.precioUsd != null) {
-    toSave.precioArs = Math.round(
-      Number(item.precioUsd) * rate
-    )
-  } else {
-    toSave.precioArs = null
+  if (rate && item?.precioUsd != null) {
+    toSave.precioArs = Math.round(Number(item.precioUsd) * rate)
   }
-
   if (pinned.has(key)) {
     pinned.delete(key)
   } else {
@@ -492,9 +412,7 @@ function togglePin (item) {
   }
   renderPinnedBar()
   document
-    .querySelectorAll(
-      `.anchor-btn[data-key="${cssEscape(key)}"]`
-    )
+    .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
     .forEach(b => {
       const on = pinned.has(key)
       b.classList.toggle('active', on)
@@ -508,9 +426,7 @@ let anchorMenuOverlay = null
 let anchorMenuPanel = null
 
 function ensureAnchorMenu () {
-  if (anchorMenuOverlay && anchorMenuPanel) {
-    return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
-  }
+  if (anchorMenuOverlay && anchorMenuPanel) return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
 
   const overlay = document.createElement('div')
   overlay.id = 'anchor-menu-overlay'
@@ -557,9 +473,7 @@ function ensureAnchorMenu () {
     if (e.target === overlay) hideAnchorMenu()
   })
   window.addEventListener('keydown', e => {
-    if (overlay.style.display === 'flex' && e.key === 'Escape') {
-      hideAnchorMenu()
-    }
+    if (overlay.style.display === 'flex' && e.key === 'Escape') hideAnchorMenu()
   })
 
   anchorMenuOverlay = overlay
@@ -590,12 +504,8 @@ function showAnchorMenu (btn, { item, copyText }) {
     const r = btn.getBoundingClientRect()
     const margin = 6
     panel.style.position = 'fixed'
-    panel.style.left =
-      Math.min(
-        window.innerWidth - panel.offsetWidth - 8,
-        Math.max(8, r.left)
-      ) + 'px'
-    panel.style.top = r.bottom + margin + 'px'
+    panel.style.left = Math.min(window.innerWidth - panel.offsetWidth - 8, Math.max(8, r.left)) + 'px'
+    panel.style.top = (r.bottom + margin) + 'px'
     panel.style.transform = 'none'
   }
 
@@ -618,8 +528,7 @@ function showAnchorMenu (btn, { item, copyText }) {
     }
     if (action === 'pin') {
       const it =
-        (tableBody._lastRowMap &&
-          tableBody._lastRowMap.get(key)) ||
+        (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) ||
         item
       togglePin(it)
     }
@@ -651,43 +560,20 @@ function renderTable (data) {
     const stockDisplay = stockNum > 100 ? 100 : stockNum
     const key = canonicalKey(item.codigo)
 
-    // Precios: respetar overrides en ARS si existen
-    let precioUsd =
-      item.precioUsd != null ? Number(item.precioUsd) : null
-    let precioArs =
-      item.precioArs != null ? Number(item.precioArs) : null
-
-    // Si NO hay ARS fijo y hay USD + cotización, calculamos ARS
-    if (
-      (precioArs == null ||
-        Number.isNaN(Number(precioArs))) &&
-      rate &&
-      precioUsd != null
-    ) {
-      precioArs = Math.round(precioUsd * rate)
-    }
+    // Precios
+    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
+    const precioArs = (rate && precioUsd != null)
+      ? Math.round(precioUsd * rate)
+      : null
 
     const soloPesos = isSoloPesosByCodigo(item.codigo)
 
-    const priceHtml =
-      precioUsd != null || precioArs != null
-        ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
-           ${
-             precioArs != null
-               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
-                   precioArs
-                 )}</span>`
-               : ''
-           }
-           ${
-             soloPesos || precioUsd == null
-               ? ''
-               : `<span class="price-usd" style="opacity:.8;">${fmtUSD(
-                   precioUsd
-                 )}</span>`
-           }
+    const priceHtml = (precioUsd != null)
+      ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
+           ${precioArs != null ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArs)}</span>` : ''}
+           ${soloPesos ? '' : `<span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>`}
          </div>`
-        : ''
+      : ''
 
     // Texto que se copia al hacer click en la fila (código al final)
     const copyText = buildCopyTextForItem({
@@ -702,31 +588,19 @@ function renderTable (data) {
 
     const anchorBtnHTML = `
       <button class="anchor-btn ${pinned.has(key) ? 'active' : ''}" 
-              title="${
-                pinned.has(key) ? 'Desanclar' : 'Anclar'
-              }" 
-              aria-pressed="${
-                pinned.has(key) ? 'true' : 'false'
-              }"
+              title="${pinned.has(key) ? 'Desanclar' : 'Anclar'}" 
+              aria-pressed="${pinned.has(key) ? 'true' : 'false'}"
               data-key="${key}"><img src="./media/3dots.png"></button>`
 
     tr.innerHTML = `
-      <td class="descycode"><span>${
-        item.descripcion || ''
-      }</span><span style="height:16px"></span><span style="font-size:12px">Código:<code> ${
-        item.codigo
-      }</code></span></td>
+      <td class="descycode"><span>${item.descripcion || ''}</span><span style="height:16px"></span><span style="font-size:12px">Código:<code> ${item.codigo}</code></span></td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
       <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${anchorBtnHTML}</td>
     `
     tableBody.appendChild(tr)
 
-    rowItemByKey.set(key, {
-      ...item,
-      precioUsd,
-      precioArs
-    })
+    rowItemByKey.set(key, { ...item, precioUsd, precioArs })
   })
 
   if (!tableBody.__delegated) {
@@ -740,23 +614,15 @@ function renderTable (data) {
         const row = anchorBtn.closest('tr')
         const copyText = row?.dataset?.copy || ''
         const it =
-          (tableBody._lastRowMap &&
-            tableBody._lastRowMap.get(k)) || {
-            codigo: k,
-            descripcion:
-              row?.querySelector('td')?.innerText || '',
-            precioUsd: null,
-            precioArs: null
-          }
+          (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
+          { codigo: k, descripcion: row?.querySelector('td')?.innerText || '', precioUsd: null, precioArs: null }
         showAnchorMenu(anchorBtn, { item: it, copyText })
         return
       }
 
       const tr = e.target.closest('tr')
       if (!tr || !tr.dataset.copy) return
-      tr.classList.remove('copy-flash')
-      void tr.offsetWidth
-      tr.classList.add('copy-flash')
+      tr.classList.remove('copy-flash'); void tr.offsetWidth; tr.classList.add('copy-flash')
       writeToClipboard(tr.dataset.copy)
       tr.focus?.()
     })
@@ -766,9 +632,7 @@ function renderTable (data) {
       if (!tr) return
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault()
-        tr.classList.remove('copy-flash')
-        void tr.offsetWidth
-        tr.classList.add('copy-flash')
+        tr.classList.remove('copy-flash'); void tr.offsetWidth; tr.classList.add('copy-flash')
         writeToClipboard(tr.dataset.copy || '')
       }
       if (e.key.toLowerCase() === 'm') {
@@ -776,29 +640,15 @@ function renderTable (data) {
         if (btn) {
           const k = tr.dataset.key
           const it =
-            (tableBody._lastRowMap &&
-              tableBody._lastRowMap.get(k)) || {
-              codigo: k,
-              descripcion:
-                tr.querySelector('td')?.innerText || '',
-              precioUsd: null,
-              precioArs: null
-            }
-          showAnchorMenu(btn, {
-            item: it,
-            copyText: tr.dataset.copy || ''
-          })
+            (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) ||
+            { codigo: k, descripcion: tr.querySelector('td')?.innerText || '', precioUsd: null, precioArs: null }
+          showAnchorMenu(btn, { item: it, copyText: tr.dataset.copy || '' })
         }
       }
     })
 
     window.addEventListener('resize', () => {
-      if (
-        !anchorMenuOverlay ||
-        anchorMenuOverlay.style.display === 'none'
-      ) {
-        return
-      }
+      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') return
       hideAnchorMenu()
     })
   }
@@ -814,25 +664,20 @@ function setActiveBtn (btn) {
 function aplicarFiltros () {
   const valor = buscador.value.trim().toLowerCase()
   if (!valor) {
-    renderPlaceholder(
-      'Utiliza la barra de búsqueda para ver resultados'
-    )
+    renderPlaceholder('Utiliza la barra de búsqueda para ver resultados')
     return
   }
 
   let datos = [...allData]
-  if (window.filtroActivo === 'camion') {
+  if (window.filtroActivo === 'camion')
     datos = datos.filter(it => esCamionImportado(it.rubro))
-  } else if (window.filtroActivo === 'auto') {
+  else if (window.filtroActivo === 'auto')
     datos = datos.filter(it => esAutoImportado(it.rubro))
-  }
 
   datos = datos.filter(
     it =>
-      (it.codigo &&
-        String(it.codigo).toLowerCase().includes(valor)) ||
-      (it.descripcion &&
-        it.descripcion.toLowerCase().includes(valor))
+      (it.codigo && String(it.codigo).toLowerCase().includes(valor)) ||
+      (it.descripcion && it.descripcion.toLowerCase().includes(valor))
   )
 
   renderTable(datos) // recalcula ARS con effectiveUsdRate()
@@ -849,9 +694,7 @@ function mergeStocksSum (arrA, arrB) {
     if (!curr) map.set(key, { ...it, stock: stockNum })
     else {
       curr.stock = parseStock(curr.stock) + stockNum
-      if (!curr.descripcion && it.descripcion) {
-        curr.descripcion = it.descripcion
-      }
+      if (!curr.descripcion && it.descripcion) curr.descripcion = it.descripcion
       if (!curr.rubro && it.rubro) curr.rubro = it.rubro
     }
   }
@@ -867,38 +710,29 @@ async function cargarDatos (stock) {
   setActiveBtn(null)
 
   try {
-    // Traer precios USD, ofertas (config.json) y, si no hay manual, intentar cotización inicial
+    // Traer precios USD y, si no hay manual, intentar cotización inicial
     const [dataPrices] = await Promise.all([
       fetch(PRICES_URL).then(r => r.json()),
-      (async () => {
-        if (!isManualDollar() && !usdRate) {
-          await fetchUsdRate()
-        }
-      })(),
-      loadConfig() // carga config.json y llena ofertasMap
+      (async () => { if (!isManualDollar() && !usdRate) await fetchUsdRate() })()
     ])
 
     let dataStock
     if (stock === 'cordoba') {
       // Depósito 1: CBA + POLO + CAMARAS
-      const [dataCba, dataPolo, dataCamaras] = await Promise.all(
-        [
-          fetch(ENDPOINTS.cordoba).then(r => r.json()),
-          fetch(ENDPOINTS.polo).then(r => r.json()),
-          fetch(ENDPOINTS.camaras).then(r => r.json())
-        ]
-      )
+      const [dataCba, dataPolo, dataCamaras] = await Promise.all([
+        fetch(ENDPOINTS.cordoba).then(r => r.json()),
+        fetch(ENDPOINTS.polo).then(r => r.json()),
+        fetch(ENDPOINTS.camaras).then(r => r.json())
+      ])
 
       const cbaMasPolo = mergeStocksSum(dataCba, dataPolo)
       dataStock = mergeStocksSum(cbaMasPolo, dataCamaras)
     } else {
       // Depósito 2: Olavarría
-      dataStock = await fetch(ENDPOINTS[stock]).then(r =>
-        r.json()
-      )
+      dataStock = await fetch(ENDPOINTS[stock]).then(r => r.json())
     }
 
-    // Price map por claves (USD) desde API normal
+    // Price map por claves (USD)
     const priceMap = new Map()
     ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
       const precio = p?.precio ?? null // USD
@@ -907,40 +741,17 @@ async function cargarDatos (stock) {
       })
     })
 
-    // Unificar dataset y agregar precioUsd / precioArs (ofertas pisan Excel/API)
-    allData = (Array.isArray(dataStock) ? dataStock : []).map(
-      item => {
-        const keys = codeKeys(item?.codigo)
-        let precioUsd = null
-        let precioArs = null
-
-        // 1) Primero, buscamos si hay OFERTA en config.json
-        for (const k of keys) {
-          const ck = clean(k)
-          const of = ofertasMap.get(ck)
-          if (of) {
-            if (of.moneda === 'usd') {
-              precioUsd = of.valor // precio fijo en USD
-            } else if (of.moneda === 'ars') {
-              precioArs = of.valor // precio fijo en ARS
-            }
-            break
-          }
+    // Unificar dataset y agregar precioUsd
+    allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
+      const keys = codeKeys(item?.codigo)
+      let precioUsd = null
+      for (const k of keys)
+        if (priceMap.has(k)) {
+          precioUsd = priceMap.get(k)
+          break
         }
-
-        // 2) Si no hay oferta (ni USD ni ARS), usamos el precio normal del API (USD)
-        if (precioUsd == null && precioArs == null) {
-          for (const k of keys) {
-            if (priceMap.has(k)) {
-              precioUsd = priceMap.get(k)
-              break
-            }
-          }
-        }
-
-        return { ...item, precioUsd, precioArs }
-      }
-    )
+      return { ...item, precioUsd }
+    })
 
     if (loading) loading.style.display = 'none'
     aplicarFiltros()
@@ -1002,22 +813,16 @@ function updateUsdInlineUIFromManual () {
   const refs = ensureUsdInline()
   refs.precio.textContent = fmtARS(Number(DOLAR_TOTAL))
   refs.label.textContent = 'Absoluto'
-  refs.updated.textContent = fmtISOToLocal(
-    new Date().toISOString()
-  )
+  refs.updated.textContent = fmtISOToLocal(new Date().toISOString())
 }
 
 function updateUsdInlineUI (data) {
   const refs = ensureUsdInline()
   if (isManualDollar()) return updateUsdInlineUIFromManual()
-  const venta =
-    typeof data?.venta === 'number' ? data.venta : null
-  refs.precio.textContent =
-    venta != null ? fmtARS(venta) : '—'
+  const venta = (typeof data?.venta === 'number') ? data.venta : null
+  refs.precio.textContent = venta != null ? fmtARS(venta) : '—'
   refs.label.textContent = 'Oficial'
-  refs.updated.textContent = fmtISOToLocal(
-    data?.fechaActualizacion
-  )
+  refs.updated.textContent = fmtISOToLocal(data?.fechaActualizacion)
 }
 
 // ====== Cotización: fetch (sincroniza UI si NO manual) ======
@@ -1035,16 +840,13 @@ async function fetchUsdRate () {
     if (Number.isFinite(venta) && venta > 0) {
       usdRate = venta
       usdInfo = json
-      usdRateUpdatedAt =
-        json?.fechaActualizacion || new Date().toISOString()
+      usdRateUpdatedAt = json?.fechaActualizacion || new Date().toISOString()
       updateUsdInlineUI(usdInfo)
     }
   } catch (e) {
     console.warn('No se pudo obtener la cotización oficial:', e)
     const refs = usdLineRef || ensureUsdInline()
-    if (refs?.updated) {
-      refs.updated.textContent = 'No se pudo actualizar'
-    }
+    if (refs?.updated) refs.updated.textContent = 'No se pudo actualizar'
   }
 }
 
@@ -1055,19 +857,17 @@ function updateClearBtn () {
   clearBuscador.style.display = has ? 'block' : 'none'
 }
 
-buscador &&
-  buscador.addEventListener('input', () => {
-    updateClearBtn()
-    aplicarFiltros()
-  })
+buscador && buscador.addEventListener('input', () => {
+  updateClearBtn()
+  aplicarFiltros()
+})
 
-clearBuscador &&
-  clearBuscador.addEventListener('click', () => {
-    buscador.value = ''
-    updateClearBtn()
-    aplicarFiltros()
-    buscador.focus()
-  })
+clearBuscador && clearBuscador.addEventListener('click', () => {
+  buscador.value = ''
+  updateClearBtn()
+  aplicarFiltros()
+  buscador.focus()
+})
 
 filtroCamion &&
   filtroCamion.addEventListener('click', () => {
@@ -1096,14 +896,12 @@ stockSelect &&
 // ====== Inicial ======
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
-  renderPlaceholder(
-    'Utiliza la barra de busqueda para en encontrar cubiertas'
-  )
+  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
   renderPinnedBar()
 
   ensureUsdInline()
 
-  // 1) Si hay dólar manual, usarlo y mostrar "Absoluto".
+  // 1) Si hay dólar manual, usarlo y mostrar "Manual".
   //    Si no, traer una vez de API para no mostrar vacío.
   if (isManualDollar()) {
     usdRate = Number(DOLAR_TOTAL)
