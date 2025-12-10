@@ -35,18 +35,12 @@ const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
 const pinnedBar = document.getElementById('pinned-bar')
 
-// ====== Override de cantidades ======
-// Array de códigos cuya cantidad querés pisar
-const CODIGOS_OVERRIDE = ['3147', 'code2'] // acá ponés los códigos reales
+// ====== Override de cantidades (opcional, ahora desactivado) ======
+// Si querés usarlo de nuevo, cargá códigos en el array y dejá esta
+// parte como está. Por defecto viene vacío para no tocar nada.
+const CODIGOS_OVERRIDE = [] // p.ej. ['3147', 'CODE2']
+let CANTIDAD_OVERRIDE = 1
 
-// Cantidad que querés mostrar para esos códigos
-let CANTIDAD_OVERRIDE = 1 // esto lo podés cambiar dinámicamente
-
-/**
- * data: array de productos [{ codigo, stock, ... }]
- * Devuelve un NUEVO array donde los códigos del array CODIGOS_OVERRIDE
- * tienen su campo "stock" igualado a CANTIDAD_OVERRIDE.
- */
 function aplicarOverrideCantidad (data) {
   const setCodigos = new Set(
     CODIGOS_OVERRIDE.map(c =>
@@ -60,14 +54,12 @@ function aplicarOverrideCantidad (data) {
       .toUpperCase()
 
     if (setCodigos.has(codigoNormalizado)) {
-      // pisamos el stock para esos códigos
       return {
         ...item,
         stock: CANTIDAD_OVERRIDE
       }
     }
 
-    // resto queda igual
     return item
   })
 }
@@ -252,6 +244,67 @@ function esAutoImportado (rubro) {
   return n.startsWith('royal') || n.startsWith('trans')
 }
 
+// ====== Ofertas desde config.json ======
+async function loadOfertasConfig () {
+  try {
+    const res = await fetch('./config.json', { cache: 'no-store' })
+    if (!res.ok) return []
+    const json = await res.json()
+    if (Array.isArray(json)) return json
+    if (Array.isArray(json?.ofertas)) return json.ofertas
+    return []
+  } catch (e) {
+    console.warn('No se pudo cargar config.json:', e)
+    return []
+  }
+}
+
+/**
+ * Soporta:
+ *  - ['3147', 100000, 'ars']
+ *  - { codigo: '3147', precio: 100000, moneda: 'ars' }
+ *  - { codigo: '3147', precio: 250, moneda: 'usd' }
+ *
+ * Devuelve Map<codigoNormalizado, { precio, tipo }>
+ *  tipo = 'ars' | 'usd'
+ */
+function buildOfertasMap (ofertasRaw) {
+  const map = new Map()
+  const arr = Array.isArray(ofertasRaw) ? ofertasRaw : []
+
+  arr.forEach(o => {
+    let codigo
+    let precio
+    let moneda
+
+    if (Array.isArray(o)) {
+      ;[codigo, precio, moneda] = o
+    } else if (o && typeof o === 'object') {
+      codigo = o.codigo ?? o[0]
+      precio = o.precio ?? o.valor ?? o[1]
+      moneda = o.moneda ?? o.tipo ?? o.currency ?? o[2]
+    }
+
+    if (!codigo || precio == null) return
+
+    const numPrecio = Number(precio)
+    if (!Number.isFinite(numPrecio) || numPrecio <= 0) return
+
+    const tipo =
+      String(moneda || 'ars').toLowerCase() === 'usd'
+        ? 'usd'
+        : 'ars'
+
+    codeKeysOne(codigo).forEach(k => {
+      if (!map.has(k)) {
+        map.set(k, { precio: numPrecio, tipo })
+      }
+    })
+  })
+
+  return map
+}
+
 // Formateos de moneda
 function fmtARS (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
@@ -306,11 +359,18 @@ const fmtISOToLocal = iso => {
 function buildCopyTextForItem (item = {}) {
   const desc = (item.descripcion || '').trim()
   let price = ''
-  if (item.precioArs != null && !Number.isNaN(Number(item.precioArs))) {
-    price = fmtARS(item.precioArs)
+
+  const preferArs =
+    item.precioArsOverride != null
+      ? item.precioArsOverride
+      : item.precioArs
+
+  if (preferArs != null && !Number.isNaN(Number(preferArs))) {
+    price = fmtARS(preferArs)
   } else if (item.precioUsd != null && !Number.isNaN(Number(item.precioUsd))) {
     price = fmtUSD(item.precioUsd)
   }
+
   const code = primaryCode(item.codigo || item.__key || '')
   const parts = []
   if (desc) parts.push(desc)
@@ -444,7 +504,7 @@ function togglePin (item) {
   if (!key) return
   const toSave = { ...item, __key: key }
   const rate = effectiveUsdRate()
-  if (rate && item?.precioUsd != null) {
+  if (rate && item?.precioUsd != null && item.precioArs == null) {
     toSave.precioArs = Math.round(Number(item.precioUsd) * rate)
   }
   if (pinned.has(key)) {
@@ -609,7 +669,7 @@ function renderTable (data) {
 
     const stockNum = parseStock(item.stock)
 
-    // 👇 si querés ver el número real, cambiá por: const stockDisplay = stockNum;
+    // 👇 límite visual en 100 (podés cambiarlo o sacarlo)
     const stockDisplay = stockNum > 100 ? 100 : stockNum
 
     const key = canonicalKey(item.codigo)
@@ -617,15 +677,18 @@ function renderTable (data) {
     // Precios
     const precioUsd =
       item.precioUsd != null ? Number(item.precioUsd) : null
-    const precioArs =
-      rate && precioUsd != null
-        ? Math.round(precioUsd * rate)
-        : null
+
+    let precioArs = null
+    if (item.precioArsOverride != null && !Number.isNaN(Number(item.precioArsOverride))) {
+      precioArs = Number(item.precioArsOverride)
+    } else if (rate && precioUsd != null) {
+      precioArs = Math.round(precioUsd * rate)
+    }
 
     const soloPesos = isSoloPesosByCodigo(item.codigo)
 
     const priceHtml =
-      precioUsd != null
+      precioUsd != null || precioArs != null
         ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
            ${
              precioArs != null
@@ -635,11 +698,11 @@ function renderTable (data) {
                : ''
            }
            ${
-             soloPesos
-               ? ''
-               : `<span class="price-usd" style="opacity:.8;">${fmtUSD(
+             !soloPesos && precioUsd != null
+               ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(
                    precioUsd
                  )}</span>`
+               : ''
            }
          </div>`
         : ''
@@ -649,7 +712,8 @@ function renderTable (data) {
       codigo: item.codigo,
       descripcion: item.descripcion,
       precioUsd,
-      precioArs
+      precioArs,
+      precioArsOverride: item.precioArsOverride
     })
 
     tr.dataset.copy = copyText
@@ -810,13 +874,16 @@ async function cargarDatos (stock) {
   setActiveBtn(null)
 
   try {
-    // Traer precios USD y, si no hay manual, intentar cotización inicial
-    const [dataPrices] = await Promise.all([
+    // Traer precios USD, ofertas y, si no hay manual, intentar cotización inicial
+    const [dataPrices, ofertas] = await Promise.all([
       fetch(PRICES_URL).then(r => r.json()),
+      loadOfertasConfig(),
       (async () => {
         if (!isManualDollar() && !usdRate) await fetchUsdRate()
       })()
     ])
+
+    const ofertasMap = buildOfertasMap(ofertas)
 
     let dataStock
     if (stock === 'cordoba') {
@@ -836,7 +903,7 @@ async function cargarDatos (stock) {
       )
     }
 
-    // 👉 Aplicamos override de cantidad (3147, etc.)
+    // 👉 Override de cantidades (por ahora no hace nada porque CODIGOS_OVERRIDE está vacío)
     dataStock = aplicarOverrideCantidad(dataStock)
 
     // Price map por claves (USD)
@@ -848,18 +915,38 @@ async function cargarDatos (stock) {
       })
     })
 
-    // Unificar dataset y agregar precioUsd
+    // Unificar dataset y agregar precioUsd + ofertas
     allData = (Array.isArray(dataStock) ? dataStock : []).map(
       item => {
         const keys = codeKeys(item?.codigo)
         let precioUsd = null
+        let precioArsOverride = null
+
+        // 1) Precio base desde API de precios (USD)
         for (const k of keys) {
           if (priceMap.has(k)) {
             precioUsd = priceMap.get(k)
             break
           }
         }
-        return { ...item, precioUsd }
+
+        // 2) Ofertas del config.json pisan el precio
+        for (const k of keys) {
+          if (ofertasMap.has(k)) {
+            const of = ofertasMap.get(k)
+            if (of.tipo === 'usd') {
+              // Oferta expresada en USD
+              precioUsd = of.precio
+              precioArsOverride = null
+            } else {
+              // Oferta expresada en ARS
+              precioArsOverride = of.precio
+            }
+            break
+          }
+        }
+
+        return { ...item, precioUsd, precioArsOverride }
       }
     )
 
