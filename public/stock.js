@@ -3,7 +3,7 @@
 // ====== Dólar manual (override) ======
 // Si querés fijar el dólar manualmente, poné acá un número (e.g., 950).
 // Si es 0, toma el valor desde la API (Oficial) y se actualiza a las 19:01 AR.
-let DOLAR_TOTAL = 1460
+let DOLAR_TOTAL = 1475
 
 const ENDPOINTS = {
   olavarria:
@@ -38,6 +38,11 @@ const pinnedBar = document.getElementById('pinned-bar')
 
 
 // Array de códigos cuya cantidad querés pisar
+const CODIGOS_OVERRIDE = ['3147', 'code2']  // acá ponés los códigos reales
+
+// Cantidad que querés mostrar para esos códigos
+let CANTIDAD_OVERRIDE = 1  // esto lo podés cambiar dinámicamente
+
 /**
  * data: array de productos [{ codigo, stock, ... }]
  * Devuelve un NUEVO array donde los códigos del array CODIGOS_OVERRIDE
