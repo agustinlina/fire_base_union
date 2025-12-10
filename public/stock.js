@@ -37,41 +37,6 @@ const pinnedBar = document.getElementById('pinned-bar')
 
 
 
-// Array de códigos cuya cantidad querés pisar
-const CODIGOS_OVERRIDE = ['3147', 'code2']  // acá ponés los códigos reales
-
-// Cantidad que querés mostrar para esos códigos
-let CANTIDAD_OVERRIDE = 1  // esto lo podés cambiar dinámicamente
-
-/**
- * data: array de productos [{ codigo, stock, ... }]
- * Devuelve un NUEVO array donde los códigos del array CODIGOS_OVERRIDE
- * tienen su campo "stock" igualado a CANTIDAD_OVERRIDE.
- */
-function aplicarOverrideCantidad (data) {
-  const setCodigos = new Set(
-    CODIGOS_OVERRIDE.map(c =>
-      String(c || '').trim().toUpperCase()
-    )
-  )
-
-  return (Array.isArray(data) ? data : []).map(item => {
-    const codigoNormalizado = String(item.codigo || '').trim().toUpperCase()
-
-    if (setCodigos.has(codigoNormalizado)) {
-      // pisamos el stock para esos códigos
-      return {
-        ...item,
-        stock: CANTIDAD_OVERRIDE
-      }
-    }
-
-    // resto queda igual
-    return item
-  })
-}
-
-
 
 const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 
