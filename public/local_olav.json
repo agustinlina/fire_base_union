@@ -87,7 +87,7 @@
     "codigo": "F36",
     "descripcion": "12.4-36 FORERUNNER QH666 12PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "9"
+    "stock": "7"
   },
   {
     "codigo": "F48",
@@ -171,7 +171,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "10"
+    "stock": "6"
   },
   {
     "codigo": "RK1964H1",
@@ -201,13 +201,13 @@
     "codigo": "6056",
     "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "30"
+    "stock": "23"
   },
   {
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "31"
+    "stock": "27"
   },
   {
     "codigo": "6059",
@@ -261,7 +261,7 @@
     "codigo": "6062",
     "descripcion": "185/60R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "1RK828H1",
@@ -273,7 +273,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "21"
+    "stock": "19"
   },
   {
     "codigo": "6571",
@@ -321,7 +321,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "31"
+    "stock": "27"
   },
   {
     "codigo": "6083",
@@ -340,12 +340,6 @@
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
     "stock": "8"
-  },
-  {
-    "codigo": "6074",
-    "descripcion": "195/60R15 88V TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "2"
   },
   {
     "codigo": "6627",
@@ -387,7 +381,7 @@
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "20"
+    "stock": "7"
   },
   {
     "codigo": "5050",
@@ -564,12 +558,6 @@
     "stock": "12"
   },
   {
-    "codigo": "5563",
-    "descripcion": "225/75R16C 121/120R TRANSMATE TRANSEASON VAN M+S",
-    "rubro": "TRANSEASON VAN",
-    "stock": "3"
-  },
-  {
     "codigo": "F26",
     "descripcion": "23.1-26 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
@@ -639,7 +627,7 @@
     "codigo": "3392",
     "descripcion": "235/70R16 106H TRANSMATE WZD105 M+S",
     "rubro": "WZD105",
-    "stock": "12"
+    "stock": "10"
   },
   {
     "codigo": "AR7971002HD",
@@ -681,7 +669,7 @@
     "codigo": "3421",
     "descripcion": "245/70R16 111T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "3426",
@@ -706,12 +694,6 @@
     "descripcion": "255/55R20 110V TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
     "stock": "10"
-  },
-  {
-    "codigo": "3446",
-    "descripcion": "255/70R16 109T TRANSMATE WZR505 M+S",
-    "rubro": "WZR505",
-    "stock": "2"
   },
   {
     "codigo": "3445",
@@ -747,7 +729,7 @@
     "codigo": "6662",
     "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "22"
+    "stock": "18"
   },
   {
     "codigo": "3458",
@@ -795,13 +777,13 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "82"
+    "stock": "78"
   },
   {
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "80"
+    "stock": "90"
   },
   {
     "codigo": "122983",
@@ -831,13 +813,13 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "45"
+    "stock": "43"
   },
   {
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "28"
+    "stock": "26"
   },
   {
     "codigo": "121760",
@@ -885,25 +867,19 @@
     "codigo": "AR7971602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "14"
-  },
-  {
-    "codigo": "3147",
-    "descripcion": "295/80R22.5 ECO76 TERCELO 152/149M M+S",
-    "rubro": "DIRECCION",
-    "stock": "18"
+    "stock": "6"
   },
   {
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "39"
+    "stock": "51"
   },
   {
     "codigo": "122967",
     "descripcion": "295/80R22.5 FUELMAX LHD 152/148L H",
     "rubro": "TRACCION",
-    "stock": "1"
+    "stock": "5"
   },
   {
     "codigo": "122968",
@@ -1005,7 +981,7 @@
     "codigo": "2802",
     "descripcion": "315/80R22.5 ECO68 TERCELO 156/153K M+S",
     "rubro": "DIRECCION",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "1AGE900001",
