@@ -16,6 +16,14 @@ const ENDPOINTS = {
     'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_camaras'
 }
 
+// ====== Fallbacks locales (mismo directorio) ======
+const LOCAL_ENDPOINTS = {
+  olavarria: './local_olav.json',
+  cordoba: './local_cba.json',
+  polo: './local_polo.json',
+  prices: './local_prices.json'
+}
+
 // Endpoint de precios (via proxy CORS) -> USD
 const PRICES_URL =
   'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
@@ -651,6 +659,56 @@ function hideAnchorMenu () {
   anchorMenuOverlay.style.display = 'none'
 }
 
+// ====== Fetch con fallback local ======
+function isNonEmptyArray (j) {
+  return Array.isArray(j) && j.length > 0
+}
+
+async function fetchJson (url) {
+  const res = await fetch(url, { cache: 'no-store' })
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
+  return await res.json()
+}
+
+/**
+ * Intenta remoto, y si falla o viene sin datos => usa local.
+ * - Si expectArray=true, considera "sin datos" cuando no es array o está vacío.
+ */
+async function fetchPreferRemoteThenLocal ({
+  remoteUrl,
+  localUrl,
+  label = '',
+  expectArray = true
+}) {
+  // 1) Remoto
+  try {
+    const json = await fetchJson(remoteUrl)
+    if (!expectArray) return json
+    if (isNonEmptyArray(json)) return json
+
+    // remoto ok pero vacío / sin data
+    console.warn(`[fallback] ${label}: remoto vacío, uso local`)
+  } catch (e) {
+    console.warn(`[fallback] ${label}: remoto falló, uso local`, e)
+  }
+
+  // 2) Local
+  if (!localUrl) {
+    // si no hay local, devolvemos []
+    return expectArray ? [] : null
+  }
+
+  try {
+    const jsonLocal = await fetchJson(localUrl)
+    if (!expectArray) return jsonLocal
+    if (Array.isArray(jsonLocal)) return jsonLocal
+    return []
+  } catch (e) {
+    console.warn(`[fallback] ${label}: local falló`, e)
+    return expectArray ? [] : null
+  }
+}
+
 // ====== Render tabla ======
 function renderTable (data) {
   tableBody.innerHTML = ''
@@ -679,7 +737,10 @@ function renderTable (data) {
       item.precioUsd != null ? Number(item.precioUsd) : null
 
     let precioArs = null
-    if (item.precioArsOverride != null && !Number.isNaN(Number(item.precioArsOverride))) {
+    if (
+      item.precioArsOverride != null &&
+      !Number.isNaN(Number(item.precioArsOverride))
+    ) {
       precioArs = Number(item.precioArsOverride)
     } else if (rate && precioUsd != null) {
       precioArs = Math.round(precioUsd * rate)
@@ -876,7 +937,12 @@ async function cargarDatos (stock) {
   try {
     // Traer precios USD, ofertas y, si no hay manual, intentar cotización inicial
     const [dataPrices, ofertas] = await Promise.all([
-      fetch(PRICES_URL).then(r => r.json()),
+      fetchPreferRemoteThenLocal({
+        remoteUrl: PRICES_URL,
+        localUrl: LOCAL_ENDPOINTS.prices,
+        label: 'PRICES',
+        expectArray: true
+      }),
       loadOfertasConfig(),
       (async () => {
         if (!isManualDollar() && !usdRate) await fetchUsdRate()
@@ -889,18 +955,37 @@ async function cargarDatos (stock) {
     if (stock === 'cordoba') {
       // Depósito 1: CBA + POLO + CAMARAS
       const [dataCba, dataPolo, dataCamaras] = await Promise.all([
-        fetch(ENDPOINTS.cordoba).then(r => r.json()),
-        fetch(ENDPOINTS.polo).then(r => r.json()),
-        fetch(ENDPOINTS.camaras).then(r => r.json())
+        fetchPreferRemoteThenLocal({
+          remoteUrl: ENDPOINTS.cordoba,
+          localUrl: LOCAL_ENDPOINTS.cordoba,
+          label: 'STOCK CBA',
+          expectArray: true
+        }),
+        fetchPreferRemoteThenLocal({
+          remoteUrl: ENDPOINTS.polo,
+          localUrl: LOCAL_ENDPOINTS.polo,
+          label: 'STOCK POLO',
+          expectArray: true
+        }),
+        // Camaras: si falla, no rompe (sin local)
+        fetchPreferRemoteThenLocal({
+          remoteUrl: ENDPOINTS.camaras,
+          localUrl: null,
+          label: 'STOCK CAMARAS',
+          expectArray: true
+        })
       ])
 
       const cbaMasPolo = mergeStocksSum(dataCba, dataPolo)
       dataStock = mergeStocksSum(cbaMasPolo, dataCamaras)
     } else {
       // Depósito 2: Olavarría
-      dataStock = await fetch(ENDPOINTS[stock]).then(r =>
-        r.json()
-      )
+      dataStock = await fetchPreferRemoteThenLocal({
+        remoteUrl: ENDPOINTS[stock],
+        localUrl: LOCAL_ENDPOINTS[stock],
+        label: 'STOCK OLAV',
+        expectArray: true
+      })
     }
 
     // 👉 Override de cantidades (por ahora no hace nada porque CODIGOS_OVERRIDE está vacío)
