@@ -7,18 +7,18 @@ let DOLAR_TOTAL = 1455
 
 const ENDPOINTS = {
   olavarria:
-    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_olav',
+    'https://api-stock-live.vercel.app/api/stock_olav',
   cordoba:
-    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_cba',
+    'https://api-stock-live.vercel.app/api/stock_cba',
   polo:
-    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_polo',
+    'https://api-stock-live.vercel.app/api/stock_polo',
   camaras:
-    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_camaras'
+    'https://api-stock-live.vercel.app/api/stock_camaras'
 }
 
 // Endpoint de precios (via proxy CORS) -> USD
 const PRICES_URL =
-  'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
+  'https://api-prices-nu.vercel.app/api/prices'
 
 // Cotización USD Oficial (venta)
 const USD_API_URL = 'https://dolarapi.com/v1/dolares/oficial'
