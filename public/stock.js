@@ -6,74 +6,22 @@
 let DOLAR_TOTAL = 1455
 
 const ENDPOINTS = {
-  olavarria: 'https://api-stock-live.vercel.app/api/stock_olav',
-  cordoba: 'https://api-stock-live.vercel.app/api/stock_cba',
-  polo: 'https://api-stock-live.vercel.app/api/stock_polo',
-  camaras: 'https://api-stock-live.vercel.app/api/stock_camaras'
+  olavarria:
+    'https://crossorigin.me/https://api-stock-live.vercel.app/api/stock_olav',
+  cordoba:
+    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_cba',
+  polo:
+    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_polo',
+  camaras:
+    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_camaras'
 }
 
-// Endpoint de precios -> USD
-const PRICES_URL = 'https://api-prices-nu.vercel.app/api/prices'
+// Endpoint de precios (via proxy CORS) -> USD
+const PRICES_URL =
+  'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
 
 // Cotización USD Oficial (venta)
 const USD_API_URL = 'https://dolarapi.com/v1/dolares/oficial'
-
-// ====== Fetch robusto (directo + fallback proxies) ======
-const PROXY_BUILDERS = [
-  // corsproxy (el tuyo)
-  url => `https://corsproxy.io/?${url}`,
-  // proxy alternativo
-  url => `https://cors.isomorphic-git.org/${url}`,
-  // allorigins raw
-  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
-]
-
-function isAlreadyProxied (url) {
-  return /corsproxy\.io\/\?|cors\.isomorphic-git\.org\/|allorigins\.win\/raw\?url=|crossorigin\.me\//i.test(
-    url
-  )
-}
-
-async function fetchJSON (url, { timeoutMs = 15000, useProxies = true } = {}) {
-  const attempts = []
-
-  // 1) intento directo
-  attempts.push(url)
-
-  // 2) intentos con proxy (si corresponde y si no viene ya proxificado)
-  if (useProxies && !isAlreadyProxied(url)) {
-    for (const build of PROXY_BUILDERS) attempts.push(build(url))
-  }
-
-  let lastErr = null
-
-  for (const u of attempts) {
-    try {
-      const ctrl = new AbortController()
-      const t = setTimeout(() => ctrl.abort(), timeoutMs)
-
-      const res = await fetch(u, {
-        signal: ctrl.signal,
-        cache: 'no-store',
-        headers: { Accept: 'application/json' }
-      })
-
-      clearTimeout(t)
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status} al pedir ${u}`)
-      }
-
-      const data = await res.json()
-      return data
-    } catch (e) {
-      lastErr = e
-      // sigue al siguiente intento
-    }
-  }
-
-  throw lastErr || new Error('fetchJSON: error desconocido')
-}
 
 // ====== Referencias DOM ======
 const tableBody = document.querySelector('#stock-table tbody')
@@ -95,11 +43,15 @@ let CANTIDAD_OVERRIDE = 1
 
 function aplicarOverrideCantidad (data) {
   const setCodigos = new Set(
-    CODIGOS_OVERRIDE.map(c => String(c || '').trim().toUpperCase())
+    CODIGOS_OVERRIDE.map(c =>
+      String(c || '').trim().toUpperCase()
+    )
   )
 
   return (Array.isArray(data) ? data : []).map(item => {
-    const codigoNormalizado = String(item.codigo || '').trim().toUpperCase()
+    const codigoNormalizado = String(item.codigo || '')
+      .trim()
+      .toUpperCase()
 
     if (setCodigos.has(codigoNormalizado)) {
       return {
@@ -125,7 +77,8 @@ let usdRateUpdatedAt = null
 // ====== Utilidad override/manual ======
 const isManualDollar = () =>
   Number(DOLAR_TOTAL) !== 0 && Number.isFinite(Number(DOLAR_TOTAL))
-const effectiveUsdRate = () => (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
+const effectiveUsdRate = () =>
+  (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
 
 // ==== Scheduler: actualizar SOLO 19:01 AR (si NO hay manual) ====
 const AR_TZ = 'America/Argentina/Buenos_Aires'
@@ -190,7 +143,9 @@ function normalizar (str) {
     .replace(/\s+/g, '')
 }
 function clean (str) {
-  return String(str || '').trim().toUpperCase()
+  return String(str || '')
+    .trim()
+    .toUpperCase()
 }
 function splitCandidates (raw) {
   if (!raw) return []
@@ -255,6 +210,7 @@ function codeKeys (raw) {
 
 // ====== Códigos que deben mostrarse SOLO en pesos (ocultar USD) ======
 const noMostrarPesos = ['3147', '3148', '7500584', '7500589'] // agregá/quita códigos acá
+
 const SOLO_PESOS_SET = new Set(noMostrarPesos.map(c => clean(c)))
 
 function isSoloPesosByCodigo (codigoRaw) {
@@ -334,7 +290,10 @@ function buildOfertasMap (ofertasRaw) {
     const numPrecio = Number(precio)
     if (!Number.isFinite(numPrecio) || numPrecio <= 0) return
 
-    const tipo = String(moneda || 'ars').toLowerCase() === 'usd' ? 'usd' : 'ars'
+    const tipo =
+      String(moneda || 'ars').toLowerCase() === 'usd'
+        ? 'usd'
+        : 'ars'
 
     codeKeysOne(codigo).forEach(k => {
       if (!map.has(k)) {
@@ -351,7 +310,10 @@ function fmtARS (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
-  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+  return (
+    '$ ' +
+    Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+  )
 }
 function fmtUSD (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
@@ -366,11 +328,12 @@ function fmtUSD (n) {
   )
 }
 
-// 🔧 parseStock: toma 3,000 / 3.000 / 3000 como 3000
+// 🔧 NUEVA parseStock: toma 3,000 / 3.000 / 3000 como 3000
 function parseStock (s) {
   if (s === null || s === undefined) return 0
   if (typeof s === 'number' && Number.isFinite(s)) return s
 
+  // Dejar solo dígitos (sacamos puntos, comas, espacios, etc.)
   const cleaned = String(s).replace(/[^\d]/g, '').trim()
   if (!cleaned) return 0
 
@@ -398,7 +361,9 @@ function buildCopyTextForItem (item = {}) {
   let price = ''
 
   const preferArs =
-    item.precioArsOverride != null ? item.precioArsOverride : item.precioArs
+    item.precioArsOverride != null
+      ? item.precioArsOverride
+      : item.precioArs
 
   if (preferArs != null && !Number.isNaN(Number(preferArs))) {
     price = fmtARS(preferArs)
@@ -431,7 +396,10 @@ function showCopied (text = 'Copiado') {
   toast.textContent = text
   toast.classList.add('show')
   clearTimeout(__copyToastTimer)
-  __copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1200)
+  __copyToastTimer = setTimeout(
+    () => toast.classList.remove('show'),
+    1200
+  )
 }
 
 async function writeToClipboard (payload) {
@@ -498,15 +466,18 @@ function renderPinnedBar () {
     })
     .join('')
 
+  // Botón ✕: borrar sin copiar
   pinnedBar.querySelectorAll('.pin-chip .remove').forEach(btn => {
     btn.addEventListener('click', e => {
-      e.stopPropagation()
+      e.stopPropagation() // para que NO dispare el click del chip
       const key = btn.closest('.pin-chip')?.dataset?.key
       if (!key) return
       pinned.delete(key)
       renderPinnedBar()
       document
-        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
+        .querySelectorAll(
+          `.anchor-btn[data-key="${cssEscape(key)}"]`
+        )
         .forEach(b => {
           b.classList.remove('active')
           b.setAttribute('aria-pressed', 'false')
@@ -515,6 +486,7 @@ function renderPinnedBar () {
     })
   })
 
+  // Click en cualquier producto anclado -> copiar TODA la lista (una por línea)
   pinnedBar.querySelectorAll('.pin-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const payload = buildPinnedListText()
@@ -535,9 +507,11 @@ function togglePin (item) {
   if (rate && item?.precioUsd != null && item.precioArs == null) {
     toSave.precioArs = Math.round(Number(item.precioUsd) * rate)
   }
-  if (pinned.has(key)) pinned.delete(key)
-  else pinned.set(key, toSave)
-
+  if (pinned.has(key)) {
+    pinned.delete(key)
+  } else {
+    pinned.set(key, toSave)
+  }
   renderPinnedBar()
   document
     .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
@@ -603,7 +577,9 @@ function ensureAnchorMenu () {
     if (e.target === overlay) hideAnchorMenu()
   })
   window.addEventListener('keydown', e => {
-    if (overlay.style.display === 'flex' && e.key === 'Escape') hideAnchorMenu()
+    if (overlay.style.display === 'flex' && e.key === 'Escape') {
+      hideAnchorMenu()
+    }
   })
 
   anchorMenuOverlay = overlay
@@ -635,8 +611,10 @@ function showAnchorMenu (btn, { item, copyText }) {
     const margin = 6
     panel.style.position = 'fixed'
     panel.style.left =
-      Math.min(window.innerWidth - panel.offsetWidth - 8, Math.max(8, r.left)) +
-      'px'
+      Math.min(
+        window.innerWidth - panel.offsetWidth - 8,
+        Math.max(8, r.left)
+      ) + 'px'
     panel.style.top = r.bottom + margin + 'px'
     panel.style.transform = 'none'
   }
@@ -648,7 +626,6 @@ function showAnchorMenu (btn, { item, copyText }) {
     const key = overlay.dataset.key
     const copy = overlay.dataset.copy || ''
     hideAnchorMenu()
-
     if (action === 'copy') {
       writeToClipboard(copy)
       return
@@ -660,7 +637,10 @@ function showAnchorMenu (btn, { item, copyText }) {
       return
     }
     if (action === 'pin') {
-      const it = (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) || item
+      const it =
+        (tableBody._lastRowMap &&
+          tableBody._lastRowMap.get(key)) ||
+        item
       togglePin(it)
     }
   }
@@ -688,16 +668,18 @@ function renderTable (data) {
     tr.tabIndex = 0
 
     const stockNum = parseStock(item.stock)
+
+    // 👇 límite visual en 100 (podés cambiarlo o sacarlo)
     const stockDisplay = stockNum > 100 ? 100 : stockNum
+
     const key = canonicalKey(item.codigo)
 
-    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
+    // Precios
+    const precioUsd =
+      item.precioUsd != null ? Number(item.precioUsd) : null
 
     let precioArs = null
-    if (
-      item.precioArsOverride != null &&
-      !Number.isNaN(Number(item.precioArsOverride))
-    ) {
+    if (item.precioArsOverride != null && !Number.isNaN(Number(item.precioArsOverride))) {
       precioArs = Number(item.precioArsOverride)
     } else if (rate && precioUsd != null) {
       precioArs = Math.round(precioUsd * rate)
@@ -725,6 +707,7 @@ function renderTable (data) {
          </div>`
         : ''
 
+    // Texto que se copia al hacer click en la fila (código al final)
     const copyText = buildCopyTextForItem({
       codigo: item.codigo,
       descripcion: item.descripcion,
@@ -764,9 +747,11 @@ function renderTable (data) {
         const row = anchorBtn.closest('tr')
         const copyText = row?.dataset?.copy || ''
         const it =
-          (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) || {
+          (tableBody._lastRowMap &&
+            tableBody._lastRowMap.get(k)) || {
             codigo: k,
-            descripcion: row?.querySelector('td')?.innerText || '',
+            descripcion:
+              row?.querySelector('td')?.innerText || '',
             precioUsd: null,
             precioArs: null
           }
@@ -798,19 +783,29 @@ function renderTable (data) {
         if (btn) {
           const k = tr.dataset.key
           const it =
-            (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) || {
+            (tableBody._lastRowMap &&
+              tableBody._lastRowMap.get(k)) || {
               codigo: k,
-              descripcion: tr.querySelector('td')?.innerText || '',
+              descripcion:
+                tr.querySelector('td')?.innerText || '',
               precioUsd: null,
               precioArs: null
             }
-          showAnchorMenu(btn, { item: it, copyText: tr.dataset.copy || '' })
+          showAnchorMenu(btn, {
+            item: it,
+            copyText: tr.dataset.copy || ''
+          })
         }
       }
     })
 
     window.addEventListener('resize', () => {
-      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') return
+      if (
+        !anchorMenuOverlay ||
+        anchorMenuOverlay.style.display === 'none'
+      ) {
+        return
+      }
       hideAnchorMenu()
     })
   }
@@ -826,7 +821,9 @@ function setActiveBtn (btn) {
 function aplicarFiltros () {
   const valor = buscador.value.trim().toLowerCase()
   if (!valor) {
-    renderPlaceholder('Utiliza la barra de búsqueda para ver resultados')
+    renderPlaceholder(
+      'Utiliza la barra de búsqueda para ver resultados'
+    )
     return
   }
 
@@ -839,11 +836,13 @@ function aplicarFiltros () {
 
   datos = datos.filter(
     it =>
-      (it.codigo && String(it.codigo).toLowerCase().includes(valor)) ||
-      (it.descripcion && it.descripcion.toLowerCase().includes(valor))
+      (it.codigo &&
+        String(it.codigo).toLowerCase().includes(valor)) ||
+      (it.descripcion &&
+        it.descripcion.toLowerCase().includes(valor))
   )
 
-  renderTable(datos)
+  renderTable(datos) // recalcula ARS con effectiveUsdRate()
 }
 
 // ====== Carga y merge ======
@@ -857,7 +856,9 @@ function mergeStocksSum (arrA, arrB) {
     if (!curr) map.set(key, { ...it, stock: stockNum })
     else {
       curr.stock = parseStock(curr.stock) + stockNum
-      if (!curr.descripcion && it.descripcion) curr.descripcion = it.descripcion
+      if (!curr.descripcion && it.descripcion) {
+        curr.descripcion = it.descripcion
+      }
       if (!curr.rubro && it.rubro) curr.rubro = it.rubro
     }
   }
@@ -875,7 +876,7 @@ async function cargarDatos (stock) {
   try {
     // Traer precios USD, ofertas y, si no hay manual, intentar cotización inicial
     const [dataPrices, ofertas] = await Promise.all([
-      fetchJSON(PRICES_URL),
+      fetch(PRICES_URL).then(r => r.json()),
       loadOfertasConfig(),
       (async () => {
         if (!isManualDollar() && !usdRate) await fetchUsdRate()
@@ -888,60 +889,66 @@ async function cargarDatos (stock) {
     if (stock === 'cordoba') {
       // Depósito 1: CBA + POLO + CAMARAS
       const [dataCba, dataPolo, dataCamaras] = await Promise.all([
-        fetchJSON(ENDPOINTS.cordoba),
-        fetchJSON(ENDPOINTS.polo),
-        fetchJSON(ENDPOINTS.camaras)
+        fetch(ENDPOINTS.cordoba).then(r => r.json()),
+        fetch(ENDPOINTS.polo).then(r => r.json()),
+        fetch(ENDPOINTS.camaras).then(r => r.json())
       ])
 
       const cbaMasPolo = mergeStocksSum(dataCba, dataPolo)
       dataStock = mergeStocksSum(cbaMasPolo, dataCamaras)
     } else {
       // Depósito 2: Olavarría
-      dataStock = await fetchJSON(ENDPOINTS[stock])
+      dataStock = await fetch(ENDPOINTS[stock]).then(r =>
+        r.json()
+      )
     }
 
-    // Override de cantidades
+    // 👉 Override de cantidades (por ahora no hace nada porque CODIGOS_OVERRIDE está vacío)
     dataStock = aplicarOverrideCantidad(dataStock)
 
     // Price map por claves (USD)
     const priceMap = new Map()
     ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
-      const precio = p?.precio ?? null
+      const precio = p?.precio ?? null // USD
       codeKeysOne(p?.codigo).forEach(k => {
         if (!priceMap.has(k)) priceMap.set(k, precio)
       })
     })
 
     // Unificar dataset y agregar precioUsd + ofertas
-    allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
-      const keys = codeKeys(item?.codigo)
-      let precioUsd = null
-      let precioArsOverride = null
+    allData = (Array.isArray(dataStock) ? dataStock : []).map(
+      item => {
+        const keys = codeKeys(item?.codigo)
+        let precioUsd = null
+        let precioArsOverride = null
 
-      // 1) Precio base desde API de precios (USD)
-      for (const k of keys) {
-        if (priceMap.has(k)) {
-          precioUsd = priceMap.get(k)
-          break
-        }
-      }
-
-      // 2) Ofertas del config.json pisan el precio
-      for (const k of keys) {
-        if (ofertasMap.has(k)) {
-          const of = ofertasMap.get(k)
-          if (of.tipo === 'usd') {
-            precioUsd = of.precio
-            precioArsOverride = null
-          } else {
-            precioArsOverride = of.precio
+        // 1) Precio base desde API de precios (USD)
+        for (const k of keys) {
+          if (priceMap.has(k)) {
+            precioUsd = priceMap.get(k)
+            break
           }
-          break
         }
-      }
 
-      return { ...item, precioUsd, precioArsOverride }
-    })
+        // 2) Ofertas del config.json pisan el precio
+        for (const k of keys) {
+          if (ofertasMap.has(k)) {
+            const of = ofertasMap.get(k)
+            if (of.tipo === 'usd') {
+              // Oferta expresada en USD
+              precioUsd = of.precio
+              precioArsOverride = null
+            } else {
+              // Oferta expresada en ARS
+              precioArsOverride = of.precio
+            }
+            break
+          }
+        }
+
+        return { ...item, precioUsd, precioArsOverride }
+      }
+    )
 
     if (loading) loading.style.display = 'none'
     aplicarFiltros()
@@ -1003,40 +1010,49 @@ function updateUsdInlineUIFromManual () {
   const refs = ensureUsdInline()
   refs.precio.textContent = fmtARS(Number(DOLAR_TOTAL))
   refs.label.textContent = 'Absoluto'
-  refs.updated.textContent = fmtISOToLocal(new Date().toISOString())
+  refs.updated.textContent = fmtISOToLocal(
+    new Date().toISOString()
+  )
 }
 
 function updateUsdInlineUI (data) {
   const refs = ensureUsdInline()
   if (isManualDollar()) return updateUsdInlineUIFromManual()
-  const venta = typeof data?.venta === 'number' ? data.venta : null
-  refs.precio.textContent = venta != null ? fmtARS(venta) : '—'
+  const venta =
+    typeof data?.venta === 'number' ? data.venta : null
+  refs.precio.textContent =
+    venta != null ? fmtARS(venta) : '—'
   refs.label.textContent = 'Oficial'
-  refs.updated.textContent = fmtISOToLocal(data?.fechaActualizacion)
+  refs.updated.textContent = fmtISOToLocal(
+    data?.fechaActualizacion
+  )
 }
 
 // ====== Cotización: fetch (sincroniza UI si NO manual) ======
 async function fetchUsdRate () {
   try {
     if (isManualDollar()) {
+      // Usar valor manual y actualizar UI acorde
       usdRate = Number(DOLAR_TOTAL)
       updateUsdInlineUIFromManual()
       return
     }
-
-    const json = await fetchJSON(USD_API_URL, { timeoutMs: 15000 })
+    const res = await fetch(USD_API_URL, { cache: 'no-store' })
+    const json = await res.json()
     const venta = Number(json?.venta)
-
     if (Number.isFinite(venta) && venta > 0) {
       usdRate = venta
       usdInfo = json
-      usdRateUpdatedAt = json?.fechaActualizacion || new Date().toISOString()
+      usdRateUpdatedAt =
+        json?.fechaActualizacion || new Date().toISOString()
       updateUsdInlineUI(usdInfo)
     }
   } catch (e) {
     console.warn('No se pudo obtener la cotización oficial:', e)
     const refs = usdLineRef || ensureUsdInline()
-    if (refs?.updated) refs.updated.textContent = 'No se pudo actualizar'
+    if (refs?.updated) {
+      refs.updated.textContent = 'No se pudo actualizar'
+    }
   }
 }
 
@@ -1067,21 +1083,18 @@ filtroCamion &&
     setActiveBtn(filtroCamion)
     aplicarFiltros()
   })
-
 filtroAuto &&
   filtroAuto.addEventListener('click', () => {
     window.filtroActivo = 'auto'
     setActiveBtn(filtroAuto)
     aplicarFiltros()
   })
-
 filtroTodos &&
   filtroTodos.addEventListener('click', () => {
     window.filtroActivo = null
     setActiveBtn(filtroTodos)
     aplicarFiltros()
   })
-
 stockSelect &&
   stockSelect.addEventListener('change', e => {
     stockActual = e.target.value
@@ -1091,17 +1104,21 @@ stockSelect &&
 // ====== Inicial ======
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
-  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
+  renderPlaceholder(
+    'Utiliza la barra de busqueda para en encontrar cubiertas'
+  )
   renderPinnedBar()
 
   ensureUsdInline()
 
+  // 1) Si hay dólar manual, usarlo y mostrar "Absoluto".
+  //    Si no, traer una vez de API para no mostrar vacío.
   if (isManualDollar()) {
     usdRate = Number(DOLAR_TOTAL)
     updateUsdInlineUIFromManual()
   } else {
     fetchUsdRate()
-    startUsdDailyScheduler()
+    startUsdDailyScheduler() // actualiza solo 19:01 AR
   }
 
   cargarDatos(stockActual)
