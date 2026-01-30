@@ -75,7 +75,7 @@
     "codigo": "F44",
     "descripcion": "11L-16 FORERUNNER QH631 12PR TL F-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "5"
+    "stock": "1"
   },
   {
     "codigo": "T1101201",
@@ -171,7 +171,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "RK1964H1",
@@ -201,13 +201,13 @@
     "codigo": "6056",
     "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "23"
+    "stock": "21"
   },
   {
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "27"
+    "stock": "23"
   },
   {
     "codigo": "6059",
@@ -279,7 +279,7 @@
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "19"
+    "stock": "17"
   },
   {
     "codigo": "RK822H1",
@@ -381,7 +381,7 @@
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "5050",
@@ -777,7 +777,7 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "78"
+    "stock": "74"
   },
   {
     "codigo": "AR16217038",
@@ -813,13 +813,13 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "43"
+    "stock": "41"
   },
   {
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "26"
+    "stock": "24"
   },
   {
     "codigo": "121760",
@@ -873,7 +873,7 @@
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "51"
+    "stock": "39"
   },
   {
     "codigo": "122967",
@@ -975,12 +975,6 @@
     "codigo": "1Y7E900001",
     "descripcion": "300/95R46 FORERUNNER QH711 148A8/148B TL R-1W (12.4R46)",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
-    "stock": "2"
-  },
-  {
-    "codigo": "2802",
-    "descripcion": "315/80R22.5 ECO68 TERCELO 156/153K M+S",
-    "rubro": "DIRECCION",
     "stock": "2"
   },
   {
