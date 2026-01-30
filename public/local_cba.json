@@ -1852,6 +1852,7 @@
     "descripcion": "295/80R22.5 COOPER WORK SERIES RHD 152/148L H",
     "rubro": "TRACCION",
     "stock": "8"
+
   },
   {
     "codigo": "4214",
@@ -1863,7 +1864,7 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "0"
+    "stock": "2"
   },
   {
     "codigo": "3148",
