@@ -123,7 +123,7 @@
     "codigo": "F63",
     "descripcion": "12.4-24 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "15"
+    "stock": "13"
   },
   {
     "codigo": "F20",
@@ -327,7 +327,7 @@
     "codigo": "F65",
     "descripcion": "16.9-30 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "10"
+    "stock": "8"
   },
   {
     "codigo": "F30",
@@ -375,7 +375,7 @@
     "codigo": "F80",
     "descripcion": "17.5-25 FORERUNNER QH811 16PR TL E-3/L-3",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "11"
+    "stock": "9"
   },
   {
     "codigo": "T1606072",
@@ -393,7 +393,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "1080"
+    "stock": "1068"
   },
   {
     "codigo": "F25",
@@ -447,7 +447,7 @@
     "codigo": "F91",
     "descripcion": "18.4-34 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "54"
+    "stock": "52"
   },
   {
     "codigo": "T1159111",
@@ -543,13 +543,13 @@
     "codigo": "6623",
     "descripcion": "195/50R16 84V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "120"
+    "stock": "116"
   },
   {
     "codigo": "6083",
     "descripcion": "195/55R16 87V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "207"
+    "stock": "193"
   },
   {
     "codigo": "1RK789H1",
@@ -621,7 +621,7 @@
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "29"
+    "stock": "25"
   },
   {
     "codigo": "6635",
@@ -633,7 +633,7 @@
     "codigo": "6089",
     "descripcion": "205/60R16 92V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "60"
+    "stock": "56"
   },
   {
     "codigo": "F83",
@@ -1119,7 +1119,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "250"
+    "stock": "249"
   },
   {
     "codigo": "7500150",
@@ -1287,7 +1287,7 @@
     "codigo": "F93",
     "descripcion": "6.50-16 FORERUNNER QH641 10PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "36"
+    "stock": "34"
   },
   {
     "codigo": "F70",
@@ -1359,7 +1359,7 @@
     "codigo": "F74",
     "descripcion": "9.5-24 FORERUNNER QH611 8PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "23"
+    "stock": "21"
   },
   {
     "codigo": "X1150600",
