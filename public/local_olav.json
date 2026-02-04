@@ -165,7 +165,7 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "24"
+    "stock": "22"
   },
   {
     "codigo": "RK1964H1",
@@ -201,7 +201,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "14"
+    "stock": "12"
   },
   {
     "codigo": "6059",
@@ -240,12 +240,6 @@
     "stock": "8"
   },
   {
-    "codigo": "6567",
-    "descripcion": "185/60R14 82H TRANSMATE TOURING H7 M+S",
-    "rubro": "TOURING H7",
-    "stock": "6"
-  },
-  {
     "codigo": "RK764H1",
     "descripcion": "185/60R15 84H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
@@ -267,7 +261,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "19"
+    "stock": "15"
   },
   {
     "codigo": "6571",
@@ -351,7 +345,7 @@
     "codigo": "6077",
     "descripcion": "195/65R15 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "10"
+    "stock": "6"
   },
   {
     "codigo": "111182",
@@ -801,7 +795,7 @@
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "22"
+    "stock": "20"
   },
   {
     "codigo": "121760",
@@ -849,19 +843,19 @@
     "codigo": "AR7971602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "53"
+    "stock": "37"
   },
   {
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "39"
+    "stock": "35"
   },
   {
     "codigo": "122967",
@@ -1005,7 +999,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "10"
+    "stock": "9"
   },
   {
     "codigo": "T1111060",
