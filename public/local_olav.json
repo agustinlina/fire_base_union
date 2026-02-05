@@ -195,19 +195,13 @@
     "codigo": "6056",
     "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
     "stock": "12"
-  },
-  {
-    "codigo": "6059",
-    "descripcion": "175/70R14 84T TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "4"
   },
   {
     "codigo": "F25",
@@ -369,7 +363,7 @@
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "5"
+    "stock": "1"
   },
   {
     "codigo": "5050",
@@ -411,7 +405,7 @@
     "codigo": "5567",
     "descripcion": "205/75R16C 113/111S TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "20"
+    "stock": "16"
   },
   {
     "codigo": "F83",
@@ -423,7 +417,7 @@
     "codigo": "5031",
     "descripcion": "215/50ZR17 95W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "3286",
@@ -708,12 +702,6 @@
     "stock": "18"
   },
   {
-    "codigo": "3458",
-    "descripcion": "265/70R16 111T TRANSMATE WRZ505 M+S",
-    "rubro": "WZR505",
-    "stock": "4"
-  },
-  {
     "codigo": "111569",
     "descripcion": "265/70R16 WRANGLER WORKHORSE AT 112T SL",
     "rubro": "WRANGLER WORKHORSE",
@@ -759,7 +747,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "96"
+    "stock": "95"
   },
   {
     "codigo": "122983",
@@ -843,13 +831,13 @@
     "codigo": "AR7971602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "37"
+    "stock": "36"
   },
   {
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "0"
+    "stock": "4"
   },
   {
     "codigo": "3148",
