@@ -3,7 +3,7 @@
     "codigo": "F77",
     "descripcion": "10-16.5 FORERUNNER SKS-8 10PR TL",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "28"
+    "stock": "24"
   },
   {
     "codigo": "T1101350",
@@ -123,13 +123,13 @@
     "codigo": "F63",
     "descripcion": "12.4-24 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "13"
+    "stock": "5"
   },
   {
     "codigo": "F20",
     "descripcion": "12.4-24 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "16"
+    "stock": "14"
   },
   {
     "codigo": "T1159211",
@@ -189,7 +189,7 @@
     "codigo": "F29",
     "descripcion": "13.6-28 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "22"
+    "stock": "16"
   },
   {
     "codigo": "T1159330",
@@ -268,12 +268,6 @@
     "descripcion": "15.5-38 DYNA TORQUE III R1 TT 8T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "6"
-  },
-  {
-    "codigo": "F64",
-    "descripcion": "15.5-38 FORERUNNER QH611 12PR TT R-1",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
   },
   {
     "codigo": "F38",
@@ -369,7 +363,7 @@
     "codigo": "F51",
     "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "42"
+    "stock": "38"
   },
   {
     "codigo": "F80",
@@ -393,7 +387,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "1056"
+    "stock": "974"
   },
   {
     "codigo": "F25",
@@ -543,19 +537,19 @@
     "codigo": "6623",
     "descripcion": "195/50R16 84V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "116"
+    "stock": "106"
   },
   {
     "codigo": "6083",
     "descripcion": "195/55R16 87V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "181"
+    "stock": "161"
   },
   {
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "225"
+    "stock": "221"
   },
   {
     "codigo": "6627",
@@ -633,7 +627,7 @@
     "codigo": "6089",
     "descripcion": "205/60R16 92V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "56"
+    "stock": "46"
   },
   {
     "codigo": "F83",
@@ -771,7 +765,7 @@
     "codigo": "5563",
     "descripcion": "225/75R16C 121/120R TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "31"
+    "stock": "23"
   },
   {
     "codigo": "X1150153",
@@ -1017,7 +1011,7 @@
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "114"
+    "stock": "84"
   },
   {
     "codigo": "28126PI",
