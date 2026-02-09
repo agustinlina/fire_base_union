@@ -51,7 +51,7 @@
     "codigo": "F43",
     "descripcion": "11.00-16 FORERUNNER QH622 12PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "8004516",
@@ -207,7 +207,7 @@
     "codigo": "6056",
     "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "34"
+    "stock": "32"
   },
   {
     "codigo": "6053",
@@ -267,7 +267,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "15"
+    "stock": "7"
   },
   {
     "codigo": "6571",
@@ -315,7 +315,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "27"
+    "stock": "23"
   },
   {
     "codigo": "6083",
@@ -534,12 +534,6 @@
     "stock": "2"
   },
   {
-    "codigo": "3356",
-    "descripcion": "225/75R15 102H TRANSMATE WZD105 M+S",
-    "rubro": "WZD105",
-    "stock": "2"
-  },
-  {
     "codigo": "3357",
     "descripcion": "225/75R15LT 108/104S TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
@@ -651,7 +645,7 @@
     "codigo": "3426",
     "descripcion": "245/75R16LT 120/116S TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "5015",
@@ -747,7 +741,7 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "70"
+    "stock": "66"
   },
   {
     "codigo": "AR16217038",
@@ -819,7 +813,7 @@
     "codigo": "AR1581602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARA1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "16"
+    "stock": "12"
   },
   {
     "codigo": "AR9191602HD",
@@ -837,7 +831,7 @@
     "codigo": "AR7971602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "56"
+    "stock": "54"
   },
   {
     "codigo": "3147",
@@ -1029,13 +1023,13 @@
     "codigo": "T1101601",
     "descripcion": "6.00-16 IMPLEMENTO RAYADO F2 TT 8T",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "4"
+    "stock": "3"
   },
   {
     "codigo": "T1100205",
     "descripcion": "6.00-16 RIB TRACTOR F2 TT 6T",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "10"
+    "stock": "8"
   },
   {
     "codigo": "F57",
