@@ -87,7 +87,7 @@
     "codigo": "F63",
     "descripcion": "12.4-24 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "8"
+    "stock": "6"
   },
   {
     "codigo": "F36",
@@ -747,7 +747,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "95"
+    "stock": "91"
   },
   {
     "codigo": "122983",
@@ -831,13 +831,13 @@
     "codigo": "AR7971602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "54"
+    "stock": "55"
   },
   {
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "3148",
