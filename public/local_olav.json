@@ -174,6 +174,12 @@
     "stock": "14"
   },
   {
+    "codigo": "6535",
+    "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
+    "rubro": "TOURING H7",
+    "stock": "30"
+  },
+  {
     "codigo": "RK1964H1",
     "descripcion": "165/70R14 81H ROYAL MILE TL M+S",
     "rubro": "ROYAL MILE",
@@ -226,6 +232,12 @@
     "descripcion": "18.4-30 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "2"
+  },
+  {
+    "codigo": "F35",
+    "descripcion": "18.4-34 FORERUNNER QH611 12PR TT R-1",
+    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
+    "stock": "8"
   },
   {
     "codigo": "X1159102",
@@ -282,6 +294,12 @@
     "stock": "2"
   },
   {
+    "codigo": "3208",
+    "descripcion": "185R15C 103/102R TRANSMATE WZT705 M+S",
+    "rubro": "WZT705",
+    "stock": "16"
+  },
+  {
     "codigo": "F82",
     "descripcion": "18X8.50-8-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
@@ -315,7 +333,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "19"
+    "stock": "15"
   },
   {
     "codigo": "6083",
@@ -352,6 +370,12 @@
     "descripcion": "195/65R15 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
     "stock": "2"
+  },
+  {
+    "codigo": "KB004",
+    "descripcion": "195R15C 106/104TKINGBOSS G326",
+    "rubro": "G326",
+    "stock": "16"
   },
   {
     "codigo": "F54",
@@ -564,6 +588,12 @@
     "stock": "2"
   },
   {
+    "codigo": "F101",
+    "descripcion": "23.1R30 FORERUNNER QH744 161A6 TL R-3",
+    "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
+    "stock": "4"
+  },
+  {
     "codigo": "F55",
     "descripcion": "23.5-25 FORERUNNER QH808 20PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
@@ -666,6 +696,12 @@
     "stock": "10"
   },
   {
+    "codigo": "3446",
+    "descripcion": "255/70R16 109T TRANSMATE WZR505 M+S",
+    "rubro": "WZR505",
+    "stock": "8"
+  },
+  {
     "codigo": "3445",
     "descripcion": "255/70R16 111T TRANSMATE WZD105 M+S",
     "rubro": "WZD105",
@@ -747,7 +783,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "85"
+    "stock": "83"
   },
   {
     "codigo": "122983",
@@ -987,7 +1023,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "7"
+    "stock": "14"
   },
   {
     "codigo": "T1111060",
