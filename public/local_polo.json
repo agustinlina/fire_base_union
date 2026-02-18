@@ -315,7 +315,7 @@
     "codigo": "F65",
     "descripcion": "16.9-30 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "3"
+    "stock": "1"
   },
   {
     "codigo": "F30",
@@ -387,7 +387,7 @@
     "codigo": "F25",
     "descripcion": "18.4-26 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "20"
+    "stock": "18"
   },
   {
     "codigo": "T1150242",
@@ -699,7 +699,7 @@
     "codigo": "5035",
     "descripcion": "225/45ZR17 94W TRANSMATE SPORT D1 M+S XL",
     "rubro": "SPORT D1",
-    "stock": "206"
+    "stock": "202"
   },
   {
     "codigo": "5036",
@@ -759,7 +759,7 @@
     "codigo": "5563",
     "descripcion": "225/75R16C 121/120R TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "19"
+    "stock": "15"
   },
   {
     "codigo": "X1150153",
@@ -855,7 +855,7 @@
     "codigo": "4449",
     "descripcion": "235/50ZR18 101W TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "16"
+    "stock": "12"
   },
   {
     "codigo": "5008",
@@ -1107,7 +1107,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "248"
+    "stock": "244"
   },
   {
     "codigo": "7500150",
@@ -1311,7 +1311,7 @@
     "codigo": "F45",
     "descripcion": "7.50-18 FORERUNNER QH621 8PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "163"
+    "stock": "162"
   },
   {
     "codigo": "X1163308",
