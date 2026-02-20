@@ -15,7 +15,7 @@
     "codigo": "F42",
     "descripcion": "10.00-16 FORERUNNER QH622 10PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "273"
+    "stock": "269"
   },
   {
     "codigo": "120243",
@@ -81,7 +81,7 @@
     "codigo": "F44",
     "descripcion": "11L-16 FORERUNNER QH631 12PR TL F-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "22"
+    "stock": "16"
   },
   {
     "codigo": "T1101250",
@@ -99,7 +99,7 @@
     "codigo": "122195",
     "descripcion": "12.00R20 G677 MSD PLUS 154K J18PR",
     "rubro": "TRACCION",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "120995",
@@ -321,7 +321,7 @@
     "codigo": "F30",
     "descripcion": "16.9-30 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "8"
+    "stock": "6"
   },
   {
     "codigo": "F66",
@@ -422,12 +422,6 @@
   {
     "codigo": "T1150413",
     "descripcion": "18.4-30 SUPER ARROZEIRO  II R2 TL 10T",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
-  },
-  {
-    "codigo": "F35",
-    "descripcion": "18.4-34 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "2"
   },
@@ -1029,7 +1023,7 @@
     "codigo": "T1150163",
     "descripcion": "28L-26 DYNA TORQUE III 16T TL",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "F27",
@@ -1275,7 +1269,7 @@
     "codigo": "F93",
     "descripcion": "6.50-16 FORERUNNER QH641 10PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "18"
+    "stock": "17"
   },
   {
     "codigo": "F70",
