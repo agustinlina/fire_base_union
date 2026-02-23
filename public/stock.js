@@ -26,7 +26,7 @@ const LOCAL_ENDPOINTS = {
 
 // Endpoint de precios (via proxy CORS) -> USD
 const PRICES_URL =
-  'https://corsproxy.io/?https://la-union-api-prices-5hvf.vercel.app/api/prices'
+  'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
 
 // Cotización USD Oficial (venta)
 const USD_API_URL = 'https://dolarapi.com/v1/dolares/oficial'
