@@ -26,7 +26,7 @@ const LOCAL_ENDPOINTS = {
 
 // Endpoint de precios (via proxy CORS) -> USD
 const PRICES_URL =
-  'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
+  'https://corsproxy.io/?https://la-union-api-prices-5hvf.vercel.app/api/prices'
 
 // Cotización USD Oficial (venta)
 const USD_API_URL = 'https://dolarapi.com/v1/dolares/oficial'
@@ -49,7 +49,7 @@ const pinnedBar = document.getElementById('pinned-bar')
 const CODIGOS_OVERRIDE = [] // p.ej. ['3147', 'CODE2']
 let CANTIDAD_OVERRIDE = 1
 
-function aplicarOverrideCantidad (data) {
+function aplicarOverrideCantidad(data) {
   const setCodigos = new Set(
     CODIGOS_OVERRIDE.map(c =>
       String(c || '').trim().toUpperCase()
@@ -93,7 +93,7 @@ const AR_TZ = 'America/Argentina/Buenos_Aires'
 let lastScheduledFetchDay = null // 'YYYY-MM-DD' en zona AR
 let schedulerInterval = null
 
-function getARDateParts (d = new Date()) {
+function getARDateParts(d = new Date()) {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: AR_TZ,
     year: 'numeric',
@@ -121,7 +121,7 @@ function getARDateParts (d = new Date()) {
   }
 }
 
-function startUsdDailyScheduler () {
+function startUsdDailyScheduler() {
   if (schedulerInterval) clearInterval(schedulerInterval)
 
   const check = () => {
@@ -143,32 +143,32 @@ function startUsdDailyScheduler () {
 }
 
 // ====== Helpers generales ======
-function normalizar (str) {
+function normalizar(str) {
   return (str || '')
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '')
 }
-function clean (str) {
+function clean(str) {
   return String(str || '')
     .trim()
     .toUpperCase()
 }
-function splitCandidates (raw) {
+function splitCandidates(raw) {
   if (!raw) return []
   return String(raw)
     .split('/')
     .map(s => clean(s))
     .filter(Boolean)
 }
-function primaryCode (raw) {
+function primaryCode(raw) {
   const parts = splitCandidates(raw)
   return parts[0] || ''
 }
-function codeKeysOne (raw) {
+function codeKeysOne(raw) {
   const keys = new Set()
-  function addVariants (base) {
+  function addVariants(base) {
     const c = clean(base)
     if (!c) return
     keys.add(c)
@@ -201,7 +201,7 @@ function codeKeysOne (raw) {
   if (noSepRaw.startsWith('LANDE')) addVariants(noSepRaw.slice(5))
   return Array.from(keys)
 }
-function codeKeys (raw) {
+function codeKeys(raw) {
   const parts = splitCandidates(raw)
   const out = []
   const seen = new Set()
@@ -221,25 +221,25 @@ const noMostrarPesos = ['3147', '3148', '7500584', '7500589'] // agregá/quita c
 
 const SOLO_PESOS_SET = new Set(noMostrarPesos.map(c => clean(c)))
 
-function isSoloPesosByCodigo (codigoRaw) {
+function isSoloPesosByCodigo(codigoRaw) {
   const keys = codeKeys(codigoRaw)
   return keys.some(k => SOLO_PESOS_SET.has(clean(k)))
 }
 
-function canonicalKey (raw) {
+function canonicalKey(raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
   return variants[0] || clean(p) || ''
 }
-function cssEscape (s) {
+function cssEscape(s) {
   if (window.CSS && CSS.escape) return CSS.escape(s)
   return String(s).replace(/[^a-zA-Z0-9_\-]/g, ch => '\\' + ch)
 }
-function esCamionImportado (rubro) {
+function esCamionImportado(rubro) {
   const n = normalizar(rubro)
   return n === 'direccion' || n === 'traccion'
 }
-function esAutoImportado (rubro) {
+function esAutoImportado(rubro) {
   const n = normalizar(rubro)
   const exactos = [
     'touringh7',
@@ -253,7 +253,7 @@ function esAutoImportado (rubro) {
 }
 
 // ====== Ofertas desde config.json ======
-async function loadOfertasConfig () {
+async function loadOfertasConfig() {
   try {
     const res = await fetch('./config.json', { cache: 'no-store' })
     if (!res.ok) return []
@@ -276,7 +276,7 @@ async function loadOfertasConfig () {
  * Devuelve Map<codigoNormalizado, { precio, tipo }>
  *  tipo = 'ars' | 'usd'
  */
-function buildOfertasMap (ofertasRaw) {
+function buildOfertasMap(ofertasRaw) {
   const map = new Map()
   const arr = Array.isArray(ofertasRaw) ? ofertasRaw : []
 
@@ -314,7 +314,7 @@ function buildOfertasMap (ofertasRaw) {
 }
 
 // Formateos de moneda
-function fmtARS (n) {
+function fmtARS(n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
@@ -323,7 +323,7 @@ function fmtARS (n) {
     Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
   )
 }
-function fmtUSD (n) {
+function fmtUSD(n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
@@ -337,7 +337,7 @@ function fmtUSD (n) {
 }
 
 // 🔧 NUEVA parseStock: toma 3,000 / 3.000 / 3000 como 3000
-function parseStock (s) {
+function parseStock(s) {
   if (s === null || s === undefined) return 0
   if (typeof s === 'number' && Number.isFinite(s)) return s
 
@@ -349,7 +349,7 @@ function parseStock (s) {
   return Number.isFinite(n) ? n : 0
 }
 
-function shorten (t, max = 36) {
+function shorten(t, max = 36) {
   const s = String(t || '').trim()
   return s.length > max ? s.slice(0, max - 1) + '…' : s
 }
@@ -364,7 +364,7 @@ const fmtISOToLocal = iso => {
 }
 
 // === Helper: texto de copiado (Descripción – Precio – Código al final) ===
-function buildCopyTextForItem (item = {}) {
+function buildCopyTextForItem(item = {}) {
   const desc = (item.descripcion || '').trim()
   let price = ''
 
@@ -388,7 +388,7 @@ function buildCopyTextForItem (item = {}) {
 }
 
 // === Helper: texto de TODAS las ancladas, una por línea ===
-function buildPinnedListText () {
+function buildPinnedListText() {
   if (!pinned.size) return ''
   return Array.from(pinned.values())
     .map(it => buildCopyTextForItem(it))
@@ -398,7 +398,7 @@ function buildPinnedListText () {
 
 // ====== Toast copiar ======
 let __copyToastTimer = null
-function showCopied (text = 'Copiado') {
+function showCopied(text = 'Copiado') {
   const toast = document.getElementById('copy-toast')
   if (!toast) return
   toast.textContent = text
@@ -410,7 +410,7 @@ function showCopied (text = 'Copiado') {
   )
 }
 
-async function writeToClipboard (payload) {
+async function writeToClipboard(payload) {
   try {
     await navigator.clipboard.writeText(payload)
     showCopied('Copiado')
@@ -433,7 +433,7 @@ async function writeToClipboard (payload) {
 }
 
 // ====== Placeholder en tabla ======
-function renderPlaceholder (message = 'Escribí para buscar') {
+function renderPlaceholder(message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
       <td colspan="5" style="text-align:center; opacity:.7; padding:16px;">${message}</td>
@@ -442,7 +442,7 @@ function renderPlaceholder (message = 'Escribí para buscar') {
 
 // ====== Anclados ======
 const pinned = new Map() // key -> { codigo, descripcion, precioUsd, precioArs, rubro, stock }
-function renderPinnedBar () {
+function renderPinnedBar() {
   if (!pinnedBar) return
   if (pinned.size === 0) {
     pinnedBar.classList.remove('show')
@@ -462,12 +462,11 @@ function renderPinnedBar () {
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
         <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
-        ${
-          ars
-            ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
-            : usd
-              ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
-              : ''
+        ${ars
+          ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
+          : usd
+            ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
+            : ''
         }
         <button class="remove" title="Quitar" style="color:red;">×</button>
       </div>`
@@ -507,7 +506,7 @@ function renderPinnedBar () {
   })
 }
 
-function togglePin (item) {
+function togglePin(item) {
   const key = canonicalKey(item?.codigo)
   if (!key) return
   const toSave = { ...item, __key: key }
@@ -535,7 +534,7 @@ function togglePin (item) {
 let anchorMenuOverlay = null
 let anchorMenuPanel = null
 
-function ensureAnchorMenu () {
+function ensureAnchorMenu() {
   if (anchorMenuOverlay && anchorMenuPanel) {
     return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
   }
@@ -595,7 +594,7 @@ function ensureAnchorMenu () {
   return { overlay, panel }
 }
 
-function showAnchorMenu (btn, { item, copyText }) {
+function showAnchorMenu(btn, { item, copyText }) {
   const { overlay, panel } = ensureAnchorMenu()
   const key = canonicalKey(item.codigo)
   overlay.dataset.key = key
@@ -654,17 +653,17 @@ function showAnchorMenu (btn, { item, copyText }) {
   }
 }
 
-function hideAnchorMenu () {
+function hideAnchorMenu() {
   if (!anchorMenuOverlay) return
   anchorMenuOverlay.style.display = 'none'
 }
 
 // ====== Fetch con fallback local ======
-function isNonEmptyArray (j) {
+function isNonEmptyArray(j) {
   return Array.isArray(j) && j.length > 0
 }
 
-async function fetchJson (url) {
+async function fetchJson(url) {
   const res = await fetch(url, { cache: 'no-store' })
   if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
   return await res.json()
@@ -674,7 +673,7 @@ async function fetchJson (url) {
  * Intenta remoto, y si falla o viene sin datos => usa local.
  * - Si expectArray=true, considera "sin datos" cuando no es array o está vacío.
  */
-async function fetchPreferRemoteThenLocal ({
+async function fetchPreferRemoteThenLocal({
   remoteUrl,
   localUrl,
   label = '',
@@ -710,7 +709,7 @@ async function fetchPreferRemoteThenLocal ({
 }
 
 // ====== Render tabla ======
-function renderTable (data) {
+function renderTable(data) {
   tableBody.innerHTML = ''
   if (!data || data.length === 0) {
     renderPlaceholder('Sin resultados. Refiná tu búsqueda.')
@@ -751,20 +750,18 @@ function renderTable (data) {
     const priceHtml =
       precioUsd != null || precioArs != null
         ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
-           ${
-             precioArs != null
-               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
-                   precioArs
-                 )}</span>`
-               : ''
-           }
-           ${
-             !soloPesos && precioUsd != null
-               ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(
-                   precioUsd
-                 )}</span>`
-               : ''
-           }
+           ${precioArs != null
+          ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
+            precioArs
+          )}</span>`
+          : ''
+        }
+           ${!soloPesos && precioUsd != null
+          ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(
+            precioUsd
+          )}</span>`
+          : ''
+        }
          </div>`
         : ''
 
@@ -875,11 +872,11 @@ function renderTable (data) {
 }
 
 // ====== Filtros ======
-function setActiveBtn (btn) {
+function setActiveBtn(btn) {
   filtroBtns.forEach(b => b && b.classList.remove('active'))
   if (btn) btn.classList.add('active')
 }
-function aplicarFiltros () {
+function aplicarFiltros() {
   const valor = buscador.value.trim().toLowerCase()
   if (!valor) {
     renderPlaceholder(
@@ -907,9 +904,9 @@ function aplicarFiltros () {
 }
 
 // ====== Carga y merge ======
-function mergeStocksSum (arrA, arrB) {
+function mergeStocksSum(arrA, arrB) {
   const map = new Map()
-  function upsert (it) {
+  function upsert(it) {
     const key = canonicalKey(it?.codigo)
     if (!key) return
     const curr = map.get(key)
@@ -923,12 +920,12 @@ function mergeStocksSum (arrA, arrB) {
       if (!curr.rubro && it.rubro) curr.rubro = it.rubro
     }
   }
-  ;(Array.isArray(arrA) ? arrA : []).forEach(upsert)
-  ;(Array.isArray(arrB) ? arrB : []).forEach(upsert)
+  ; (Array.isArray(arrA) ? arrA : []).forEach(upsert)
+    ; (Array.isArray(arrB) ? arrB : []).forEach(upsert)
   return Array.from(map.values())
 }
 
-async function cargarDatos (stock) {
+async function cargarDatos(stock) {
   loading && (loading.style.display = '')
   if (error) error.textContent = ''
   window.filtroActivo = null
@@ -993,12 +990,12 @@ async function cargarDatos (stock) {
 
     // Price map por claves (USD)
     const priceMap = new Map()
-    ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
-      const precio = p?.precio ?? null // USD
-      codeKeysOne(p?.codigo).forEach(k => {
-        if (!priceMap.has(k)) priceMap.set(k, precio)
+      ; (Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
+        const precio = p?.precio ?? null // USD
+        codeKeysOne(p?.codigo).forEach(k => {
+          if (!priceMap.has(k)) priceMap.set(k, precio)
+        })
       })
-    })
 
     // Unificar dataset y agregar precioUsd + ofertas
     allData = (Array.isArray(dataStock) ? dataStock : []).map(
@@ -1048,7 +1045,7 @@ async function cargarDatos (stock) {
 // ====== UI Cotización (línea compacta) ======
 let usdLineRef = null
 
-function ensureUsdInline () {
+function ensureUsdInline() {
   if (usdLineRef) return usdLineRef
 
   const container = document.querySelector('main') || document.body
@@ -1091,7 +1088,7 @@ function ensureUsdInline () {
   return usdLineRef
 }
 
-function updateUsdInlineUIFromManual () {
+function updateUsdInlineUIFromManual() {
   const refs = ensureUsdInline()
   refs.precio.textContent = fmtARS(Number(DOLAR_TOTAL))
   refs.label.textContent = 'Absoluto'
@@ -1100,7 +1097,7 @@ function updateUsdInlineUIFromManual () {
   )
 }
 
-function updateUsdInlineUI (data) {
+function updateUsdInlineUI(data) {
   const refs = ensureUsdInline()
   if (isManualDollar()) return updateUsdInlineUIFromManual()
   const venta =
@@ -1114,7 +1111,7 @@ function updateUsdInlineUI (data) {
 }
 
 // ====== Cotización: fetch (sincroniza UI si NO manual) ======
-async function fetchUsdRate () {
+async function fetchUsdRate() {
   try {
     if (isManualDollar()) {
       // Usar valor manual y actualizar UI acorde
@@ -1142,7 +1139,7 @@ async function fetchUsdRate () {
 }
 
 // ====== Listeners ======
-function updateClearBtn () {
+function updateClearBtn() {
   if (!clearBuscador) return
   const has = (buscador?.value || '').length > 0
   clearBuscador.style.display = has ? 'block' : 'none'
