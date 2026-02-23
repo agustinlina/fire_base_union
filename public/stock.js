@@ -5,6 +5,29 @@
 // Si es 0, toma el valor desde la API (Oficial) y se actualiza a las 19:01 AR.
 let DOLAR_TOTAL = 1395
 
+function withCacheBuster(url) {
+  const u = new URL(url, window.location.href)
+  u.searchParams.set('_ts', Date.now().toString())
+  return u.toString()
+}
+
+async function fetchJson(url) {
+  const finalUrl = withCacheBuster(url)
+
+  const res = await fetch(finalUrl, {
+    cache: 'no-store',
+    credentials: 'omit',
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+      Pragma: 'no-cache',
+      Expires: '0'
+    }
+  })
+
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
+  return await res.json()
+}
+
 const ENDPOINTS = {
   olavarria:
     'https://crossorigin.me/https://api-stock-live.vercel.app/api/stock_olav',
