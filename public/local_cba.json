@@ -15,7 +15,7 @@
     "codigo": "F42",
     "descripcion": "10.00-16 FORERUNNER QH622 10PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "267"
+    "stock": "265"
   },
   {
     "codigo": "120243",
@@ -81,7 +81,7 @@
     "codigo": "F44",
     "descripcion": "11L-16 FORERUNNER QH631 12PR TL F-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "14"
+    "stock": "10"
   },
   {
     "codigo": "T1101250",
@@ -147,7 +147,7 @@
     "codigo": "F36",
     "descripcion": "12.4-36 FORERUNNER QH666 12PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "32"
+    "stock": "27"
   },
   {
     "codigo": "T1101422",
@@ -297,7 +297,7 @@
     "codigo": "F28",
     "descripcion": "16.9-28 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "8"
+    "stock": "6"
   },
   {
     "codigo": "T1150221",
@@ -321,7 +321,7 @@
     "codigo": "F30",
     "descripcion": "16.9-30 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "F66",
@@ -381,13 +381,13 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "824"
+    "stock": "793"
   },
   {
     "codigo": "F25",
     "descripcion": "18.4-26 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "18"
+    "stock": "16"
   },
   {
     "codigo": "T1150242",
@@ -507,7 +507,7 @@
     "codigo": "F50",
     "descripcion": "19.5L-24 FORERUNNER QH607 12PR TL R-4",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "14"
+    "stock": "10"
   },
   {
     "codigo": "T1151801",
@@ -531,7 +531,7 @@
     "codigo": "6083",
     "descripcion": "195/55R16 87V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "75"
+    "stock": "72"
   },
   {
     "codigo": "1RK789H1",
@@ -603,19 +603,13 @@
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "19"
+    "stock": "15"
   },
   {
     "codigo": "6635",
     "descripcion": "205/60R16 92V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
     "stock": "26"
-  },
-  {
-    "codigo": "6089",
-    "descripcion": "205/60R16 92V TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "6"
   },
   {
     "codigo": "F83",
@@ -651,7 +645,7 @@
     "codigo": "4359",
     "descripcion": "215/60R17 96H TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "34"
+    "stock": "18"
   },
   {
     "codigo": "4452",
@@ -897,7 +891,7 @@
     "codigo": "5048",
     "descripcion": "245/45ZR17 99W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "44"
+    "stock": "40"
   },
   {
     "codigo": "5049",
@@ -993,7 +987,7 @@
     "codigo": "123909",
     "descripcion": "275/80R22.5 KMAX S GEN-2 149/146L  H",
     "rubro": "DIRECCION",
-    "stock": "165"
+    "stock": "163"
   },
   {
     "codigo": "7500584",
@@ -1023,7 +1017,7 @@
     "codigo": "T1150163",
     "descripcion": "28L-26 DYNA TORQUE III 16T TL",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
+    "stock": "1"
   },
   {
     "codigo": "F27",
@@ -1125,13 +1119,13 @@
     "codigo": "T1150173",
     "descripcion": "30.5L-32 DYNA TORQUE III R1 TL 14T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "F34",
     "descripcion": "30.5L-32 FORERUNNER QH666 18PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "19"
+    "stock": "15"
   },
   {
     "codigo": "LL7T96",
@@ -1197,7 +1191,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "147"
+    "stock": "139"
   },
   {
     "codigo": "1I1E9D001",
