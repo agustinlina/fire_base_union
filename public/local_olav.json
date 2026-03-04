@@ -204,12 +204,6 @@
     "stock": "2"
   },
   {
-    "codigo": "F35",
-    "descripcion": "18.4-34 FORERUNNER QH611 12PR TT R-1",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
-  },
-  {
     "codigo": "X1159102",
     "descripcion": "18.4-34 SUPREME TFC TT 12T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
@@ -322,12 +316,6 @@
     "descripcion": "195/65R15 91H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
     "stock": "1"
-  },
-  {
-    "codigo": "6077",
-    "descripcion": "195/65R15 91V TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "2"
   },
   {
     "codigo": "KB004",
@@ -825,7 +813,7 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "14"
+    "stock": "10"
   },
   {
     "codigo": "3148",
@@ -1138,12 +1126,6 @@
     "descripcion": "LT285/70R17 121/118Q TRANSMATE TRANSFORTIS MT01 M+S",
     "rubro": "TRANSFORTIS MT01",
     "stock": "6"
-  },
-  {
-    "codigo": "RK033H1",
-    "descripcion": "P265/65R17 110T ROYAL A/T TL M+S",
-    "rubro": "ROYAL A/T",
-    "stock": "3"
   },
   {
     "codigo": "Cantidad Total de Artículos:",
