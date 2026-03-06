@@ -15,7 +15,7 @@
     "codigo": "F42",
     "descripcion": "10.00-16 FORERUNNER QH622 10PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "261"
+    "stock": "251"
   },
   {
     "codigo": "120243",
@@ -177,7 +177,7 @@
     "codigo": "F29",
     "descripcion": "13.6-28 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "16"
+    "stock": "12"
   },
   {
     "codigo": "T1159330",
@@ -201,7 +201,7 @@
     "codigo": "F61",
     "descripcion": "14-17.5 FORERUNNER SKS-1 14PR TL",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "16"
+    "stock": "15"
   },
   {
     "codigo": "X1101415",
@@ -267,7 +267,7 @@
     "codigo": "RK636H1",
     "descripcion": "155R12C 88/86R ROYAL COMMERCIAL TL M+S",
     "rubro": "ROYAL COMMERCIAL",
-    "stock": "158"
+    "stock": "154"
   },
   {
     "codigo": "T1101300",
@@ -291,7 +291,7 @@
     "codigo": "F28",
     "descripcion": "16.9-28 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "T1150221",
@@ -333,7 +333,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "4124"
+    "stock": "4082"
   },
   {
     "codigo": "RK2087H1",
@@ -375,13 +375,13 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "690"
+    "stock": "662"
   },
   {
     "codigo": "F25",
     "descripcion": "18.4-26 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "14"
+    "stock": "12"
   },
   {
     "codigo": "T1150242",
@@ -423,7 +423,7 @@
     "codigo": "F91",
     "descripcion": "18.4-34 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "52"
+    "stock": "46"
   },
   {
     "codigo": "T1159111",
@@ -519,7 +519,7 @@
     "codigo": "6623",
     "descripcion": "195/50R16 84V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "102"
+    "stock": "68"
   },
   {
     "codigo": "6083",
@@ -531,7 +531,7 @@
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "146"
+    "stock": "134"
   },
   {
     "codigo": "6627",
@@ -600,12 +600,6 @@
     "stock": "15"
   },
   {
-    "codigo": "6635",
-    "descripcion": "205/60R16 92V TRANSMATE TOURING H7 M+S",
-    "rubro": "TOURING H7",
-    "stock": "14"
-  },
-  {
     "codigo": "F83",
     "descripcion": "20X8.00-8-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
@@ -639,7 +633,7 @@
     "codigo": "4359",
     "descripcion": "215/60R17 96H TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "16"
+    "stock": "11"
   },
   {
     "codigo": "4452",
@@ -681,7 +675,7 @@
     "codigo": "5035",
     "descripcion": "225/45ZR17 94W TRANSMATE SPORT D1 M+S XL",
     "rubro": "SPORT D1",
-    "stock": "196"
+    "stock": "192"
   },
   {
     "codigo": "5036",
@@ -736,12 +730,6 @@
     "descripcion": "225/75R15LT 108/104S TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
     "stock": "30"
-  },
-  {
-    "codigo": "5563",
-    "descripcion": "225/75R16C 121/120R TRANSMATE TRANSEASON VAN M+S",
-    "rubro": "TRANSEASON VAN",
-    "stock": "2"
   },
   {
     "codigo": "X1150153",
@@ -849,7 +837,7 @@
     "codigo": "5045",
     "descripcion": "235/55ZR17 103W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "34"
+    "stock": "26"
   },
   {
     "codigo": "4364",
@@ -987,7 +975,7 @@
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "48"
+    "stock": "46"
   },
   {
     "codigo": "28126PI",
@@ -1089,7 +1077,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "236"
+    "stock": "228"
   },
   {
     "codigo": "7500150",
@@ -1185,7 +1173,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "137"
+    "stock": "135"
   },
   {
     "codigo": "1I1E9D001",
@@ -1293,7 +1281,7 @@
     "codigo": "F45",
     "descripcion": "7.50-18 FORERUNNER QH621 8PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "159"
+    "stock": "146"
   },
   {
     "codigo": "X1163308",
@@ -1329,7 +1317,7 @@
     "codigo": "F74",
     "descripcion": "9.5-24 FORERUNNER QH611 8PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "20"
+    "stock": "15"
   },
   {
     "codigo": "X1150600",
