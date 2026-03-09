@@ -159,7 +159,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "30"
+    "stock": "28"
   },
   {
     "codigo": "RK1964H1",
@@ -192,16 +192,10 @@
     "stock": "4"
   },
   {
-    "codigo": "6056",
-    "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "10"
-  },
-  {
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "20"
+    "stock": "10"
   },
   {
     "codigo": "6059",
@@ -381,7 +375,7 @@
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "14"
+    "stock": "12"
   },
   {
     "codigo": "6089",
@@ -411,7 +405,7 @@
     "codigo": "5567",
     "descripcion": "205/75R16C 113/111S TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "14"
+    "stock": "10"
   },
   {
     "codigo": "F83",
@@ -429,7 +423,7 @@
     "codigo": "6731",
     "descripcion": "215/50ZR17 95W TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "3286",
@@ -441,7 +435,7 @@
     "codigo": "4359",
     "descripcion": "215/60R17 96H TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "10"
+    "stock": "6"
   },
   {
     "codigo": "110740",
@@ -624,12 +618,6 @@
     "stock": "1"
   },
   {
-    "codigo": "F33",
-    "descripcion": "24.5-32 FORERUNNER QH666 16PR TT R-1",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
-  },
-  {
     "codigo": "5048",
     "descripcion": "245/45ZR17 99W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
@@ -729,7 +717,7 @@
     "codigo": "RK314H1",
     "descripcion": "265/70R17 115T ROYAL A/T TL M+S",
     "rubro": "ROYAL A/T",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "3464",
@@ -753,7 +741,7 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "42"
+    "stock": "38"
   },
   {
     "codigo": "AR16217038",
@@ -825,7 +813,7 @@
     "codigo": "AR1581602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARA1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "48"
+    "stock": "46"
   },
   {
     "codigo": "AR9191602HD",
@@ -840,12 +828,6 @@
     "stock": "12"
   },
   {
-    "codigo": "AR7971602HD",
-    "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
-    "rubro": "DIRECCION",
-    "stock": "1"
-  },
-  {
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
@@ -855,7 +837,7 @@
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "21"
+    "stock": "13"
   },
   {
     "codigo": "122967",
@@ -999,7 +981,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "13"
+    "stock": "12"
   },
   {
     "codigo": "T1111060",
