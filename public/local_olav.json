@@ -21,7 +21,7 @@
     "codigo": "F42",
     "descripcion": "10.00-16 FORERUNNER QH622 10PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "8"
+    "stock": "6"
   },
   {
     "codigo": "F46",
@@ -156,16 +156,10 @@
     "stock": "4"
   },
   {
-    "codigo": "F66",
-    "descripcion": "16.9-34 FORERUNNER QH611 12PR TT R-1",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "1"
-  },
-  {
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "32"
+    "stock": "22"
   },
   {
     "codigo": "6535",
@@ -219,7 +213,7 @@
     "codigo": "3176",
     "descripcion": "175/70R14C 95/93S TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "F91",
@@ -273,7 +267,7 @@
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "3208",
@@ -306,22 +300,10 @@
     "stock": "4"
   },
   {
-    "codigo": "RK010H1",
-    "descripcion": "195/55R15 85H ROYAL COMFORT TL M+S",
-    "rubro": "ROYAL COMFORT",
-    "stock": "8"
-  },
-  {
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "7"
-  },
-  {
-    "codigo": "RK2098H1",
-    "descripcion": "195/55R16 91V EXTRA LOAD XL ROYAL MILE TL M+S",
-    "rubro": "ROYAL MILE",
-    "stock": "1"
+    "stock": "3"
   },
   {
     "codigo": "1RK789H1",
@@ -387,7 +369,7 @@
     "codigo": "6089",
     "descripcion": "205/60R16 92V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "10"
+    "stock": "4"
   },
   {
     "codigo": "140922",
@@ -411,7 +393,7 @@
     "codigo": "5567",
     "descripcion": "205/75R16C 113/111S TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "F83",
@@ -490,12 +472,6 @@
     "descripcion": "225/45ZR17 94W EXTRA LOAD XL ROYAL PERFORMANCE TL M+S",
     "rubro": "ROYAL PERFORMANCE",
     "stock": "16"
-  },
-  {
-    "codigo": "5035",
-    "descripcion": "225/45ZR17 94W TRANSMATE SPORT D1 M+S XL",
-    "rubro": "SPORT D1",
-    "stock": "2"
   },
   {
     "codigo": "6747",
@@ -657,7 +633,7 @@
     "codigo": "3445",
     "descripcion": "255/70R16 111T TRANSMATE WZD105 M+S",
     "rubro": "WZD105",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "116527",
@@ -771,7 +747,7 @@
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "36"
+    "stock": "34"
   },
   {
     "codigo": "121760",
@@ -819,13 +795,13 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "46"
+    "stock": "42"
   },
   {
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "13"
+    "stock": "42"
   },
   {
     "codigo": "122967",
@@ -1000,12 +976,6 @@
     "descripcion": "550/45-22.5 FORERUNNER QH643 16PR TL",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
     "stock": "2"
-  },
-  {
-    "codigo": "T1101601",
-    "descripcion": "6.00-16 IMPLEMENTO RAYADO F2 TT 8T",
-    "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "3"
   },
   {
     "codigo": "T1100205",
