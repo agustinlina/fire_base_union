@@ -369,7 +369,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "486"
+    "stock": "436"
   },
   {
     "codigo": "F25",
@@ -459,13 +459,13 @@
     "codigo": "6062",
     "descripcion": "185/60R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "144"
+    "stock": "124"
   },
   {
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "135"
+    "stock": "105"
   },
   {
     "codigo": "6571",
@@ -507,7 +507,7 @@
     "codigo": "6623",
     "descripcion": "195/50R16 84V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "66"
+    "stock": "56"
   },
   {
     "codigo": "1RK789H1",
@@ -615,7 +615,7 @@
     "codigo": "4452",
     "descripcion": "215/65R16 102H TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "13"
+    "stock": "2"
   },
   {
     "codigo": "123313",
@@ -831,7 +831,7 @@
     "codigo": "F33",
     "descripcion": "24.5-32 FORERUNNER QH666 16PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "5047",
@@ -891,7 +891,7 @@
     "codigo": "6662",
     "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "196"
+    "stock": "186"
   },
   {
     "codigo": "3461",
@@ -1143,7 +1143,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "132"
+    "stock": "130"
   },
   {
     "codigo": "1I1E9D001",
@@ -1215,7 +1215,7 @@
     "codigo": "F93",
     "descripcion": "6.50-16 FORERUNNER QH641 10PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "F70",

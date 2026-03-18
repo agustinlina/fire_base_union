@@ -390,12 +390,6 @@
     "stock": "2"
   },
   {
-    "codigo": "5567",
-    "descripcion": "205/75R16C 113/111S TRANSMATE TRANSEASON VAN M+S",
-    "rubro": "TRANSEASON VAN",
-    "stock": "2"
-  },
-  {
     "codigo": "F83",
     "descripcion": "20X8.00-8-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
@@ -532,6 +526,12 @@
     "descripcion": "23.1-30 DYNA TORQUE III R1 TT 12T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "1"
+  },
+  {
+    "codigo": "F32",
+    "descripcion": "23.1-30 FORERUNNER QH611 16PR TL R-1",
+    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
+    "stock": "2"
   },
   {
     "codigo": "F101",
@@ -711,7 +711,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "79"
+    "stock": "75"
   },
   {
     "codigo": "122983",
@@ -795,7 +795,7 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "42"
+    "stock": "40"
   },
   {
     "codigo": "3148",
