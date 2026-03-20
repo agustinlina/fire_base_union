@@ -3,13 +3,13 @@
     "codigo": "F59",
     "descripcion": "10-16.5 FORERUNNER SKS-1 10PR TL",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "F77",
     "descripcion": "10-16.5 FORERUNNER SKS-8 10PR TL",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "T1100000",
@@ -87,7 +87,7 @@
     "codigo": "F36",
     "descripcion": "12.4-36 FORERUNNER QH666 12PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "288600",
@@ -231,7 +231,7 @@
     "codigo": "3176",
     "descripcion": "175/70R14C 95/93S TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "8"
+    "stock": "6"
   },
   {
     "codigo": "F25",
@@ -255,7 +255,7 @@
     "codigo": "F39",
     "descripcion": "18.4-38 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "6567",
@@ -465,7 +465,7 @@
     "codigo": "AR7971902HD",
     "descripcion": "215/75R17.5 ARIVO BUFFALO ARST1 135/133J",
     "rubro": "DIRECCION",
-    "stock": "9"
+    "stock": "7"
   },
   {
     "codigo": "7500413",
@@ -660,12 +660,6 @@
     "stock": "10"
   },
   {
-    "codigo": "3445",
-    "descripcion": "255/70R16 111T TRANSMATE WZD105 M+S",
-    "rubro": "WZD105",
-    "stock": "2"
-  },
-  {
     "codigo": "116527",
     "descripcion": "255/70R16 WRANGLER WORKHORSE AT 115T XL",
     "rubro": "WRANGLER WORKHORSE",
@@ -807,7 +801,7 @@
     "codigo": "AR1581602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARA1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "46"
+    "stock": "42"
   },
   {
     "codigo": "AR9191602HD",
@@ -831,7 +825,7 @@
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "62"
+    "stock": "54"
   },
   {
     "codigo": "122967",
@@ -975,7 +969,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "11"
+    "stock": "9"
   },
   {
     "codigo": "T1111060",
@@ -1041,7 +1035,7 @@
     "codigo": "F93",
     "descripcion": "6.50-16 FORERUNNER QH641 10PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "14"
+    "stock": "10"
   },
   {
     "codigo": "F58",
