@@ -108,12 +108,6 @@
     "stock": "24"
   },
   {
-    "codigo": "122188",
-    "descripcion": "12.00R20 G686 MSS PLUS 154K J18PR",
-    "rubro": "DIRECCION",
-    "stock": "4"
-  },
-  {
     "codigo": "T1150015",
     "descripcion": "12.4-24 DYNA TORQUE II HD R1 TL 10T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
@@ -345,7 +339,7 @@
     "codigo": "F80",
     "descripcion": "17.5-25 FORERUNNER QH811 16PR TL E-3/L-3",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "5"
+    "stock": "4"
   },
   {
     "codigo": "T1606072",
@@ -369,7 +363,7 @@
     "codigo": "F25",
     "descripcion": "18.4-26 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "T1150242",
@@ -453,7 +447,7 @@
     "codigo": "6062",
     "descripcion": "185/60R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "124"
+    "stock": "118"
   },
   {
     "codigo": "6065",
@@ -507,7 +501,7 @@
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "100"
+    "stock": "88"
   },
   {
     "codigo": "6627",
@@ -525,7 +519,7 @@
     "codigo": "3238",
     "descripcion": "195/75R16C 107/105R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "149"
+    "stock": "133"
   },
   {
     "codigo": "F53",
@@ -885,7 +879,7 @@
     "codigo": "6662",
     "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "186"
+    "stock": "178"
   },
   {
     "codigo": "3461",
@@ -1137,7 +1131,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "124"
+    "stock": "123"
   },
   {
     "codigo": "1I1E9D001",

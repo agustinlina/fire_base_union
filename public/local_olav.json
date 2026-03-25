@@ -177,7 +177,7 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "30"
+    "stock": "28"
   },
   {
     "codigo": "6535",
@@ -189,7 +189,7 @@
     "codigo": "RK1964H1",
     "descripcion": "165/70R14 81H ROYAL MILE TL M+S",
     "rubro": "ROYAL MILE",
-    "stock": "33"
+    "stock": "31"
   },
   {
     "codigo": "RK2087H1",
@@ -219,7 +219,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "38"
+    "stock": "32"
   },
   {
     "codigo": "6059",
@@ -273,7 +273,7 @@
     "codigo": "6062",
     "descripcion": "185/60R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "1RK828H1",
@@ -327,13 +327,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "3"
-  },
-  {
-    "codigo": "1RK789H1",
-    "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
-    "rubro": "ROYAL COMFORT",
-    "stock": "2"
+    "stock": "1"
   },
   {
     "codigo": "6627",
@@ -759,7 +753,7 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "32"
+    "stock": "24"
   },
   {
     "codigo": "7500584",
@@ -786,12 +780,6 @@
     "stock": "12"
   },
   {
-    "codigo": "3478",
-    "descripcion": "285/75R16LT 126/123R TRANSMATE WZR505 M+S",
-    "rubro": "WZR505",
-    "stock": "8"
-  },
-  {
     "codigo": "F27",
     "descripcion": "28L-26 FORERUNNER QH691 20PR TL LS-2",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
@@ -801,7 +789,7 @@
     "codigo": "AR1581602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARA1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "42"
+    "stock": "40"
   },
   {
     "codigo": "AR9191602HD",
@@ -819,7 +807,7 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "18"
+    "stock": "12"
   },
   {
     "codigo": "3148",
@@ -1035,13 +1023,13 @@
     "codigo": "F93",
     "descripcion": "6.50-16 FORERUNNER QH641 10PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "10"
+    "stock": "6"
   },
   {
     "codigo": "F58",
     "descripcion": "7.00-12 FORERUNNER SKS-1 14PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "10"
+    "stock": "8"
   },
   {
     "codigo": "T1102500",
