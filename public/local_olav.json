@@ -495,7 +495,7 @@
     "codigo": "6747",
     "descripcion": "225/45ZR17 94W TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "14"
+    "stock": "12"
   },
   {
     "codigo": "6107",
@@ -555,7 +555,7 @@
     "codigo": "F101",
     "descripcion": "23.1R30 FORERUNNER QH744 161A6 TL R-3",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
-    "stock": "4"
+    "stock": "3"
   },
   {
     "codigo": "F55",
@@ -723,7 +723,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "75"
+    "stock": "73"
   },
   {
     "codigo": "122983",
@@ -753,13 +753,13 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "24"
+    "stock": "20"
   },
   {
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "28"
+    "stock": "26"
   },
   {
     "codigo": "121760",
@@ -777,7 +777,7 @@
     "codigo": "3477",
     "descripcion": "285/70R17LT 121/118S TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "F27",
@@ -789,7 +789,7 @@
     "codigo": "AR1581602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARA1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "40"
+    "stock": "30"
   },
   {
     "codigo": "AR9191602HD",
@@ -807,7 +807,7 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "12"
+    "stock": "10"
   },
   {
     "codigo": "3148",
@@ -957,7 +957,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "9"
+    "stock": "8"
   },
   {
     "codigo": "T1111060",
@@ -1018,12 +1018,6 @@
     "descripcion": "6.50-16 DYNA RIB F2 TT 8T",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
     "stock": "1"
-  },
-  {
-    "codigo": "F93",
-    "descripcion": "6.50-16 FORERUNNER QH641 10PR TT",
-    "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "6"
   },
   {
     "codigo": "F58",
