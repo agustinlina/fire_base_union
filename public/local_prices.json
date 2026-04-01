@@ -813,231 +813,231 @@
   },
   {
     "codigo": "120002",
-    "precio": 298
+    "precio": 277
   },
   {
     "codigo": "124592",
-    "precio": 301
+    "precio": 280
   },
   {
     "codigo": "120050",
-    "precio": 154
+    "precio": 144
   },
   {
     "codigo": "120098",
-    "precio": 246
+    "precio": 229
   },
   {
     "codigo": "122968",
-    "precio": 560
+    "precio": 520
   },
   {
     "codigo": "122967",
-    "precio": 624
+    "precio": 580
   },
   {
     "codigo": "123492",
-    "precio": 543
+    "precio": 505
   },
   {
     "codigo": "123345",
-    "precio": 336
+    "precio": 312
   },
   {
     "codigo": "123343",
-    "precio": 400
+    "precio": 372
   },
   {
     "codigo": "120389",
-    "precio": 460
+    "precio": 428
   },
   {
     "codigo": "123822",
-    "precio": 501
+    "precio": 466
   },
   {
     "codigo": "124487",
-    "precio": 528
+    "precio": 491
   },
   {
     "codigo": "124486",
-    "precio": 560
+    "precio": 520
   },
   {
     "codigo": "121304",
-    "precio": 654
+    "precio": 608
   },
   {
     "codigo": "122673",
-    "precio": 465
+    "precio": 433
   },
   {
     "codigo": "122647",
-    "precio": 583
+    "precio": 542
   },
   {
     "codigo": "123313",
-    "precio": 357
+    "precio": 332
   },
   {
     "codigo": "123012",
-    "precio": 541
+    "precio": 503
   },
   {
     "codigo": "122671",
-    "precio": 601
+    "precio": 559
   },
   {
     "codigo": "122962",
-    "precio": 624
+    "precio": 580
   },
   {
     "codigo": "120285",
-    "precio": 588
+    "precio": 547
   },
   {
     "codigo": "121307",
-    "precio": 719
+    "precio": 669
   },
   {
     "codigo": "123284",
-    "precio": 464
+    "precio": 432
   },
   {
     "codigo": "120028",
-    "precio": 534
+    "precio": 497
   },
   {
     "codigo": "120008",
-    "precio": 761
+    "precio": 708
   },
   {
     "codigo": "123153",
-    "precio": 528
+    "precio": 491
   },
   {
     "codigo": "124624",
-    "precio": 339
+    "precio": 315
   },
   {
     "codigo": "124594",
-    "precio": 404
+    "precio": 376
   },
   {
     "codigo": "123084",
-    "precio": 630
+    "precio": 586
   },
   {
     "codigo": "124247",
-    "precio": 543
+    "precio": 505
   },
   {
     "codigo": "120339",
-    "precio": 495
+    "precio": 460
   },
   {
     "codigo": "124248",
-    "precio": 600
+    "precio": 558
   },
   {
     "codigo": "124548",
-    "precio": 540
+    "precio": 502
   },
   {
     "codigo": "123445",
-    "precio": 779
+    "precio": 725
   },
   {
     "codigo": "124246",
-    "precio": 962
+    "precio": 894
   },
   {
     "codigo": "122188",
-    "precio": 699
+    "precio": 650
   },
   {
     "codigo": "122195",
-    "precio": 778
+    "precio": 724
   },
   {
     "codigo": "122983",
-    "precio": 589
+    "precio": 548
   },
   {
     "codigo": "122984",
-    "precio": 651
+    "precio": 605
   },
   {
     "codigo": "123862",
-    "precio": 932
+    "precio": 867
   },
   {
     "codigo": "122650",
-    "precio": 968
+    "precio": 900
   },
   {
     "codigo": "124433",
-    "precio": 923
+    "precio": 858
   },
   {
     "codigo": "120995",
-    "precio": 778
+    "precio": 724
   },
   {
     "codigo": "123222",
-    "precio": 961
+    "precio": 893
   },
   {
     "codigo": "120240",
-    "precio": 488
+    "precio": 454
   },
   {
     "codigo": "123833",
-    "precio": 562
+    "precio": 522
   },
   {
     "codigo": "124477",
-    "precio": 269
+    "precio": 250
   },
   {
     "codigo": "123344",
-    "precio": 245
+    "precio": 228
   },
   {
     "codigo": "124475",
-    "precio": 412
+    "precio": 383
   },
   {
     "codigo": "121760",
-    "precio": 392
+    "precio": 364
   },
   {
     "codigo": "124476",
-    "precio": 492
+    "precio": 458
   },
   {
     "codigo": "124370",
-    "precio": 479
+    "precio": 445
   },
   {
     "codigo": "121651",
-    "precio": 429
+    "precio": 399
   },
   {
     "codigo": "124371",
-    "precio": 527
+    "precio": 490
   },
   {
     "codigo": "122703",
-    "precio": 479
+    "precio": 445
   },
   {
     "codigo": "123560",
-    "precio": 449
+    "precio": 418
   },
   {
     "codigo": "123561",
-    "precio": 536
+    "precio": 498
   },
   {
     "codigo": "160052",
@@ -1056,1264 +1056,968 @@
     "precio": 232
   },
   {
-    "codigo": "X1100000",
+    "codigo": "1100000",
     "precio": 243
   },
   {
-    "codigo": "X1100403",
-    "precio": 202
+    "codigo": "1100403",
+    "precio": 203
   },
   {
-    "codigo": "X1700401",
-    "precio": 263
-  },
-  {
-    "codigo": "X1700402",
-    "precio": 284
-  },
-  {
-    "codigo": "X1100401",
-    "precio": 266
-  },
-  {
-    "codigo": "X1100402",
-    "precio": 287
-  },
-  {
-    "codigo": "X1102700",
+    "codigo": "1102700",
     "precio": 279
   },
   {
-    "codigo": "X1181019",
-    "precio": 4280
+    "codigo": "1100401",
+    "precio": 265
   },
   {
-    "codigo": "X1701510",
-    "precio": 405
+    "codigo": "1100402",
+    "precio": 288
   },
   {
-    "codigo": "X1701535",
-    "precio": 313
+    "codigo": "1701535",
+    "precio": 320
   },
   {
-    "codigo": "X1101350",
-    "precio": 308
+    "codigo": "1101350",
+    "precio": 337
   },
   {
-    "codigo": "X1120001",
-    "precio": 325
+    "codigo": "1701510",
+    "precio": 426
   },
   {
-    "codigo": "X1100051",
-    "precio": 322
+    "codigo": "1100051",
+    "precio": 339
   },
   {
-    "codigo": "X1100050",
-    "precio": 340
+    "codigo": "1100050",
+    "precio": 350
   },
   {
-    "codigo": "X1600050",
-    "precio": 678
+    "codigo": "1120001",
+    "precio": 335
   },
   {
-    "codigo": "X1150005",
-    "precio": 361
+    "codigo": "1600050",
+    "precio": 864
   },
   {
-    "codigo": "X1750005",
-    "precio": 357
+    "codigo": "1150005",
+    "precio": 353
   },
   {
-    "codigo": "X1150000",
+    "codigo": "1150000",
+    "precio": 375
+  },
+  {
+    "codigo": "1150003",
+    "precio": 398
+  },
+  {
+    "codigo": "1103003",
+    "precio": 175
+  },
+  {
+    "codigo": "1103002",
+    "precio": 189
+  },
+  {
+    "codigo": "1103001",
+    "precio": 236
+  },
+  {
+    "codigo": "1101150",
+    "precio": 232
+  },
+  {
+    "codigo": "1101160",
+    "precio": 270
+  },
+  {
+    "codigo": "1101202",
+    "precio": 254
+  },
+  {
+    "codigo": "1101201",
+    "precio": 290
+  },
+  {
+    "codigo": "1602023",
+    "precio": 1798
+  },
+  {
+    "codigo": "1150014",
     "precio": 391
   },
   {
-    "codigo": "X1150003",
-    "precio": 413
+    "codigo": "1150015",
+    "precio": 670
   },
   {
-    "codigo": "X1750003",
-    "precio": 394
+    "codigo": "1159305",
+    "precio": 424
   },
   {
-    "codigo": "X1182040",
-    "precio": 6464
+    "codigo": "1159211",
+    "precio": 466
   },
   {
-    "codigo": "X1103003",
-    "precio": 176
-  },
-  {
-    "codigo": "X1701150",
-    "precio": 219
-  },
-  {
-    "codigo": "X1701160",
-    "precio": 253
-  },
-  {
-    "codigo": "X1103002",
-    "precio": 185
-  },
-  {
-    "codigo": "X1103001",
-    "precio": 229
-  },
-  {
-    "codigo": "X1703002",
-    "precio": 180
-  },
-  {
-    "codigo": "X1703001",
-    "precio": 226
-  },
-  {
-    "codigo": "X1101150",
-    "precio": 226
-  },
-  {
-    "codigo": "X1101160",
-    "precio": 261
-  },
-  {
-    "codigo": "X1701202",
-    "precio": 240
-  },
-  {
-    "codigo": "X1701201",
-    "precio": 274
-  },
-  {
-    "codigo": "X1101202",
-    "precio": 247
-  },
-  {
-    "codigo": "X1101201",
-    "precio": 280
-  },
-  {
-    "codigo": "X1602023",
-    "precio": 1738
-  },
-  {
-    "codigo": "X1150014",
-    "precio": 404
-  },
-  {
-    "codigo": "X1150015",
-    "precio": 662
-  },
-  {
-    "codigo": "X1159305",
-    "precio": 438
-  },
-  {
-    "codigo": "X1159211",
-    "precio": 465
-  },
-  {
-    "codigo": "X1159320",
-    "precio": 420
-  },
-  {
-    "codigo": "X1159210",
-    "precio": 377
-  },
-  {
-    "codigo": "X1159324",
-    "precio": 382
-  },
-  {
-    "codigo": "X1150315",
-    "precio": 361
-  },
-  {
-    "codigo": "X1750013",
-    "precio": 440
-  },
-  {
-    "codigo": "X1750014",
-    "precio": 386
-  },
-  {
-    "codigo": "X1150020",
-    "precio": 451
-  },
-  {
-    "codigo": "X1750020",
-    "precio": 436
-  },
-  {
-    "codigo": "X1150124",
-    "precio": 640
-  },
-  {
-    "codigo": "X1150032",
-    "precio": 598
-  },
-  {
-    "codigo": "X1150030",
-    "precio": 519
-  },
-  {
-    "codigo": "X1750032",
-    "precio": 566
-  },
-  {
-    "codigo": "X1750840",
-    "precio": 634
-  },
-  {
-    "codigo": "X1150900",
-    "precio": 635
-  },
-  {
-    "codigo": "X1750900",
-    "precio": 621
-  },
-  {
-    "codigo": "X1701410",
+    "codigo": "1159320",
     "precio": 405
   },
   {
-    "codigo": "X1701422",
-    "precio": 438
+    "codigo": "1159210",
+    "precio": 355
   },
   {
-    "codigo": "X1101800",
-    "precio": 384
+    "codigo": "1159324",
+    "precio": 365
   },
   {
-    "codigo": "X1101410",
-    "precio": 403
+    "codigo": "1150315",
+    "precio": 347
   },
   {
-    "codigo": "X1101422",
-    "precio": 449
+    "codigo": "1150020",
+    "precio": 433
   },
   {
-    "codigo": "X1103005",
-    "precio": 222
+    "codigo": "1150124",
+    "precio": 621
   },
   {
-    "codigo": "X1103004",
-    "precio": 213
+    "codigo": "1150032",
+    "precio": 576
   },
   {
-    "codigo": "X1103006",
-    "precio": 262
+    "codigo": "1150030",
+    "precio": 489
   },
   {
-    "codigo": "X1701530",
-    "precio": 370
-  },
-  {
-    "codigo": "X1101250",
-    "precio": 345
-  },
-  {
-    "codigo": "X1701515",
-    "precio": 474
-  },
-  {
-    "codigo": "X1601002",
-    "precio": 718
-  },
-  {
-    "codigo": "X1601003",
-    "precio": 742
-  },
-  {
-    "codigo": "X1601004",
-    "precio": 686
-  },
-  {
-    "codigo": "X1601005",
-    "precio": 805
-  },
-  {
-    "codigo": "X1150022",
-    "precio": 526
-  },
-  {
-    "codigo": "X1159330",
-    "precio": 590
-  },
-  {
-    "codigo": "X1150201",
-    "precio": 805
-  },
-  {
-    "codigo": "X1150200",
-    "precio": 692
-  },
-  {
-    "codigo": "X1750201",
-    "precio": 779
-  },
-  {
-    "codigo": "X1601024",
-    "precio": 789
-  },
-  {
-    "codigo": "X1602025",
-    "precio": 2005
-  },
-  {
-    "codigo": "X1606094",
-    "precio": 772
-  },
-  {
-    "codigo": "X1606095",
-    "precio": 774
-  },
-  {
-    "codigo": "X1606097",
-    "precio": 835
-  },
-  {
-    "codigo": "X1606096",
-    "precio": 789
-  },
-  {
-    "codigo": "X1150041",
-    "precio": 557
-  },
-  {
-    "codigo": "X1150043",
-    "precio": 842
-  },
-  {
-    "codigo": "X1750042",
+    "codigo": "1150900",
     "precio": 607
   },
   {
-    "codigo": "X1753812",
-    "precio": 466
+    "codigo": "1101800",
+    "precio": 385
   },
   {
-    "codigo": "X1150411",
-    "precio": 658
+    "codigo": "1101410",
+    "precio": 406
   },
   {
-    "codigo": "X1750411",
-    "precio": 658
+    "codigo": "1101422",
+    "precio": 455
   },
   {
-    "codigo": "X1159230",
-    "precio": 594
-  },
-  {
-    "codigo": "X1159201",
-    "precio": 579
-  },
-  {
-    "codigo": "X1159200",
-    "precio": 510
-  },
-  {
-    "codigo": "X1159220",
-    "precio": 585
-  },
-  {
-    "codigo": "X1159323",
-    "precio": 534
-  },
-  {
-    "codigo": "X1150320",
-    "precio": 498
-  },
-  {
-    "codigo": "X1150300",
-    "precio": 450
-  },
-  {
-    "codigo": "X1750043",
-    "precio": 874
-  },
-  {
-    "codigo": "X1750041",
-    "precio": 557
-  },
-  {
-    "codigo": "X1150050",
-    "precio": 639
-  },
-  {
-    "codigo": "X1750070",
-    "precio": 596
-  },
-  {
-    "codigo": "X1750050",
-    "precio": 628
-  },
-  {
-    "codigo": "X1750051",
-    "precio": 597
-  },
-  {
-    "codigo": "X1150060",
-    "precio": 629
-  },
-  {
-    "codigo": "X1150062",
-    "precio": 686
-  },
-  {
-    "codigo": "X1150061",
-    "precio": 646
-  },
-  {
-    "codigo": "X1750060",
-    "precio": 610
-  },
-  {
-    "codigo": "X1150211",
-    "precio": 666
-  },
-  {
-    "codigo": "X1150415",
-    "precio": 768
-  },
-  {
-    "codigo": "X1750415",
-    "precio": 734
-  },
-  {
-    "codigo": "X1159325",
-    "precio": 624
-  },
-  {
-    "codigo": "X1750061",
-    "precio": 640
-  },
-  {
-    "codigo": "X1101414",
-    "precio": 466
-  },
-  {
-    "codigo": "X1101415",
-    "precio": 527
-  },
-  {
-    "codigo": "X1608000",
-    "precio": 833
-  },
-  {
-    "codigo": "X1150192",
-    "precio": 786
-  },
-  {
-    "codigo": "X1750192",
-    "precio": 781
-  },
-  {
-    "codigo": "X1101300",
-    "precio": 614
-  },
-  {
-    "codigo": "X1102600",
-    "precio": 686
-  },
-  {
-    "codigo": "X1606520",
-    "precio": 3654
-  },
-  {
-    "codigo": "X1151004",
-    "precio": 749
-  },
-  {
-    "codigo": "X1151003",
-    "precio": 958
-  },
-  {
-    "codigo": "X1151002",
-    "precio": 664
-  },
-  {
-    "codigo": "X1159336",
-    "precio": 794
-  },
-  {
-    "codigo": "X1751004",
-    "precio": 733
-  },
-  {
-    "codigo": "X1751002",
-    "precio": 679
-  },
-  {
-    "codigo": "X1159215",
-    "precio": 785
-  },
-  {
-    "codigo": "X1150221",
-    "precio": 848
-  },
-  {
-    "codigo": "X1151102",
-    "precio": 938
-  },
-  {
-    "codigo": "X1150095",
-    "precio": 828
-  },
-  {
-    "codigo": "X1150080",
-    "precio": 824
-  },
-  {
-    "codigo": "X1150417",
-    "precio": 1161
-  },
-  {
-    "codigo": "X1750080",
-    "precio": 826
-  },
-  {
-    "codigo": "X1606021",
-    "precio": null
-  },
-  {
-    "codigo": "X1606072",
-    "precio": 1173
-  },
-  {
-    "codigo": "X1606098",
-    "precio": 976
-  },
-  {
-    "codigo": "X1606099",
-    "precio": 987
-  },
-  {
-    "codigo": "X1650010",
-    "precio": 1723
-  },
-  {
-    "codigo": "X1606010",
-    "precio": 4818
-  },
-  {
-    "codigo": "X1150233",
-    "precio": 1002
-  },
-  {
-    "codigo": "X1150420",
-    "precio": 1151
-  },
-  {
-    "codigo": "X1150240",
-    "precio": 934
-  },
-  {
-    "codigo": "X1150242",
-    "precio": 998
-  },
-  {
-    "codigo": "X1750233",
-    "precio": 1018
-  },
-  {
-    "codigo": "X1150100",
-    "precio": 1406
-  },
-  {
-    "codigo": "X1150413",
-    "precio": 1343
-  },
-  {
-    "codigo": "X1750413",
-    "precio": 1340
-  },
-  {
-    "codigo": "X1159101",
-    "precio": 886
-  },
-  {
-    "codigo": "X1159091",
-    "precio": 977
-  },
-  {
-    "codigo": "X1750090",
-    "precio": 951
-  },
-  {
-    "codigo": "X1750091",
-    "precio": 1056
-  },
-  {
-    "codigo": "X1150101",
-    "precio": 1043
-  },
-  {
-    "codigo": "X1150106",
-    "precio": 1463
-  },
-  {
-    "codigo": "X1150414",
-    "precio": 1422
-  },
-  {
-    "codigo": "X1750414",
-    "precio": 1368
-  },
-  {
-    "codigo": "X1159111",
-    "precio": 937
-  },
-  {
-    "codigo": "X1159102",
-    "precio": 970
-  },
-  {
-    "codigo": "X1750112",
-    "precio": 1097
-  },
-  {
-    "codigo": "X1750101",
-    "precio": 971
-  },
-  {
-    "codigo": "X1750102",
-    "precio": 1105
-  },
-  {
-    "codigo": "X1159213",
-    "precio": 1168
-  },
-  {
-    "codigo": "X1159212",
-    "precio": 1050
-  },
-  {
-    "codigo": "X1159214",
-    "precio": 1157
-  },
-  {
-    "codigo": "X1750111",
-    "precio": 1046
-  },
-  {
-    "codigo": "X1751801",
-    "precio": 877
-  },
-  {
-    "codigo": "X1151800",
-    "precio": 814
-  },
-  {
-    "codigo": "X1151801",
-    "precio": 927
-  },
-  {
-    "codigo": "X1602003",
-    "precio": 1618
-  },
-  {
-    "codigo": "X1606075",
-    "precio": 1710
-  },
-  {
-    "codigo": "X1606080",
-    "precio": 2268
-  },
-  {
-    "codigo": "X1656085",
-    "precio": 2824
-  },
-  {
-    "codigo": "X1150422",
-    "precio": 1936
-  },
-  {
-    "codigo": "X1150423",
-    "precio": 2061
-  },
-  {
-    "codigo": "X1750423",
-    "precio": 2051
-  },
-  {
-    "codigo": "X1159309",
-    "precio": 1365
-  },
-  {
-    "codigo": "X1159308",
-    "precio": 1567
-  },
-  {
-    "codigo": "X1750121",
-    "precio": 1663
-  },
-  {
-    "codigo": "X1154902",
-    "precio": 1896
-  },
-  {
-    "codigo": "X1150425",
-    "precio": 1942
-  },
-  {
-    "codigo": "X1152800",
-    "precio": 1069
-  },
-  {
-    "codigo": "X1153812",
-    "precio": 1189
-  },
-  {
-    "codigo": "X1153814",
-    "precio": 1623
-  },
-  {
-    "codigo": "X1150153",
-    "precio": 1566
-  },
-  {
-    "codigo": "X1150155",
-    "precio": 1718
-  },
-  {
-    "codigo": "X1150401",
-    "precio": 1574
-  },
-  {
-    "codigo": "X1750401",
-    "precio": 1582
-  },
-  {
-    "codigo": "X1159010",
-    "precio": 1972
-  },
-  {
-    "codigo": "X1750153",
-    "precio": 1591
-  },
-  {
-    "codigo": "X1750155",
-    "precio": 1698
-  },
-  {
-    "codigo": "X1153810",
-    "precio": 1460
-  },
-  {
-    "codigo": "X1150130",
-    "precio": 1696
-  },
-  {
-    "codigo": "X1150131",
-    "precio": 1382
-  },
-  {
-    "codigo": "X1150132",
-    "precio": 1391
-  },
-  {
-    "codigo": "X1150412",
-    "precio": 1849
-  },
-  {
-    "codigo": "X1150410",
-    "precio": 1987
-  },
-  {
-    "codigo": "X1750410",
-    "precio": 2001
-  },
-  {
-    "codigo": "X1750132",
-    "precio": 1403
-  },
-  {
-    "codigo": "X1753810",
-    "precio": 1433
-  },
-  {
-    "codigo": "X1606074",
-    "precio": 2139
-  },
-  {
-    "codigo": "X1656095",
-    "precio": 3433
-  },
-  {
-    "codigo": "X1153813",
-    "precio": 1754
-  },
-  {
-    "codigo": "X1150142",
-    "precio": 1802
-  },
-  {
-    "codigo": "X1155196",
-    "precio": 2280
-  },
-  {
-    "codigo": "X1750142",
-    "precio": 1790
-  },
-  {
-    "codigo": "X1753811",
-    "precio": 1836
-  },
-  {
-    "codigo": "X1159327",
-    "precio": 271
-  },
-  {
-    "codigo": "X1656096",
-    "precio": 5524
-  },
-  {
-    "codigo": "X1650100",
-    "precio": 3933
-  },
-  {
-    "codigo": "X1150161",
-    "precio": 1805
-  },
-  {
-    "codigo": "X1150163",
-    "precio": 1954
-  },
-  {
-    "codigo": "X1750161",
-    "precio": 1778
-  },
-  {
-    "codigo": "X1606090",
-    "precio": 4655
-  },
-  {
-    "codigo": "X1606092",
-    "precio": 4721
-  },
-  {
-    "codigo": "X1150172",
-    "precio": 2208
-  },
-  {
-    "codigo": "X1150173",
-    "precio": 2265
-  },
-  {
-    "codigo": "X1154127",
-    "precio": 4431
-  },
-  {
-    "codigo": "X1750173",
-    "precio": 2208
-  },
-  {
-    "codigo": "X1155000",
-    "precio": 643
-  },
-  {
-    "codigo": "X1801207",
-    "precio": 1031
-  },
-  {
-    "codigo": "X1163740",
-    "precio": 1031
-  },
-  {
-    "codigo": "X1801210",
-    "precio": 1329
-  },
-  {
-    "codigo": "X1163410",
-    "precio": 1392
-  },
-  {
-    "codigo": "X1168020",
-    "precio": 1419
-  },
-  {
-    "codigo": "X1163620",
-    "precio": 1241
-  },
-  {
-    "codigo": "X1801211",
-    "precio": 1278
-  },
-  {
-    "codigo": "X1163530",
-    "precio": 1307
-  },
-  {
-    "codigo": "X1168025",
-    "precio": 1438
-  },
-  {
-    "codigo": "X1163850",
-    "precio": 1342
-  },
-  {
-    "codigo": "X1155010",
-    "precio": 929
-  },
-  {
-    "codigo": "X1801205",
-    "precio": 1751
-  },
-  {
-    "codigo": "X1801206",
-    "precio": 1855
-  },
-  {
-    "codigo": "X1167010",
-    "precio": 1788
-  },
-  {
-    "codigo": "X1168010",
-    "precio": 1756
-  },
-  {
-    "codigo": "X1111120",
-    "precio": 639
-  },
-  {
-    "codigo": "X1111080",
-    "precio": 326
-  },
-  {
-    "codigo": "X1111050",
-    "precio": 368
-  },
-  {
-    "codigo": "X1111060",
-    "precio": 356
-  },
-  {
-    "codigo": "X1711050",
-    "precio": 369
-  },
-  {
-    "codigo": "X1166060",
-    "precio": 1255
-  },
-  {
-    "codigo": "X1155035",
-    "precio": 1523
-  },
-  {
-    "codigo": "X1155020",
-    "precio": 1478
-  },
-  {
-    "codigo": "X1155030",
-    "precio": 1489
-  },
-  {
-    "codigo": "X1168013",
-    "precio": 1615
-  },
-  {
-    "codigo": "X1808013",
-    "precio": 1614
-  },
-  {
-    "codigo": "X1102800",
-    "precio": 98
-  },
-  {
-    "codigo": "X1100600",
-    "precio": 100
-  },
-  {
-    "codigo": "X1701433",
-    "precio": 91
-  },
-  {
-    "codigo": "X1111110",
-    "precio": 763
-  },
-  {
-    "codigo": "X1111010",
-    "precio": 1081
-  },
-  {
-    "codigo": "X1166020",
-    "precio": 1767
-  },
-  {
-    "codigo": "X1166030",
-    "precio": 1925
-  },
-  {
-    "codigo": "X1166040",
-    "precio": 2218
-  },
-  {
-    "codigo": "X1166044",
-    "precio": 2256
-  },
-  {
-    "codigo": "X1166042",
-    "precio": 2578
-  },
-  {
-    "codigo": "X1801200",
-    "precio": 1915
-  },
-  {
-    "codigo": "X1801201",
-    "precio": 2233
-  },
-  {
-    "codigo": "X1111090",
-    "precio": 801
-  },
-  {
-    "codigo": "X1153815",
-    "precio": 1715
-  },
-  {
-    "codigo": "X1151006",
-    "precio": 3161
-  },
-  {
-    "codigo": "X1101600",
-    "precio": 122
-  },
-  {
-    "codigo": "X1101601",
-    "precio": 127
-  },
-  {
-    "codigo": "X1100205",
-    "precio": 115
-  },
-  {
-    "codigo": "X1102400",
-    "precio": 139
-  },
-  {
-    "codigo": "X1103200",
-    "precio": 141
-  },
-  {
-    "codigo": "X1103261",
-    "precio": 185
-  },
-  {
-    "codigo": "X1111123",
-    "precio": 1006
-  },
-  {
-    "codigo": "X1111100",
-    "precio": 1045
-  },
-  {
-    "codigo": "X1703004",
-    "precio": 1046
-  },
-  {
-    "codigo": "X1181015",
-    "precio": 2640
-  },
-  {
-    "codigo": "X1153244",
-    "precio": 1802
-  },
-  {
-    "codigo": "X1153242",
-    "precio": 2038
-  },
-  {
-    "codigo": "X1801202",
-    "precio": 1718
-  },
-  {
-    "codigo": "X1801203",
-    "precio": 1986
-  },
-  {
-    "codigo": "X1310002",
-    "precio": 1625
-  },
-  {
-    "codigo": "X1163250",
-    "precio": 2070
-  },
-  {
-    "codigo": "X1157041",
-    "precio": 2343
-  },
-  {
-    "codigo": "X1801212",
-    "precio": 2070
-  },
-  {
-    "codigo": "X1155037",
-    "precio": 3074
-  },
-  {
-    "codigo": "X1155036",
-    "precio": 2913
-  },
-  {
-    "codigo": "X1801213",
-    "precio": 2978
-  },
-  {
-    "codigo": "X1163271",
-    "precio": 2583
-  },
-  {
-    "codigo": "X1181017",
-    "precio": 4226
-  },
-  {
-    "codigo": "X1811200",
-    "precio": 4224
-  },
-  {
-    "codigo": "X1153282",
-    "precio": 2593
-  },
-  {
-    "codigo": "X1155040",
-    "precio": 3235
-  },
-  {
-    "codigo": "X1157040",
-    "precio": 3650
-  },
-  {
-    "codigo": "X1102500",
-    "precio": 152
-  },
-  {
-    "codigo": "X1103250",
-    "precio": 169
-  },
-  {
-    "codigo": "X1600010",
-    "precio": 295
-  },
-  {
-    "codigo": "X1103255",
-    "precio": 190
-  },
-  {
-    "codigo": "X1103257",
+    "codigo": "1103005",
     "precio": 223
   },
   {
-    "codigo": "X1100811",
-    "precio": 151
-  },
-  {
-    "codigo": "X1100215",
-    "precio": 163
-  },
-  {
-    "codigo": "X1700215",
-    "precio": 161
-  },
-  {
-    "codigo": "X1100040",
-    "precio": 193
-  },
-  {
-    "codigo": "X1100844",
-    "precio": 224
-  },
-  {
-    "codigo": "X1100225",
-    "precio": 168
-  },
-  {
-    "codigo": "X1700225",
-    "precio": 169
-  },
-  {
-    "codigo": "X1100030",
-    "precio": 210
-  },
-  {
-    "codigo": "X1111030",
-    "precio": 1443
-  },
-  {
-    "codigo": "X1168012",
-    "precio": 3810
-  },
-  {
-    "codigo": "X1801204",
-    "precio": 3810
-  },
-  {
-    "codigo": "X1310001",
-    "precio": 3295
-  },
-  {
-    "codigo": "X1168011",
-    "precio": 3651
-  },
-  {
-    "codigo": "X1181040",
-    "precio": 3203
-  },
-  {
-    "codigo": "X1157030",
-    "precio": 2908
-  },
-  {
-    "codigo": "X1159300",
-    "precio": 188
-  },
-  {
-    "codigo": "X1157032",
-    "precio": 3162
-  },
-  {
-    "codigo": "X1154065",
-    "precio": 3440
-  },
-  {
-    "codigo": "X1320002",
-    "precio": 3233
-  },
-  {
-    "codigo": "X1156010",
-    "precio": 4858
-  },
-  {
-    "codigo": "X1152018",
+    "codigo": "1103004",
     "precio": 207
   },
   {
-    "codigo": "X1100235",
+    "codigo": "1103006",
+    "precio": 261
+  },
+  {
+    "codigo": "1701530",
+    "precio": 381
+  },
+  {
+    "codigo": "1701515",
+    "precio": 496
+  },
+  {
+    "codigo": "1101250",
+    "precio": 360
+  },
+  {
+    "codigo": "1601002",
+    "precio": 758
+  },
+  {
+    "codigo": "1601003",
+    "precio": 799
+  },
+  {
+    "codigo": "1601004",
+    "precio": 735
+  },
+  {
+    "codigo": "1601005",
+    "precio": 891
+  },
+  {
+    "codigo": "1150022",
+    "precio": 531
+  },
+  {
+    "codigo": "1159330",
+    "precio": 574
+  },
+  {
+    "codigo": "1150201",
+    "precio": 780
+  },
+  {
+    "codigo": "1150200",
+    "precio": 653
+  },
+  {
+    "codigo": "1602025",
+    "precio": 2552
+  },
+  {
+    "codigo": "1606094",
+    "precio": 835
+  },
+  {
+    "codigo": "1606095",
+    "precio": 794
+  },
+  {
+    "codigo": "1606097",
+    "precio": 945
+  },
+  {
+    "codigo": "1606096",
+    "precio": 890
+  },
+  {
+    "codigo": "1150041",
+    "precio": 556
+  },
+  {
+    "codigo": "1150043",
+    "precio": 860
+  },
+  {
+    "codigo": "1150411",
+    "precio": 645
+  },
+  {
+    "codigo": "1159230",
+    "precio": 588
+  },
+  {
+    "codigo": "1159201",
+    "precio": 557
+  },
+  {
+    "codigo": "1159200",
+    "precio": 483
+  },
+  {
+    "codigo": "1159220",
+    "precio": 588
+  },
+  {
+    "codigo": "1159323",
+    "precio": 547
+  },
+  {
+    "codigo": "1150320",
+    "precio": 498
+  },
+  {
+    "codigo": "1150300",
+    "precio": 423
+  },
+  {
+    "codigo": "1150050",
+    "precio": 621
+  },
+  {
+    "codigo": "1150060",
+    "precio": 601
+  },
+  {
+    "codigo": "1150062",
+    "precio": 679
+  },
+  {
+    "codigo": "1150061",
+    "precio": 631
+  },
+  {
+    "codigo": "1150211",
+    "precio": 656
+  },
+  {
+    "codigo": "1150415",
+    "precio": 765
+  },
+  {
+    "codigo": "1159325",
+    "precio": 609
+  },
+  {
+    "codigo": "1101414",
+    "precio": 484
+  },
+  {
+    "codigo": "1101415",
+    "precio": 552
+  },
+  {
+    "codigo": "1608000",
+    "precio": 917
+  },
+  {
+    "codigo": "1150192",
+    "precio": 761
+  },
+  {
+    "codigo": "1101300",
+    "precio": 630
+  },
+  {
+    "codigo": "1102600",
+    "precio": 709
+  },
+  {
+    "codigo": "1151004",
+    "precio": 734
+  },
+  {
+    "codigo": "1151003",
+    "precio": 957
+  },
+  {
+    "codigo": "1151002",
+    "precio": 655
+  },
+  {
+    "codigo": "1159336",
+    "precio": 791
+  },
+  {
+    "codigo": "1159215",
+    "precio": 792
+  },
+  {
+    "codigo": "1150221",
+    "precio": 821
+  },
+  {
+    "codigo": "1159333",
+    "precio": 830
+  },
+  {
+    "codigo": "1151102",
+    "precio": 921
+  },
+  {
+    "codigo": "1150095",
+    "precio": 791
+  },
+  {
+    "codigo": "1150080",
+    "precio": 786
+  },
+  {
+    "codigo": "1150417",
+    "precio": 1158
+  },
+  {
+    "codigo": "1606098",
+    "precio": 985
+  },
+  {
+    "codigo": "1606099",
+    "precio": 996
+  },
+  {
+    "codigo": "1603001",
+    "precio": 3055
+  },
+  {
+    "codigo": "1606072",
+    "precio": 1199
+  },
+  {
+    "codigo": "1650010",
+    "precio": 1947
+  },
+  {
+    "codigo": "1606011",
+    "precio": 5121
+  },
+  {
+    "codigo": "1606010",
+    "precio": 5117
+  },
+  {
+    "codigo": "1150233",
+    "precio": 977
+  },
+  {
+    "codigo": "1150420",
+    "precio": 1136
+  },
+  {
+    "codigo": "1150240",
+    "precio": 896
+  },
+  {
+    "codigo": "1150242",
+    "precio": 966
+  },
+  {
+    "codigo": "1150100",
+    "precio": 1395
+  },
+  {
+    "codigo": "1150413",
+    "precio": 1309
+  },
+  {
+    "codigo": "1159101",
+    "precio": 853
+  },
+  {
+    "codigo": "1159091",
+    "precio": 952
+  },
+  {
+    "codigo": "1150101",
+    "precio": 1098
+  },
+  {
+    "codigo": "1150106",
+    "precio": 1468
+  },
+  {
+    "codigo": "1150414",
+    "precio": 1380
+  },
+  {
+    "codigo": "1159111",
+    "precio": 971
+  },
+  {
+    "codigo": "1159102",
+    "precio": 1012
+  },
+  {
+    "codigo": "1159213",
+    "precio": 1154
+  },
+  {
+    "codigo": "1159212",
+    "precio": 1113
+  },
+  {
+    "codigo": "1159214",
+    "precio": 1195
+  },
+  {
+    "codigo": "1151800",
+    "precio": 847
+  },
+  {
+    "codigo": "1151801",
+    "precio": 913
+  },
+  {
+    "codigo": "1602003",
+    "precio": 1624
+  },
+  {
+    "codigo": "1606075",
+    "precio": 1715
+  },
+  {
+    "codigo": "1606080",
+    "precio": 2351
+  },
+  {
+    "codigo": "1656085",
+    "precio": 2884
+  },
+  {
+    "codigo": "1150422",
+    "precio": 1903
+  },
+  {
+    "codigo": "1150423",
+    "precio": 2020
+  },
+  {
+    "codigo": "1159309",
+    "precio": 1287
+  },
+  {
+    "codigo": "1159308",
+    "precio": 1515
+  },
+  {
+    "codigo": "1154902",
+    "precio": 1836
+  },
+  {
+    "codigo": "1150425",
+    "precio": 1881
+  },
+  {
+    "codigo": "1152800",
+    "precio": 1038
+  },
+  {
+    "codigo": "1153812",
+    "precio": 1168
+  },
+  {
+    "codigo": "1153814",
+    "precio": 1645
+  },
+  {
+    "codigo": "1150153",
+    "precio": 1525
+  },
+  {
+    "codigo": "1150155",
+    "precio": 1721
+  },
+  {
+    "codigo": "1150401",
+    "precio": 1533
+  },
+  {
+    "codigo": "1159010",
+    "precio": 1975
+  },
+  {
+    "codigo": "1153810",
+    "precio": 1454
+  },
+  {
+    "codigo": "1150130",
+    "precio": 1645
+  },
+  {
+    "codigo": "1150131",
+    "precio": 1406
+  },
+  {
+    "codigo": "1150132",
+    "precio": 1377
+  },
+  {
+    "codigo": "1150412",
+    "precio": 1799
+  },
+  {
+    "codigo": "1150410",
+    "precio": 1915
+  },
+  {
+    "codigo": "1606074",
+    "precio": 2145
+  },
+  {
+    "codigo": "1656095",
+    "precio": 3586
+  },
+  {
+    "codigo": "1153813",
+    "precio": 1794
+  },
+  {
+    "codigo": "1150142",
+    "precio": 1715
+  },
+  {
+    "codigo": "1155196",
+    "precio": 2231
+  },
+  {
+    "codigo": "1159327",
+    "precio": 273
+  },
+  {
+    "codigo": "1650100",
+    "precio": 5038
+  },
+  {
+    "codigo": "1656096",
+    "precio": 7011
+  },
+  {
+    "codigo": "1150161",
+    "precio": 1783
+  },
+  {
+    "codigo": "1150163",
+    "precio": 1944
+  },
+  {
+    "codigo": "1606090",
+    "precio": 4821
+  },
+  {
+    "codigo": "1606092",
+    "precio": 4889
+  },
+  {
+    "codigo": "1150172",
+    "precio": 2105
+  },
+  {
+    "codigo": "1150173",
+    "precio": 2250
+  },
+  {
+    "codigo": "1154127",
+    "precio": 4508
+  },
+  {
+    "codigo": "1155000",
+    "precio": 666
+  },
+  {
+    "codigo": "1155010",
+    "precio": 938
+  },
+  {
+    "codigo": "1111120",
+    "precio": 711
+  },
+  {
+    "codigo": "1111080",
+    "precio": 365
+  },
+  {
+    "codigo": "1111050",
+    "precio": 409
+  },
+  {
+    "codigo": "1111060",
+    "precio": 402
+  },
+  {
+    "codigo": "1166060",
+    "precio": 1278
+  },
+  {
+    "codigo": "1155035",
+    "precio": 1570
+  },
+  {
+    "codigo": "1155020",
+    "precio": 1504
+  },
+  {
+    "codigo": "1155030",
+    "precio": 1499
+  },
+  {
+    "codigo": "1168013",
+    "precio": 1648
+  },
+  {
+    "codigo": "1102800",
+    "precio": 102
+  },
+  {
+    "codigo": "1100600",
+    "precio": 101
+  },
+  {
+    "codigo": "1701433",
+    "precio": 93
+  },
+  {
+    "codigo": "1111110",
+    "precio": 786
+  },
+  {
+    "codigo": "1111010",
+    "precio": 1038
+  },
+  {
+    "codigo": "1166020",
+    "precio": 1805
+  },
+  {
+    "codigo": "1310004",
+    "precio": 1947
+  },
+  {
+    "codigo": "1166030",
+    "precio": 2047
+  },
+  {
+    "codigo": "1166040",
+    "precio": 2312
+  },
+  {
+    "codigo": "1310006",
+    "precio": 2312
+  },
+  {
+    "codigo": "1166044",
+    "precio": 2362
+  },
+  {
+    "codigo": "1166042",
+    "precio": 2711
+  },
+  {
+    "codigo": "1111090",
+    "precio": 819
+  },
+  {
+    "codigo": "1153815",
+    "precio": 1693
+  },
+  {
+    "codigo": "1101600",
+    "precio": 126
+  },
+  {
+    "codigo": "1101601",
+    "precio": 131
+  },
+  {
+    "codigo": "1100205",
+    "precio": 118
+  },
+  {
+    "codigo": "1102400",
+    "precio": 144
+  },
+  {
+    "codigo": "1103200",
+    "precio": 145
+  },
+  {
+    "codigo": "1103261",
+    "precio": 190
+  },
+  {
+    "codigo": "1111123",
+    "precio": 1038
+  },
+  {
+    "codigo": "1111100",
+    "precio": 1066
+  },
+  {
+    "codigo": "1161070",
+    "precio": 1689
+  },
+  {
+    "codigo": "1153244",
+    "precio": 1726
+  },
+  {
+    "codigo": "1153242",
+    "precio": 1969
+  },
+  {
+    "codigo": "1163250",
+    "precio": 2108
+  },
+  {
+    "codigo": "1155036",
+    "precio": 2862
+  },
+  {
+    "codigo": "1163271",
+    "precio": 2658
+  },
+  {
+    "codigo": "1153282",
+    "precio": 2630
+  },
+  {
+    "codigo": "1155040",
+    "precio": 3329
+  },
+  {
+    "codigo": "1102500",
+    "precio": 156
+  },
+  {
+    "codigo": "1103250",
+    "precio": 174
+  },
+  {
+    "codigo": "1600010",
+    "precio": 309
+  },
+  {
+    "codigo": "1100811",
+    "precio": 150
+  },
+  {
+    "codigo": "1103257",
+    "precio": 228
+  },
+  {
+    "codigo": "1103255",
+    "precio": 192
+  },
+  {
+    "codigo": "1100215",
+    "precio": 162
+  },
+  {
+    "codigo": "1100040",
+    "precio": 192
+  },
+  {
+    "codigo": "1100844",
+    "precio": 225
+  },
+  {
+    "codigo": "1100225",
+    "precio": 166
+  },
+  {
+    "codigo": "1100030",
+    "precio": 208
+  },
+  {
+    "codigo": "1111122",
+    "precio": 1218
+  },
+  {
+    "codigo": "1168012",
+    "precio": 3822
+  },
+  {
+    "codigo": "1168011",
+    "precio": 3484
+  },
+  {
+    "codigo": "1157030",
+    "precio": 2797
+  },
+  {
+    "codigo": "1159300",
+    "precio": 187
+  },
+  {
+    "codigo": "1157032",
+    "precio": 3146
+  },
+  {
+    "codigo": "1154065",
+    "precio": 3518
+  },
+  {
+    "codigo": "1320002",
+    "precio": 3223
+  },
+  {
+    "codigo": "1152018",
+    "precio": 209
+  },
+  {
+    "codigo": "1100235",
     "precio": 211
   },
   {
-    "codigo": "X1700235",
-    "precio": 212
+    "codigo": "1159332",
+    "precio": 276
   },
   {
-    "codigo": "X1159332",
-    "precio": 281
+    "codigo": "1159335",
+    "precio": 260
   },
   {
-    "codigo": "X1159335",
-    "precio": 266
-  },
-  {
-    "codigo": "X1750600",
-    "precio": 281
-  },
-  {
-    "codigo": "X1703003",
+    "codigo": "1703003",
     "precio": 171
   },
   {
-    "codigo": "X1157700",
-    "precio": 3882
+    "codigo": "1157700",
+    "precio": 4026
+  },
+  {
+    "codigo": "1163740",
+    "precio": 1136
+  },
+  {
+    "codigo": "1163410",
+    "precio": 1431
+  },
+  {
+    "codigo": "1163620",
+    "precio": 1471
+  },
+  {
+    "codigo": "1163530",
+    "precio": 1323
+  },
+  {
+    "codigo": "1168025",
+    "precio": 1488
+  },
+  {
+    "codigo": "1163850",
+    "precio": 1375
+  },
+  {
+    "codigo": "1167010",
+    "precio": 1757
+  },
+  {
+    "codigo": "1310002",
+    "precio": 1647
+  },
+  {
+    "codigo": "1157041",
+    "precio": 2404
+  },
+  {
+    "codigo": "1155037",
+    "precio": 2951
+  },
+  {
+    "codigo": "1157040",
+    "precio": 37131
+  },
+  {
+    "codigo": "1310001",
+    "precio": 3274
+  },
+  {
+    "codigo": "1156010",
+    "precio": 4886
+  },
+  {
+    "codigo": "1181019",
+    "precio": 4387
+  },
+  {
+    "codigo": "1182040",
+    "precio": 6443
+  },
+  {
+    "codigo": "1181015",
+    "precio": 2734
+  },
+  {
+    "codigo": "1181017",
+    "precio": 4335
+  },
+  {
+    "codigo": "1181040",
+    "precio": 3368
+  },
+  {
+    "codigo": "1168020",
+    "precio": 1477
+  },
+  {
+    "codigo": "1168010",
+    "precio": 1919
   },
   {
     "codigo": "6009",
@@ -2477,7 +2181,7 @@
   },
   {
     "codigo": "3205",
-    "precio": 312
+    "precio": 3121
   },
   {
     "codigo": "3147",
@@ -2877,7 +2581,7 @@
   },
   {
     "codigo": "6819",
-    "precio": 87
+    "precio": 871
   },
   {
     "codigo": "4892",
@@ -3081,7 +2785,7 @@
   },
   {
     "codigo": "3421",
-    "precio": 114
+    "precio": 1141
   },
   {
     "codigo": "3426",
@@ -3289,7 +2993,7 @@
   },
   {
     "codigo": "1AGE900001",
-    "precio": 1011
+    "precio": 10111
   },
   {
     "codigo": "1AGE900002",
@@ -3314,6 +3018,302 @@
   {
     "codigo": "F63",
     "precio": 302
+  },
+  {
+    "codigo": "F21",
+    "precio": 393
+  },
+  {
+    "codigo": "F22",
+    "precio": 433
+  },
+  {
+    "codigo": "F23",
+    "precio": 388
+  },
+  {
+    "codigo": "F24",
+    "precio": 578
+  },
+  {
+    "codigo": "F95",
+    "precio": 610
+  },
+  {
+    "codigo": "F75",
+    "precio": 664
+  },
+  {
+    "codigo": "F25",
+    "precio": 684
+  },
+  {
+    "codigo": "F67",
+    "precio": 731
+  },
+  {
+    "codigo": "F26",
+    "precio": 1014
+  },
+  {
+    "codigo": "F27",
+    "precio": 2265
+  },
+  {
+    "codigo": "F28",
+    "precio": 571
+  },
+  {
+    "codigo": "F96",
+    "precio": 578
+  },
+  {
+    "codigo": "F29",
+    "precio": 464
+  },
+  {
+    "codigo": "F30",
+    "precio": 705
+  },
+  {
+    "codigo": "F65",
+    "precio": 582
+  },
+  {
+    "codigo": "F31",
+    "precio": 765
+  },
+  {
+    "codigo": "F32",
+    "precio": 1169
+  },
+  {
+    "codigo": "F33",
+    "precio": 1454
+  },
+  {
+    "codigo": "F62",
+    "precio": 0
+  },
+  {
+    "codigo": "F34",
+    "precio": 2064
+  },
+  {
+    "codigo": "F66",
+    "precio": 666
+  },
+  {
+    "codigo": "F35",
+    "precio": 833
+  },
+  {
+    "codigo": "F91",
+    "precio": 902
+  },
+  {
+    "codigo": "F36",
+    "precio": 521
+  },
+  {
+    "codigo": "F37",
+    "precio": 580
+  },
+  {
+    "codigo": "F38",
+    "precio": 633
+  },
+  {
+    "codigo": "F64",
+    "precio": 507
+  },
+  {
+    "codigo": "F39",
+    "precio": 831
+  },
+  {
+    "codigo": "F40",
+    "precio": 1141
+  },
+  {
+    "codigo": "F92",
+    "precio": 1175
+  },
+  {
+    "codigo": "F41",
+    "precio": 253
+  },
+  {
+    "codigo": "F73",
+    "precio": 94
+  },
+  {
+    "codigo": "F76",
+    "precio": 118
+  },
+  {
+    "codigo": "F42",
+    "precio": 198
+  },
+  {
+    "codigo": "F43",
+    "precio": 250
+  },
+  {
+    "codigo": "F44",
+    "precio": 158
+  },
+  {
+    "codigo": "F45",
+    "precio": 148
+  },
+  {
+    "codigo": "F46",
+    "precio": 233
+  },
+  {
+    "codigo": "F47",
+    "precio": 276
+  },
+  {
+    "codigo": "F69",
+    "precio": 439
+  },
+  {
+    "codigo": "F71",
+    "precio": 647
+  },
+  {
+    "codigo": "F70",
+    "precio": 809
+  },
+  {
+    "codigo": "F48",
+    "precio": 514
+  },
+  {
+    "codigo": "F49",
+    "precio": 558
+  },
+  {
+    "codigo": "F50",
+    "precio": 581
+  },
+  {
+    "codigo": "F72",
+    "precio": 608
+  },
+  {
+    "codigo": "F94",
+    "precio": 579
+  },
+  {
+    "codigo": "F51",
+    "precio": 6821
+  },
+  {
+    "codigo": "F52",
+    "precio": 800
+  },
+  {
+    "codigo": "F80",
+    "precio": 718
+  },
+  {
+    "codigo": "F53",
+    "precio": 1052
+  },
+  {
+    "codigo": "F54",
+    "precio": 1140
+  },
+  {
+    "codigo": "F55",
+    "precio": 1379
+  },
+  {
+    "codigo": "F56",
+    "precio": 1466
+  },
+  {
+    "codigo": "F90",
+    "precio": 2552
+  },
+  {
+    "codigo": "F57",
+    "precio": 83
+  },
+  {
+    "codigo": "F79",
+    "precio": 97
+  },
+  {
+    "codigo": "F98",
+    "precio": 102
+  },
+  {
+    "codigo": "F58",
+    "precio": 152
+  },
+  {
+    "codigo": "F93",
+    "precio": 85
+  },
+  {
+    "codigo": "F59",
+    "precio": 149
+  },
+  {
+    "codigo": "F77",
+    "precio": 149
+  },
+  {
+    "codigo": "F78",
+    "precio": 185
+  },
+  {
+    "codigo": "F60",
+    "precio": 185
+  },
+  {
+    "codigo": "F61",
+    "precio": 322
+  },
+  {
+    "codigo": "F81",
+    "precio": 28
+  },
+  {
+    "codigo": "F82",
+    "precio": 47
+  },
+  {
+    "codigo": "F83",
+    "precio": 44
+  },
+  {
+    "codigo": "F84",
+    "precio": 49
+  },
+  {
+    "codigo": "F85",
+    "precio": 63
+  },
+  {
+    "codigo": "F86",
+    "precio": 82
+  },
+  {
+    "codigo": "F87",
+    "precio": 63
+  },
+  {
+    "codigo": "F88",
+    "precio": 104
+  },
+  {
+    "codigo": "F89",
+    "precio": 79
   },
   {
     "codigo": "F21",
