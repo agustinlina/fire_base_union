@@ -207,7 +207,7 @@
     "codigo": "F49",
     "descripcion": "14.00-24 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "24"
+    "stock": "20"
   },
   {
     "codigo": "T1606097",
@@ -231,7 +231,7 @@
     "codigo": "T1159325",
     "descripcion": "14.9-28 SUPREME 8T TT",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "T1150192",
@@ -243,7 +243,7 @@
     "codigo": "F38",
     "descripcion": "15.5-38 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "RK636H1",
@@ -309,7 +309,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "4066"
+    "stock": "4060"
   },
   {
     "codigo": "RK2087H1",
@@ -327,7 +327,7 @@
     "codigo": "F51",
     "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "41"
+    "stock": "40"
   },
   {
     "codigo": "T1606072",
@@ -345,7 +345,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "378"
+    "stock": "354"
   },
   {
     "codigo": "F25",
@@ -582,12 +582,6 @@
     "stock": "12"
   },
   {
-    "codigo": "4452",
-    "descripcion": "215/65R16 102H TRANSMATE SOLITUDE M+S",
-    "rubro": "SOLITUDE",
-    "stock": "2"
-  },
-  {
     "codigo": "123313",
     "descripcion": "215/75R17.5 REGIONAL RHD 126/124L F TL",
     "rubro": "TRACCION",
@@ -603,7 +597,7 @@
     "codigo": "7500412",
     "descripcion": "215/75R17.5 ROYAL BLACK RS201 18PR 135/133J M+S",
     "rubro": "DIRECCION",
-    "stock": "545"
+    "stock": "541"
   },
   {
     "codigo": "123344",
@@ -639,7 +633,7 @@
     "codigo": "RK632H1",
     "descripcion": "225/55R18 98H ROYAL SPORT TL M+S",
     "rubro": "ROYAL SPORT",
-    "stock": "140"
+    "stock": "136"
   },
   {
     "codigo": "5005",
@@ -915,7 +909,7 @@
     "codigo": "7500584",
     "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
     "rubro": "DIRECCION",
-    "stock": "34"
+    "stock": "19"
   },
   {
     "codigo": "28126PI",
@@ -1113,7 +1107,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "120"
+    "stock": "119"
   },
   {
     "codigo": "1I1E9D001",
@@ -1209,7 +1203,7 @@
     "codigo": "F76",
     "descripcion": "7.50-16 FORERUNNER 8PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "29"
+    "stock": "27"
   },
   {
     "codigo": "F45",
@@ -1239,7 +1233,7 @@
     "codigo": "T1154065",
     "descripcion": "800/65R32 OPTITRAC DT830 R1W TL 172",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
-    "stock": "15"
+    "stock": "14"
   },
   {
     "codigo": "120240",

@@ -183,7 +183,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "26"
+    "stock": "24"
   },
   {
     "codigo": "RK1964H1",
@@ -213,7 +213,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "32"
+    "stock": "28"
   },
   {
     "codigo": "6059",
@@ -270,12 +270,6 @@
     "stock": "2"
   },
   {
-    "codigo": "1RK828H1",
-    "descripcion": "185/65R15 88H ROYAL COMFORT TL M+S",
-    "rubro": "ROYAL COMFORT",
-    "stock": "2"
-  },
-  {
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
@@ -285,7 +279,7 @@
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "20"
+    "stock": "18"
   },
   {
     "codigo": "3208",
@@ -687,7 +681,7 @@
     "codigo": "3461",
     "descripcion": "265/70R17 113T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "RK314H1",
@@ -717,7 +711,7 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "192"
+    "stock": "188"
   },
   {
     "codigo": "AR16217038",
@@ -753,7 +747,7 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "38"
+    "stock": "34"
   },
   {
     "codigo": "7500584",
@@ -807,7 +801,7 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "3148",
