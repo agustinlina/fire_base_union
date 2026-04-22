@@ -6,6 +6,12 @@
     "stock": "8"
   },
   {
+    "codigo": "X1100000",
+    "descripcion": "10.00-16 DYNA RIB F2 TT 10T",
+    "rubro": "AGRICOLA TRACTOR DELANTERO",
+    "stock": "1"
+  },
+  {
     "codigo": "T1100000",
     "descripcion": "10.00-16 DYNA RIB F2 TT 10T",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
@@ -94,6 +100,12 @@
     "descripcion": "13.00-24 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
     "stock": "8"
+  },
+  {
+    "codigo": "F48COPIA",
+    "descripcion": "13.00-24 FORERUNNER QH808 16PR TL G-2/L-2",
+    "rubro": "VIALES / OTR - DIAGONALES",
+    "stock": "2"
   },
   {
     "codigo": "T1150022",
@@ -261,7 +273,7 @@
     "codigo": "3208",
     "descripcion": "185R15C 103/102R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "16"
+    "stock": "12"
   },
   {
     "codigo": "F82",
@@ -405,7 +417,7 @@
     "codigo": "AR7971902HD",
     "descripcion": "215/75R17.5 ARIVO BUFFALO ARST1 135/133J",
     "rubro": "DIRECCION",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "7500413",
@@ -738,16 +750,22 @@
     "stock": "12"
   },
   {
+    "codigo": "AR7971602HDCOPIA",
+    "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
+    "rubro": "DIRECCION",
+    "stock": "1"
+  },
+  {
     "codigo": "3147",
-    "descripcion": "295/80R22.5 ECO76 TERCELO 152/149M M+S",
+    "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
     "stock": "52"
   },
   {
     "codigo": "3148",
-    "descripcion": "295/80R22.5 ECO86 TERCELO 152/149J M+S",
+    "descripcion": "295/80R22.5 ECOSAVER ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "27"
+    "stock": "25"
   },
   {
     "codigo": "122967",
@@ -789,7 +807,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "74"
+    "stock": "69"
   },
   {
     "codigo": "7500150",
@@ -826,12 +844,6 @@
     "descripcion": "295/80R22.5 TUA91 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
     "stock": "26"
-  },
-  {
-    "codigo": "T1150173",
-    "descripcion": "30.5L-32 DYNA TORQUE III R1 TL 14T",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
   },
   {
     "codigo": "F34",
@@ -957,7 +969,7 @@
     "codigo": "F58",
     "descripcion": "7.00-12 FORERUNNER SKS-1 14PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "T1102500",

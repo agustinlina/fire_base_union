@@ -9,7 +9,7 @@
     "codigo": "F42",
     "descripcion": "10.00-16 FORERUNNER QH622 10PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "237"
+    "stock": "235"
   },
   {
     "codigo": "120243",
@@ -231,7 +231,7 @@
     "codigo": "RK636H1",
     "descripcion": "155R12C 88/86R ROYAL COMMERCIAL TL M+S",
     "rubro": "ROYAL COMMERCIAL",
-    "stock": "141"
+    "stock": "137"
   },
   {
     "codigo": "T1101300",
@@ -274,12 +274,6 @@
     "descripcion": "16.9-30 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "4"
-  },
-  {
-    "codigo": "F66",
-    "descripcion": "16.9-34 FORERUNNER QH611 12PR TT R-1",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "1"
   },
   {
     "codigo": "160025PI",
@@ -327,7 +321,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "219"
+    "stock": "212"
   },
   {
     "codigo": "F25",
@@ -423,7 +417,7 @@
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "101"
+    "stock": "94"
   },
   {
     "codigo": "F82",
@@ -525,7 +519,7 @@
     "codigo": "T1154902",
     "descripcion": "20.8-42 DYNA TORQUE III 14T TL",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "16"
+    "stock": "12"
   },
   {
     "codigo": "6607",
@@ -759,7 +753,7 @@
     "codigo": "4364",
     "descripcion": "235/60R18 103H TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "24"
+    "stock": "20"
   },
   {
     "codigo": "4362",
@@ -837,7 +831,7 @@
     "codigo": "6662",
     "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "162"
+    "stock": "160"
   },
   {
     "codigo": "3461",
@@ -886,12 +880,6 @@
     "descripcion": "275/80R22.5 KMAX S GEN-2 149/146L  H",
     "rubro": "DIRECCION",
     "stock": "159"
-  },
-  {
-    "codigo": "7500584",
-    "descripcion": "275/80R22.5 ROYAL BLACK RS201 18PR 149/146M M+S",
-    "rubro": "DIRECCION",
-    "stock": "1"
   },
   {
     "codigo": "28126PI",
@@ -1017,7 +1005,7 @@
     "codigo": "T1150173",
     "descripcion": "30.5L-32 DYNA TORQUE III R1 TL 14T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "3"
   },
   {
     "codigo": "F34",
@@ -1191,7 +1179,7 @@
     "codigo": "F45",
     "descripcion": "7.50-18 FORERUNNER QH621 8PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "143"
+    "stock": "141"
   },
   {
     "codigo": "X1163308",
