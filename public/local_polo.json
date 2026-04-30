@@ -225,7 +225,7 @@
     "codigo": "RK636H1",
     "descripcion": "155R12C 88/86R ROYAL COMMERCIAL TL M+S",
     "rubro": "ROYAL COMMERCIAL",
-    "stock": "137"
+    "stock": "133"
   },
   {
     "codigo": "T1101300",
@@ -291,7 +291,7 @@
     "codigo": "F51",
     "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "40"
+    "stock": "38"
   },
   {
     "codigo": "T1606072",
@@ -309,7 +309,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "181"
+    "stock": "123"
   },
   {
     "codigo": "F25",
@@ -393,13 +393,7 @@
     "codigo": "6062",
     "descripcion": "185/60R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "64"
-  },
-  {
-    "codigo": "6065",
-    "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "14"
+    "stock": "49"
   },
   {
     "codigo": "6571",
@@ -441,7 +435,7 @@
     "codigo": "6623",
     "descripcion": "195/50R16 84V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "56"
+    "stock": "40"
   },
   {
     "codigo": "1RK789H1",
@@ -573,7 +567,7 @@
     "codigo": "5035",
     "descripcion": "225/45ZR17 94W TRANSMATE SPORT D1 M+S XL",
     "rubro": "SPORT D1",
-    "stock": "141"
+    "stock": "121"
   },
   {
     "codigo": "5036",
@@ -729,7 +723,7 @@
     "codigo": "5045",
     "descripcion": "235/55ZR17 103W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "14"
+    "stock": "6"
   },
   {
     "codigo": "4364",
@@ -1179,7 +1173,7 @@
     "codigo": "T1154065",
     "descripcion": "800/65R32 OPTITRAC DT830 R1W TL 172",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
-    "stock": "14"
+    "stock": "12"
   },
   {
     "codigo": "120240",
