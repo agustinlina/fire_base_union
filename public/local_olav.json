@@ -195,7 +195,7 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "14"
+    "stock": "26"
   },
   {
     "codigo": "6535",
@@ -228,10 +228,22 @@
     "stock": "3"
   },
   {
+    "codigo": "6053",
+    "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
+    "rubro": "TRANSERENUS ECO",
+    "stock": "20"
+  },
+  {
     "codigo": "6059",
     "descripcion": "175/70R14 84T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
     "stock": "1"
+  },
+  {
+    "codigo": "3176",
+    "descripcion": "175/70R14C 95/93S TRANSMATE WZT705 M+S",
+    "rubro": "WZT705",
+    "stock": "6"
   },
   {
     "codigo": "F25",
@@ -273,7 +285,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "6571",
@@ -711,7 +723,7 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "156"
+    "stock": "154"
   },
   {
     "codigo": "AR16217038",
@@ -747,7 +759,7 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "13"
+    "stock": "11"
   },
   {
     "codigo": "121760",
@@ -796,6 +808,12 @@
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARST1 152/149M",
     "rubro": "DIRECCION",
     "stock": "1"
+  },
+  {
+    "codigo": "4214",
+    "descripcion": "295/80R22.5 ECOSAVER ECO68 TERCELO 152/149L M+S",
+    "rubro": "DIRECCION",
+    "stock": "30"
   },
   {
     "codigo": "3148",
@@ -868,12 +886,6 @@
     "descripcion": "295/80R22.5 STEELMARK AGS/AHS 152/148L H TL",
     "rubro": "DIRECCION",
     "stock": "18"
-  },
-  {
-    "codigo": "103269",
-    "descripcion": "295/80R22.5 TLD19 TERCELO 152/149J M+S",
-    "rubro": "TRACCION",
-    "stock": "4"
   },
   {
     "codigo": "104058",
@@ -993,13 +1005,13 @@
     "codigo": "F57",
     "descripcion": "6.00-9 FORERUNNER QH201 10PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "3"
+    "stock": "1"
   },
   {
-    "codigo": "T1103200",
-    "descripcion": "6.50-16 DYNA RIB F2 TT 8T",
-    "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "1"
+    "codigo": "F79",
+    "descripcion": "6.00-9 FORERUNNER QH201 12PR TT",
+    "rubro": "INDUSTRIALES IMPORTADO",
+    "stock": "9"
   },
   {
     "codigo": "F58",
