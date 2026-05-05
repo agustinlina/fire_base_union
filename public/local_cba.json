@@ -159,7 +159,7 @@
     "codigo": "6056",
     "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "262"
+    "stock": "222"
   },
   {
     "codigo": "1RK885H1",
@@ -171,7 +171,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "48"
+    "stock": "38"
   },
   {
     "codigo": "117808",
@@ -183,7 +183,7 @@
     "codigo": "6059",
     "descripcion": "175/70R14 84T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "18"
+    "stock": "2"
   },
   {
     "codigo": "141202",
@@ -213,7 +213,7 @@
     "codigo": "6567",
     "descripcion": "185/60R14 82H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "14"
+    "stock": "10"
   },
   {
     "codigo": "110529",
@@ -261,7 +261,7 @@
     "codigo": "6569",
     "descripcion": "185/65R14 86H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "62"
+    "stock": "53"
   },
   {
     "codigo": "110525",
@@ -279,7 +279,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "85"
+    "stock": "72"
   },
   {
     "codigo": "106855",
@@ -321,7 +321,7 @@
     "codigo": "3206",
     "descripcion": "185R14C 102/100Q TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "30"
+    "stock": "22"
   },
   {
     "codigo": "KB003",
@@ -393,7 +393,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "572"
+    "stock": "564"
   },
   {
     "codigo": "111462",
@@ -417,7 +417,7 @@
     "codigo": "6074",
     "descripcion": "195/60R15 88V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "10"
+    "stock": "8"
   },
   {
     "codigo": "107236",
@@ -591,7 +591,7 @@
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "192"
+    "stock": "176"
   },
   {
     "codigo": "111418",
@@ -675,7 +675,7 @@
     "codigo": "6080",
     "descripcion": "205/65R15 94H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "73"
+    "stock": "61"
   },
   {
     "codigo": "110745",
@@ -951,7 +951,7 @@
     "codigo": "6747",
     "descripcion": "225/45ZR17 94W TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "38"
+    "stock": "36"
   },
   {
     "codigo": "5036",
@@ -1095,7 +1095,7 @@
     "codigo": "3357",
     "descripcion": "225/75R15LT 108/104S TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "28"
+    "stock": "26"
   },
   {
     "codigo": "F102",
@@ -1689,7 +1689,7 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "331"
+    "stock": "327"
   },
   {
     "codigo": "AR16217038",
@@ -1797,7 +1797,7 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECOSAVER ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "236"
+    "stock": "228"
   },
   {
     "codigo": "122968",
@@ -1851,7 +1851,7 @@
     "codigo": "7500150",
     "descripcion": "295/80R22.5 ROYAL BLACK RD860 18PR 152/149K M+S",
     "rubro": "TRACCION",
-    "stock": "94"
+    "stock": "86"
   },
   {
     "codigo": "121651",

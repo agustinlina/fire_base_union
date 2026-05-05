@@ -126,12 +126,6 @@
     "stock": "3"
   },
   {
-    "codigo": "X1601004",
-    "descripcion": "13.00-24 ROAD GRADER G2 TT 12T",
-    "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "3"
-  },
-  {
     "codigo": "T1150022",
     "descripcion": "13.6-24 DYNA TORQUE II R-1 TL 8T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
@@ -273,7 +267,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "4034"
+    "stock": "4026"
   },
   {
     "codigo": "RK2087H1",
@@ -387,7 +381,7 @@
     "codigo": "6062",
     "descripcion": "185/60R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "45"
+    "stock": "37"
   },
   {
     "codigo": "6571",
@@ -435,7 +429,7 @@
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "34"
+    "stock": "30"
   },
   {
     "codigo": "6627",
@@ -447,7 +441,7 @@
     "codigo": "3237",
     "descripcion": "195/70R15C 104/102R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "58"
+    "stock": "48"
   },
   {
     "codigo": "3238",
