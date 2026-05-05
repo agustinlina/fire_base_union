@@ -3334,5 +3334,13 @@
   {
     "codigo": "F89",
     "precio": 81
+  },
+  {
+    "codigo": "6210",
+    "precio": 165
+  },
+  {
+    "codigo": "3481",
+    "precio": 145
   }
 ]
