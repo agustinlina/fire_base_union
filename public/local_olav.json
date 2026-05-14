@@ -51,7 +51,7 @@
     "codigo": "F43",
     "descripcion": "11.00-16 FORERUNNER QH622 12PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "10"
+    "stock": "7"
   },
   {
     "codigo": "8004516",
@@ -162,12 +162,6 @@
     "stock": "8"
   },
   {
-    "codigo": "F23",
-    "descripcion": "14.9-24 FORERUNNER QH611 12PR TT R-1",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
-  },
-  {
     "codigo": "F22",
     "descripcion": "14.9-24 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
@@ -195,13 +189,13 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "15"
+    "stock": "27"
   },
   {
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "14"
+    "stock": "20"
   },
   {
     "codigo": "RK1964H1",
@@ -225,19 +219,25 @@
     "codigo": "F51",
     "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "3"
+    "stock": "4"
   },
-   {
+  {
+    "codigo": "6056",
+    "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
+    "rubro": "TRANSERENUS ECO",
+    "stock": "10"
+  },
+  {
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "20"
+    "stock": "2"
   },
   {
     "codigo": "6059",
     "descripcion": "175/70R14 84T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "1"
+    "stock": "6"
   },
   {
     "codigo": "3176",
@@ -282,16 +282,28 @@
     "stock": "2"
   },
   {
+    "codigo": "6569",
+    "descripcion": "185/65R14 86H TRANSMATE TOURING H7 M+S",
+    "rubro": "TOURING H7",
+    "stock": "8"
+  },
+  {
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "4"
+    "stock": "14"
   },
   {
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "20"
+    "stock": "16"
+  },
+  {
+    "codigo": "3206",
+    "descripcion": "185R14C 102/100Q TRANSMATE WZT705 M+S",
+    "rubro": "WZT705",
+    "stock": "12"
   },
   {
     "codigo": "3208",
@@ -327,13 +339,13 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "1"
+    "stock": "13"
   },
   {
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "10"
+    "stock": "7"
   },
   {
     "codigo": "6627",
@@ -396,6 +408,12 @@
     "stock": "4"
   },
   {
+    "codigo": "6086",
+    "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
+    "rubro": "TRANSERENUS ECO",
+    "stock": "20"
+  },
+  {
     "codigo": "5050",
     "descripcion": "205/55ZR17 95W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
@@ -405,7 +423,7 @@
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "140922",
@@ -420,16 +438,16 @@
     "stock": "4"
   },
   {
+    "codigo": "5567",
+    "descripcion": "205/75R16C 113/111S TRANSMATE TRANSEASON VAN M+S",
+    "rubro": "TRANSEASON VAN",
+    "stock": "12"
+  },
+  {
     "codigo": "F83",
     "descripcion": "20X8.00-8-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
     "stock": "4"
-  },
-  {
-    "codigo": "5031",
-    "descripcion": "215/50ZR17 95W TRANSMATE SPORT D1 M+S",
-    "rubro": "SPORT D1",
-    "stock": "2"
   },
   {
     "codigo": "3286",
@@ -561,12 +579,6 @@
     "codigo": "T1150132",
     "descripcion": "23.1-30 DYNA TORQUE III R1 TT 12T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "1"
-  },
-  {
-    "codigo": "F101",
-    "descripcion": "23.1R30 FORERUNNER QH744 161A6 TL R-3",
-    "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
     "stock": "1"
   },
   {
@@ -717,7 +729,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "67"
+    "stock": "83"
   },
   {
     "codigo": "122983",
@@ -747,7 +759,7 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "11"
+    "stock": "30"
   },
   {
     "codigo": "121760",
@@ -801,13 +813,13 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECOSAVER ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "30"
+    "stock": "40"
   },
   {
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "22"
+    "stock": "26"
   },
   {
     "codigo": "3148",
@@ -855,7 +867,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "69"
+    "stock": "57"
   },
   {
     "codigo": "7500150",
@@ -904,6 +916,12 @@
     "descripcion": "300/95R46 FORERUNNER QH711 148A8/148B TL R-1W (12.4R46)",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
     "stock": "2"
+  },
+  {
+    "codigo": "6210",
+    "descripcion": "31X10,5R15LT 109Q TRANSMATE TRANSFORTIS MT01 M+S",
+    "rubro": "TRANSFORTIS MT01",
+    "stock": "4"
   },
   {
     "codigo": "1AGE900001",
@@ -1140,4 +1158,3 @@
     "stock": "0"
   }
 ]
-
