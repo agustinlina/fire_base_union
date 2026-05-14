@@ -39,7 +39,7 @@
     "codigo": "X1100051",
     "descripcion": "11.00-16 DYNA RIB F2 TT 10T",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "T1100051",
@@ -123,19 +123,13 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "807"
+    "stock": "769"
   },
   {
     "codigo": "RK1956H1",
     "descripcion": "165/70R13 79T ROYAL MILE TL M+S",
     "rubro": "ROYAL MILE",
     "stock": "3"
-  },
-  {
-    "codigo": "6535",
-    "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
-    "rubro": "TOURING H7",
-    "stock": "2"
   },
   {
     "codigo": "110375",
@@ -168,10 +162,16 @@
     "stock": "357"
   },
   {
+    "codigo": "F51",
+    "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
+    "rubro": "VIALES / OTR - DIAGONALES",
+    "stock": "2"
+  },
+  {
     "codigo": "6056",
     "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "39"
+    "stock": "23"
   },
   {
     "codigo": "1RK885H1",
@@ -195,13 +195,19 @@
     "codigo": "3176",
     "descripcion": "175/70R14C 95/93S TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "29"
+    "stock": "27"
   },
   {
     "codigo": "117840",
     "descripcion": "175/80R14 KELLY EDGE SUV 2 88T SL",
     "rubro": "KELLY",
     "stock": "8"
+  },
+  {
+    "codigo": "F31COPIA",
+    "descripcion": "18.4-30 FORERUNNER QH611 12PR TT R-1",
+    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
+    "stock": "1"
   },
   {
     "codigo": "111468",
@@ -267,7 +273,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "45"
+    "stock": "43"
   },
   {
     "codigo": "106855",
@@ -369,7 +375,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "499"
+    "stock": "491"
   },
   {
     "codigo": "111462",
@@ -429,7 +435,7 @@
     "codigo": "6627",
     "descripcion": "195/60R16 93V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "85"
+    "stock": "81"
   },
   {
     "codigo": "111172",
@@ -477,7 +483,7 @@
     "codigo": "5535",
     "descripcion": "195/75R16C 107/105S TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "199"
+    "stock": "197"
   },
   {
     "codigo": "KB007",
@@ -567,7 +573,7 @@
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "115"
+    "stock": "110"
   },
   {
     "codigo": "111418",
@@ -651,13 +657,7 @@
     "codigo": "6080",
     "descripcion": "205/65R15 94H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "30"
-  },
-  {
-    "codigo": "110745",
-    "descripcion": "205/65R15 WRANGLER FORTITUDE HT 94H SL",
-    "rubro": "WRANGLER FORTITUDE HT",
-    "stock": "2"
+    "stock": "17"
   },
   {
     "codigo": "111532",
@@ -846,6 +846,12 @@
     "stock": "4"
   },
   {
+    "codigo": "7500413",
+    "descripcion": "215/75R17.5 ROYAL BLACK RD801 18PR 135/133J M+S",
+    "rubro": "TRACCION",
+    "stock": "1"
+  },
+  {
     "codigo": "123344",
     "descripcion": "215/75R17.5 STEELMARK AGS 126/124L",
     "rubro": "DIRECCION",
@@ -921,7 +927,7 @@
     "codigo": "2R082H1",
     "descripcion": "225/45ZR17 94W EXTRA LOAD XL ROYAL PERFORMANCE TL M+S",
     "rubro": "ROYAL PERFORMANCE",
-    "stock": "95"
+    "stock": "91"
   },
   {
     "codigo": "6747",
@@ -999,7 +1005,7 @@
     "codigo": "3347",
     "descripcion": "225/65R16C 112/110R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "38"
+    "stock": "36"
   },
   {
     "codigo": "5527",
@@ -1572,6 +1578,12 @@
     "stock": "133"
   },
   {
+    "codigo": "6662",
+    "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
+    "rubro": "WZR505",
+    "stock": "2"
+  },
+  {
     "codigo": "107883",
     "descripcion": "265/65R17 EFFICIENTGRIP SUV 112H",
     "rubro": "EFFICIENTGRIP SUV",
@@ -1587,7 +1599,7 @@
     "codigo": "3461",
     "descripcion": "265/70R17 113T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "26"
+    "stock": "34"
   },
   {
     "codigo": "2R099H1",
@@ -1629,7 +1641,7 @@
     "codigo": "AR7972601HD",
     "descripcion": "275/70R22.5 ARIVO BUFFALO ARST1 145/145M",
     "rubro": "DIRECCION",
-    "stock": "42"
+    "stock": "40"
   },
   {
     "codigo": "121526",
@@ -1641,13 +1653,13 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "311"
+    "stock": "299"
   },
   {
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "413"
+    "stock": "409"
   },
   {
     "codigo": "124475",
@@ -1689,7 +1701,7 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "127"
+    "stock": "123"
   },
   {
     "codigo": "7500584",
@@ -1731,7 +1743,7 @@
     "codigo": "AR9191602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARD1 152/149L",
     "rubro": "TRACCION",
-    "stock": "133"
+    "stock": "117"
   },
   {
     "codigo": "122984",
@@ -1755,7 +1767,7 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "1082"
+    "stock": "1046"
   },
   {
     "codigo": "122968",
@@ -1827,7 +1839,7 @@
     "codigo": "104058",
     "descripcion": "295/80R22.5 TUA91 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "78"
+    "stock": "76"
   },
   {
     "codigo": "F99",
@@ -2031,7 +2043,7 @@
     "codigo": "6241",
     "descripcion": "LT265/70R17 121/118Q TRANSMATE TRANSFORTIS MT01 M+S",
     "rubro": "TRANSFORTIS MT01",
-    "stock": "88"
+    "stock": "84"
   },
   {
     "codigo": "RK031H1",
@@ -2115,7 +2127,7 @@
     "codigo": "RK033H1",
     "descripcion": "P265/65R17 110T ROYAL A/T TL M+S",
     "rubro": "ROYAL A/T",
-    "stock": "123"
+    "stock": "118"
   },
   {
     "codigo": "RK312H1",
