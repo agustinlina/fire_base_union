@@ -216,16 +216,10 @@
     "stock": "8"
   },
   {
-    "codigo": "F51",
-    "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
-    "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "4"
-  },
-  {
     "codigo": "6056",
     "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "2"
+    "stock": "1"
   },
   {
     "codigo": "6053",
@@ -525,7 +519,7 @@
     "codigo": "6107",
     "descripcion": "225/50ZR17 98W TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "8"
+    "stock": "2"
   },
   {
     "codigo": "4453",
@@ -624,6 +618,12 @@
     "stock": "1"
   },
   {
+    "codigo": "F33",
+    "descripcion": "24.5-32 FORERUNNER QH666 16PR TT R-1",
+    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
+    "stock": "2"
+  },
+  {
     "codigo": "5048",
     "descripcion": "245/45ZR17 99W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
@@ -711,7 +711,7 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "154"
+    "stock": "150"
   },
   {
     "codigo": "AR16217038",
@@ -747,7 +747,7 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "27"
+    "stock": "25"
   },
   {
     "codigo": "121760",
@@ -783,7 +783,7 @@
     "codigo": "AR9191602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARD1 152/149L",
     "rubro": "TRACCION",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "AR9691602HD",
@@ -807,7 +807,7 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "110"
+    "stock": "98"
   },
   {
     "codigo": "3148",
