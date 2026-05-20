@@ -51,7 +51,7 @@
     "codigo": "F43",
     "descripcion": "11.00-16 FORERUNNER QH622 12PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "8004516",
@@ -216,12 +216,6 @@
     "stock": "8"
   },
   {
-    "codigo": "6056",
-    "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "1"
-  },
-  {
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
@@ -261,7 +255,7 @@
     "codigo": "F91",
     "descripcion": "18.4-34 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "X1159102",
@@ -279,13 +273,13 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "14"
+    "stock": "12"
   },
   {
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "16"
+    "stock": "12"
   },
   {
     "codigo": "3206",
@@ -807,7 +801,7 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "98"
+    "stock": "90"
   },
   {
     "codigo": "3148",
