@@ -33,7 +33,7 @@
     "codigo": "F43",
     "descripcion": "11.00-16 FORERUNNER QH622 12PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "112"
+    "stock": "105"
   },
   {
     "codigo": "181815",
@@ -174,12 +174,6 @@
     "stock": "7"
   },
   {
-    "codigo": "T1606097",
-    "descripcion": "14.00-24 TITAN TRT 16PR TL",
-    "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "4"
-  },
-  {
     "codigo": "4AW634",
     "descripcion": "14.9-24 ALL WEATHER R-3 TL 6T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
@@ -189,7 +183,7 @@
     "codigo": "T1159230",
     "descripcion": "14.9-24 SUPREME TFC 12PR TT R1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
+    "stock": "1"
   },
   {
     "codigo": "T1159325",
@@ -201,7 +195,7 @@
     "codigo": "T1150192",
     "descripcion": "15.5-38 DYNA TORQUE III R1 TT 8T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "F38",
@@ -255,7 +249,7 @@
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "4002"
+    "stock": "3979"
   },
   {
     "codigo": "RK2087H1",
@@ -273,7 +267,7 @@
     "codigo": "F51",
     "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "36"
+    "stock": "32"
   },
   {
     "codigo": "T1606072",
@@ -327,7 +321,7 @@
     "codigo": "F91",
     "descripcion": "18.4-34 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "39"
+    "stock": "33"
   },
   {
     "codigo": "T1159111",
@@ -345,7 +339,7 @@
     "codigo": "T1159212",
     "descripcion": "18.4-38 SUPREME TFC 10T TT",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "5"
+    "stock": "3"
   },
   {
     "codigo": "T1159214",
@@ -357,13 +351,13 @@
     "codigo": "6062",
     "descripcion": "185/60R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "21"
+    "stock": "19"
   },
   {
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "51"
+    "stock": "39"
   },
   {
     "codigo": "F82",
@@ -417,13 +411,13 @@
     "codigo": "3237",
     "descripcion": "195/70R15C 104/102R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "44"
+    "stock": "42"
   },
   {
     "codigo": "3238",
     "descripcion": "195/75R16C 107/105R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "85"
+    "stock": "65"
   },
   {
     "codigo": "F53",
@@ -435,7 +429,7 @@
     "codigo": "F54",
     "descripcion": "20.5-25 FORERUNNER QH811 20PR TL E-3/L-3",
     "rubro": "VIALES / OTR - DIAGONALES",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "20525LING",
@@ -489,7 +483,7 @@
     "codigo": "5031",
     "descripcion": "215/50ZR17 95W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "67"
+    "stock": "66"
   },
   {
     "codigo": "6101",
@@ -525,7 +519,7 @@
     "codigo": "5035",
     "descripcion": "225/45ZR17 94W TRANSMATE SPORT D1 M+S XL",
     "rubro": "SPORT D1",
-    "stock": "111"
+    "stock": "109"
   },
   {
     "codigo": "5036",
@@ -567,7 +561,7 @@
     "codigo": "4361",
     "descripcion": "225/65R17 102H TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "150"
+    "stock": "146"
   },
   {
     "codigo": "3356",
@@ -651,7 +645,7 @@
     "codigo": "5041",
     "descripcion": "235/45ZR17 97W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "26"
+    "stock": "24"
   },
   {
     "codigo": "5007",
@@ -663,7 +657,7 @@
     "codigo": "4449",
     "descripcion": "235/50ZR18 101W TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "10"
+    "stock": "6"
   },
   {
     "codigo": "5008",
@@ -753,19 +747,13 @@
     "codigo": "6662",
     "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "125"
+    "stock": "113"
   },
   {
     "codigo": "3461",
     "descripcion": "265/70R17 113T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
     "stock": "62"
-  },
-  {
-    "codigo": "3464",
-    "descripcion": "265/75R16LT 123/120S TRANSMATE WZR505 M+S",
-    "rubro": "WZR505",
-    "stock": "1"
   },
   {
     "codigo": "121526",
@@ -897,7 +885,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "187"
+    "stock": "179"
   },
   {
     "codigo": "7500150",
@@ -927,7 +915,7 @@
     "codigo": "F34",
     "descripcion": "30.5L-32 FORERUNNER QH666 18PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "12"
+    "stock": "10"
   },
   {
     "codigo": "LL7T96",
@@ -993,7 +981,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "104"
+    "stock": "101"
   },
   {
     "codigo": "1I1E9D001",
@@ -1089,7 +1077,7 @@
     "codigo": "F76",
     "descripcion": "7.50-16 FORERUNNER 8PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "25"
+    "stock": "22"
   },
   {
     "codigo": "F45",

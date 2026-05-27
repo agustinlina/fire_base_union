@@ -117,13 +117,13 @@
     "codigo": "F81",
     "descripcion": "15X6.00-6-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
-    "stock": "20"
+    "stock": "18"
   },
   {
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "691"
+    "stock": "613"
   },
   {
     "codigo": "RK1956H1",
@@ -159,7 +159,7 @@
     "codigo": "6555",
     "descripcion": "165/70R14 85T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "353"
+    "stock": "351"
   },
   {
     "codigo": "F51",
@@ -168,22 +168,28 @@
     "stock": "1"
   },
   {
+    "codigo": "6056",
+    "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
+    "rubro": "TRANSERENUS ECO",
+    "stock": "12"
+  },
+  {
     "codigo": "1RK885H1",
     "descripcion": "175/70R13 82T ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
     "stock": "1"
   },
   {
+    "codigo": "6053",
+    "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
+    "rubro": "TRANSERENUS ECO",
+    "stock": "25"
+  },
+  {
     "codigo": "141202",
     "descripcion": "175/70R14 EFFICIENTGRIP PERFORMANCE 88T",
     "rubro": "EFFICIENTGRIP",
-    "stock": "6"
-  },
-  {
-    "codigo": "3176",
-    "descripcion": "175/70R14C 95/93S TRANSMATE WZT705 M+S",
-    "rubro": "WZT705",
-    "stock": "17"
+    "stock": "4"
   },
   {
     "codigo": "117840",
@@ -231,7 +237,7 @@
     "codigo": "RK764H1",
     "descripcion": "185/60R15 84H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "194"
+    "stock": "190"
   },
   {
     "codigo": "RK764H1COPIA",
@@ -246,6 +252,12 @@
     "stock": "1"
   },
   {
+    "codigo": "6569",
+    "descripcion": "185/65R14 86H TRANSMATE TOURING H7 M+S",
+    "rubro": "TOURING H7",
+    "stock": "14"
+  },
+  {
     "codigo": "1RK828H1",
     "descripcion": "185/65R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
@@ -255,7 +267,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "31"
+    "stock": "19"
   },
   {
     "codigo": "106855",
@@ -297,7 +309,7 @@
     "codigo": "F82",
     "descripcion": "18X8.50-8-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "195R15CFX",
@@ -357,13 +369,13 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "473"
+    "stock": "456"
   },
   {
     "codigo": "111462",
     "descripcion": "195/55R15 EAGLE SPORT 2 85H SL",
     "rubro": "EAGLE SPORT",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "108711",
@@ -375,13 +387,13 @@
     "codigo": "141271",
     "descripcion": "195/55R16 EAGLE TOURING 91V XL FP",
     "rubro": "EAGLE TOURING",
-    "stock": "8"
+    "stock": "4"
   },
   {
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "8"
+    "stock": "3"
   },
   {
     "codigo": "107236",
@@ -441,7 +453,7 @@
     "codigo": "110787",
     "descripcion": "195/65R15 EFFICIENTGRIP PERFORMANCE 91H SL FP",
     "rubro": "EFFICIENTGRIP",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "KB006",
@@ -453,25 +465,19 @@
     "codigo": "3238",
     "descripcion": "195/75R16C 107/105R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "5535",
     "descripcion": "195/75R16C 107/105S TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "191"
+    "stock": "189"
   },
   {
     "codigo": "KB007",
     "descripcion": "195/75R16C 107/105T KINGBOSS G326",
     "rubro": "G326",
-    "stock": "28"
-  },
-  {
-    "codigo": "111182",
-    "descripcion": "195/75R16C CARGO MARATHON 2 110/108R",
-    "rubro": "CARGO",
-    "stock": "6"
+    "stock": "26"
   },
   {
     "codigo": "3239",
@@ -489,7 +495,7 @@
     "codigo": "118298",
     "descripcion": "205/40R17 KELLY EDGE SPORT 2 84W XL",
     "rubro": "KELLY",
-    "stock": "12"
+    "stock": "10"
   },
   {
     "codigo": "108737",
@@ -537,31 +543,25 @@
     "codigo": "5029",
     "descripcion": "205/50ZR17 93W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "61"
+    "stock": "56"
   },
   {
     "codigo": "6098",
     "descripcion": "205/50ZR17 93W TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "29"
+    "stock": "27"
   },
   {
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "86"
+    "stock": "79"
   },
   {
     "codigo": "111418",
     "descripcion": "205/55R16 EAGLE SPORT 2 91V SL",
     "rubro": "EAGLE SPORT",
     "stock": "2"
-  },
-  {
-    "codigo": "108795",
-    "descripcion": "205/55R16 EFFICIENTGRIP PERFORMANCE 91V",
-    "rubro": "EFFICIENTGRIP",
-    "stock": "4"
   },
   {
     "codigo": "117785",
@@ -579,13 +579,13 @@
     "codigo": "5050",
     "descripcion": "205/55ZR17 95W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "82"
+    "stock": "70"
   },
   {
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "132"
+    "stock": "130"
   },
   {
     "codigo": "118140",
@@ -609,7 +609,7 @@
     "codigo": "1RK800H1",
     "descripcion": "205/60R16 92V ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "51"
+    "stock": "47"
   },
   {
     "codigo": "RK1992H1",
@@ -621,7 +621,7 @@
     "codigo": "6635",
     "descripcion": "205/60R16 92V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "42"
+    "stock": "32"
   },
   {
     "codigo": "6080",
@@ -645,7 +645,7 @@
     "codigo": "3269",
     "descripcion": "205/70R15C 106/104R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "13"
+    "stock": "5"
   },
   {
     "codigo": "5555",
@@ -657,7 +657,7 @@
     "codigo": "KB005",
     "descripcion": "205/70R15C 106/104T KINGBOSS G326",
     "rubro": "G326",
-    "stock": "69"
+    "stock": "56"
   },
   {
     "codigo": "109645",
@@ -729,13 +729,13 @@
     "codigo": "6731",
     "descripcion": "215/50ZR17 95W TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "21"
+    "stock": "13"
   },
   {
     "codigo": "6101",
     "descripcion": "215/50ZR17 95W TRANSMATE TRANSERENUS ECO M+S XL",
     "rubro": "TRANSERENUS ECO",
-    "stock": "96"
+    "stock": "86"
   },
   {
     "codigo": "107263",
@@ -771,7 +771,7 @@
     "codigo": "3303",
     "descripcion": "215/70R15C 109/107S TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "27"
+    "stock": "21"
   },
   {
     "codigo": "RK601H1",
@@ -867,7 +867,7 @@
     "codigo": "107629",
     "descripcion": "225/45R17 EFFICIENTGRIP PERFORMANCE 94W",
     "rubro": "EFFICIENTGRIP",
-    "stock": "6"
+    "stock": "4"
   },
   {
     "codigo": "103470",
@@ -885,19 +885,19 @@
     "codigo": "2R082H1",
     "descripcion": "225/45ZR17 94W EXTRA LOAD XL ROYAL PERFORMANCE TL M+S",
     "rubro": "ROYAL PERFORMANCE",
-    "stock": "91"
+    "stock": "87"
   },
   {
     "codigo": "6747",
     "descripcion": "225/45ZR17 94W TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "26"
+    "stock": "18"
   },
   {
     "codigo": "5036",
     "descripcion": "225/45ZR18 95W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
-    "stock": "50"
+    "stock": "48"
   },
   {
     "codigo": "111467",
@@ -915,7 +915,7 @@
     "codigo": "6107",
     "descripcion": "225/50ZR17 98W TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "30"
+    "stock": "22"
   },
   {
     "codigo": "106698",
@@ -933,13 +933,13 @@
     "codigo": "6819",
     "descripcion": "225/55R18 98V TRANSMATE TOURINGH H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "43"
+    "stock": "37"
   },
   {
     "codigo": "4360",
     "descripcion": "225/60R17 99H TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
-    "stock": "34"
+    "stock": "32"
   },
   {
     "codigo": "110752",
@@ -969,7 +969,7 @@
     "codigo": "5527",
     "descripcion": "225/65R16C 112/110S TRANSMATE TRANSEASON VAN M+S",
     "rubro": "TRANSEASON VAN",
-    "stock": "121"
+    "stock": "117"
   },
   {
     "codigo": "105705",
@@ -1017,7 +1017,7 @@
     "codigo": "3355",
     "descripcion": "225/70R17 108T TRANSMATE WZD105 M+S",
     "rubro": "WZD105",
-    "stock": "46"
+    "stock": "34"
   },
   {
     "codigo": "3356",
@@ -1246,6 +1246,12 @@
     "descripcion": "235/75R17.5 ARIVO BUFFALO ARST1 143/141J",
     "rubro": "DIRECCION",
     "stock": "30"
+  },
+  {
+    "codigo": "X1153813",
+    "descripcion": "24.5-32 ALL WEATHER R3 TL 14T",
+    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
+    "stock": "2"
   },
   {
     "codigo": "108514",
@@ -1521,7 +1527,7 @@
     "codigo": "RK625H1",
     "descripcion": "265/60R18 114H ROYAL SPORT EXTRA LOAD XL TL M+S",
     "rubro": "ROYAL SPORT",
-    "stock": "113"
+    "stock": "95"
   },
   {
     "codigo": "2R023H1",
@@ -1534,12 +1540,6 @@
     "descripcion": "265/65R17 112H TRANSMATE WZD105 M+S",
     "rubro": "WZD105",
     "stock": "133"
-  },
-  {
-    "codigo": "6662",
-    "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
-    "rubro": "WZR505",
-    "stock": "8"
   },
   {
     "codigo": "107883",
@@ -1570,12 +1570,6 @@
     "descripcion": "265/70R17 115T ROYAL A/T TL M+S",
     "rubro": "ROYAL A/T",
     "stock": "15"
-  },
-  {
-    "codigo": "3464",
-    "descripcion": "265/75R16LT 123/120S TRANSMATE WZR505 M+S",
-    "rubro": "WZR505",
-    "stock": "3"
   },
   {
     "codigo": "104301",
@@ -1611,13 +1605,13 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "263"
+    "stock": "223"
   },
   {
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "363"
+    "stock": "340"
   },
   {
     "codigo": "124475",
@@ -1701,7 +1695,7 @@
     "codigo": "AR9191602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARD1 152/149L",
     "rubro": "TRACCION",
-    "stock": "72"
+    "stock": "10"
   },
   {
     "codigo": "AR9691602HD",
@@ -1725,13 +1719,13 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECOSAVER ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "204"
+    "stock": "184"
   },
   {
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "753"
+    "stock": "486"
   },
   {
     "codigo": "122968",
@@ -1803,7 +1797,7 @@
     "codigo": "104058",
     "descripcion": "295/80R22.5 TUA91 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "72"
+    "stock": "70"
   },
   {
     "codigo": "F99",
@@ -1833,13 +1827,13 @@
     "codigo": "6249",
     "descripcion": "33X12.50R18LT 118Q TRANSMATE TRANSFORTIS MT01 M+S",
     "rubro": "TRANSFORTIS MT01",
-    "stock": "32"
+    "stock": "28"
   },
   {
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "1"
+    "stock": "5"
   },
   {
     "codigo": "T1111060",
@@ -2085,7 +2079,7 @@
     "codigo": "RK033H1",
     "descripcion": "P265/65R17 110T ROYAL A/T TL M+S",
     "rubro": "ROYAL A/T",
-    "stock": "118"
+    "stock": "117"
   },
   {
     "codigo": "RK312H1",

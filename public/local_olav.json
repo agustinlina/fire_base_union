@@ -51,7 +51,7 @@
     "codigo": "F43",
     "descripcion": "11.00-16 FORERUNNER QH622 12PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "5"
+    "stock": "12"
   },
   {
     "codigo": "8004516",
@@ -75,7 +75,7 @@
     "codigo": "T1101201",
     "descripcion": "11L-16 LABORER F3 TL 12T",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "10"
+    "stock": "8"
   },
   {
     "codigo": "F63",
@@ -93,7 +93,7 @@
     "codigo": "F36",
     "descripcion": "12.4-36 FORERUNNER QH666 12PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "3"
   },
   {
     "codigo": "288600",
@@ -153,13 +153,19 @@
     "codigo": "F61",
     "descripcion": "14-17.5 FORERUNNER SKS-1 14PR TL",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "8"
+    "stock": "7"
   },
   {
     "codigo": "F49",
     "descripcion": "14.00-24 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
     "stock": "6"
+  },
+  {
+    "codigo": "T1606097",
+    "descripcion": "14.00-24 TITAN TRT 16PR TL",
+    "rubro": "VIALES / OTR - DIAGONALES",
+    "stock": "4"
   },
   {
     "codigo": "F22",
@@ -171,13 +177,7 @@
     "codigo": "RK636H1",
     "descripcion": "155R12C 88/86R ROYAL COMMERCIAL TL M+S",
     "rubro": "ROYAL COMMERCIAL",
-    "stock": "8"
-  },
-  {
-    "codigo": "T1150095",
-    "descripcion": "16.9-30 DYNA TORQUE II 12T TL",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
+    "stock": "4"
   },
   {
     "codigo": "F30",
@@ -189,7 +189,7 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "27"
+    "stock": "21"
   },
   {
     "codigo": "6535",
@@ -213,7 +213,13 @@
     "codigo": "6555",
     "descripcion": "165/70R14 85T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "8"
+    "stock": "6"
+  },
+  {
+    "codigo": "F51",
+    "descripcion": "17.5-25 FORERUNNER QH808 16PR TL G-2/L-2",
+    "rubro": "VIALES / OTR - DIAGONALES",
+    "stock": "4"
   },
   {
     "codigo": "6053",
@@ -255,13 +261,19 @@
     "codigo": "F91",
     "descripcion": "18.4-34 FORERUNNER QH666 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
+    "stock": "8"
   },
   {
     "codigo": "X1159102",
     "descripcion": "18.4-34 SUPREME TFC TT 12T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "1"
+  },
+  {
+    "codigo": "T1159212",
+    "descripcion": "18.4-38 SUPREME TFC 10T TT",
+    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
+    "stock": "2"
   },
   {
     "codigo": "RK764H1",
@@ -280,12 +292,6 @@
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
     "stock": "12"
-  },
-  {
-    "codigo": "3206",
-    "descripcion": "185R14C 102/100Q TRANSMATE WZT705 M+S",
-    "rubro": "WZT705",
-    "stock": "8"
   },
   {
     "codigo": "3208",
@@ -321,13 +327,19 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "11"
+    "stock": "12"
+  },
+  {
+    "codigo": "108711",
+    "descripcion": "195/55R15 EFFICIENTGRIP PERFORMANCE 85H",
+    "rubro": "EFFICIENTGRIP",
+    "stock": "1"
   },
   {
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "6627",
@@ -351,7 +363,13 @@
     "codigo": "3238",
     "descripcion": "195/75R16C 107/105R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "10"
+    "stock": "2"
+  },
+  {
+    "codigo": "111182",
+    "descripcion": "195/75R16C CARGO MARATHON 2 110/108R",
+    "rubro": "CARGO",
+    "stock": "1"
   },
   {
     "codigo": "KB004",
@@ -375,7 +393,7 @@
     "codigo": "F40",
     "descripcion": "20.8-38 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
+    "stock": "1"
   },
   {
     "codigo": "F92",
@@ -387,7 +405,7 @@
     "codigo": "T1154902",
     "descripcion": "20.8-42 DYNA TORQUE III 14T TL",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "6086",
@@ -405,7 +423,7 @@
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "2"
+    "stock": "6"
   },
   {
     "codigo": "140922",
@@ -417,7 +435,7 @@
     "codigo": "2R449H1",
     "descripcion": "205/70R15 106/104R ROYAL COMMERCIAL TL M+S",
     "rubro": "ROYAL COMMERCIAL",
-    "stock": "4"
+    "stock": "2"
   },
   {
     "codigo": "5567",
@@ -430,6 +448,12 @@
     "descripcion": "20X8.00-8-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
     "stock": "4"
+  },
+  {
+    "codigo": "6731",
+    "descripcion": "215/50ZR17 95W TRANSMATE TOURING H7 M+S",
+    "rubro": "TOURING H7",
+    "stock": "8"
   },
   {
     "codigo": "3286",
@@ -540,6 +564,12 @@
     "stock": "8"
   },
   {
+    "codigo": "3355",
+    "descripcion": "225/70R17 108T TRANSMATE WZD105 M+S",
+    "rubro": "WZD105",
+    "stock": "8"
+  },
+  {
     "codigo": "3357",
     "descripcion": "225/75R15LT 108/104S TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
@@ -555,7 +585,7 @@
     "codigo": "T1153810",
     "descripcion": "23.1-30 ALL WEATHER R3 TT 12T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
+    "stock": "1"
   },
   {
     "codigo": "T1150132",
@@ -660,6 +690,12 @@
     "stock": "4"
   },
   {
+    "codigo": "RK625H1",
+    "descripcion": "265/60R18 114H ROYAL SPORT EXTRA LOAD XL TL M+S",
+    "rubro": "ROYAL SPORT",
+    "stock": "8"
+  },
+  {
     "codigo": "2R023H1",
     "descripcion": "265/65R17 112H ROYAL PERFORMANCE TL M+S",
     "rubro": "ROYAL PERFORMANCE",
@@ -705,13 +741,13 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "150"
+    "stock": "146"
   },
   {
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "77"
+    "stock": "71"
   },
   {
     "codigo": "122983",
@@ -741,7 +777,7 @@
     "codigo": "7500589",
     "descripcion": "275/80R22.5 ROYAL BLACK RD801 18PR 149/146M M+S",
     "rubro": "TRACCION",
-    "stock": "25"
+    "stock": "7"
   },
   {
     "codigo": "121760",
@@ -771,13 +807,13 @@
     "codigo": "AR1581602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARA1 152/149M",
     "rubro": "DIRECCION",
-    "stock": "24"
+    "stock": "22"
   },
   {
     "codigo": "AR9191602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARD1 152/149L",
     "rubro": "TRACCION",
-    "stock": "8"
+    "stock": "24"
   },
   {
     "codigo": "AR9691602HD",
@@ -801,13 +837,13 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "90"
+    "stock": "48"
   },
   {
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECOSAVER ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "11"
+    "stock": "10"
   },
   {
     "codigo": "122967",
@@ -849,7 +885,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "57"
+    "stock": "53"
   },
   {
     "codigo": "7500150",
@@ -885,7 +921,7 @@
     "codigo": "F34",
     "descripcion": "30.5L-32 FORERUNNER QH666 18PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
+    "stock": "4"
   },
   {
     "codigo": "F99",
@@ -909,6 +945,12 @@
     "codigo": "1AGE900001",
     "descripcion": "320/90R46 FORERUNNER QH711 148A8/148B TL R-1W",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
+    "stock": "4"
+  },
+  {
+    "codigo": "6249",
+    "descripcion": "33X12.50R18LT 118Q TRANSMATE TRANSFORTIS MT01 M+S",
+    "rubro": "TRANSFORTIS MT01",
     "stock": "4"
   },
   {
@@ -939,7 +981,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "9"
+    "stock": "10"
   },
   {
     "codigo": "T1111060",
@@ -999,7 +1041,7 @@
     "codigo": "F79",
     "descripcion": "6.00-9 FORERUNNER QH201 12PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "9"
+    "stock": "7"
   },
   {
     "codigo": "F58",
@@ -1029,7 +1071,7 @@
     "codigo": "F76",
     "descripcion": "7.50-16 FORERUNNER 8PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "12"
+    "stock": "10"
   },
   {
     "codigo": "T1100040",
@@ -1114,12 +1156,6 @@
     "descripcion": "LT285/70R17 121/118Q TRANSMATE TRANSFORTIS MT01 M+S",
     "rubro": "TRANSFORTIS MT01",
     "stock": "6"
-  },
-  {
-    "codigo": "RK033H1",
-    "descripcion": "P265/65R17 110T ROYAL A/T TL M+S",
-    "rubro": "ROYAL A/T",
-    "stock": "4"
   },
   {
     "codigo": "X1168010",
