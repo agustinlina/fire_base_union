@@ -21,7 +21,7 @@
     "codigo": "F42",
     "descripcion": "10.00-16 FORERUNNER QH622 10PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "16"
+    "stock": "15"
   },
   {
     "codigo": "F46",
@@ -642,12 +642,6 @@
     "stock": "1"
   },
   {
-    "codigo": "F33",
-    "descripcion": "24.5-32 FORERUNNER QH666 16PR TT R-1",
-    "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "2"
-  },
-  {
     "codigo": "5048",
     "descripcion": "245/45ZR17 99W TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
@@ -813,7 +807,7 @@
     "codigo": "AR9191602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARD1 152/149L",
     "rubro": "TRACCION",
-    "stock": "24"
+    "stock": "18"
   },
   {
     "codigo": "AR9691602HD",
@@ -837,13 +831,13 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "48"
+    "stock": "38"
   },
   {
     "codigo": "3148",
     "descripcion": "295/80R22.5 ECOSAVER ECO86 TERCELO 152/149J M+S",
     "rubro": "TRACCION",
-    "stock": "10"
+    "stock": "2"
   },
   {
     "codigo": "122967",
@@ -885,7 +879,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "53"
+    "stock": "49"
   },
   {
     "codigo": "7500150",
@@ -1041,7 +1035,7 @@
     "codigo": "F79",
     "descripcion": "6.00-9 FORERUNNER QH201 12PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "7"
+    "stock": "5"
   },
   {
     "codigo": "F58",

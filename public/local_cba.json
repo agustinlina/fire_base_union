@@ -123,7 +123,7 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "613"
+    "stock": "611"
   },
   {
     "codigo": "RK1956H1",
@@ -237,7 +237,7 @@
     "codigo": "RK764H1",
     "descripcion": "185/60R15 84H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "190"
+    "stock": "189"
   },
   {
     "codigo": "RK764H1COPIA",
@@ -255,7 +255,7 @@
     "codigo": "6569",
     "descripcion": "185/65R14 86H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "14"
+    "stock": "10"
   },
   {
     "codigo": "1RK828H1",
@@ -369,7 +369,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "456"
+    "stock": "452"
   },
   {
     "codigo": "111462",
@@ -393,7 +393,7 @@
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "3"
+    "stock": "1"
   },
   {
     "codigo": "107236",
@@ -429,7 +429,7 @@
     "codigo": "6627",
     "descripcion": "195/60R16 93V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "81"
+    "stock": "79"
   },
   {
     "codigo": "111172",
@@ -555,7 +555,7 @@
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "79"
+    "stock": "73"
   },
   {
     "codigo": "111418",
@@ -585,7 +585,7 @@
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "130"
+    "stock": "126"
   },
   {
     "codigo": "118140",
@@ -621,7 +621,7 @@
     "codigo": "6635",
     "descripcion": "205/60R16 92V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "32"
+    "stock": "30"
   },
   {
     "codigo": "6080",
@@ -645,7 +645,7 @@
     "codigo": "3269",
     "descripcion": "205/70R15C 106/104R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "5"
+    "stock": "9"
   },
   {
     "codigo": "5555",
@@ -735,7 +735,7 @@
     "codigo": "6101",
     "descripcion": "215/50ZR17 95W TRANSMATE TRANSERENUS ECO M+S XL",
     "rubro": "TRANSERENUS ECO",
-    "stock": "86"
+    "stock": "84"
   },
   {
     "codigo": "107263",
@@ -1035,7 +1035,7 @@
     "codigo": "3357",
     "descripcion": "225/75R15LT 108/104S TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "26"
+    "stock": "20"
   },
   {
     "codigo": "F56",
@@ -1203,7 +1203,7 @@
     "codigo": "111330",
     "descripcion": "235/65R16C CARGO MARATHON 2 121/119R E",
     "rubro": "CARGO",
-    "stock": "14"
+    "stock": "11"
   },
   {
     "codigo": "4362",
@@ -1593,7 +1593,7 @@
     "codigo": "AR7972601HD",
     "descripcion": "275/70R22.5 ARIVO BUFFALO ARST1 145/145M",
     "rubro": "DIRECCION",
-    "stock": "40"
+    "stock": "38"
   },
   {
     "codigo": "121526",
@@ -1611,7 +1611,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "340"
+    "stock": "334"
   },
   {
     "codigo": "124475",
@@ -1695,7 +1695,7 @@
     "codigo": "AR9191602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARD1 152/149L",
     "rubro": "TRACCION",
-    "stock": "10"
+    "stock": "2"
   },
   {
     "codigo": "AR9691602HD",
@@ -1719,13 +1719,13 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECOSAVER ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "184"
+    "stock": "172"
   },
   {
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "486"
+    "stock": "475"
   },
   {
     "codigo": "122968",
@@ -1797,7 +1797,7 @@
     "codigo": "104058",
     "descripcion": "295/80R22.5 TUA91 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "70"
+    "stock": "68"
   },
   {
     "codigo": "F99",
@@ -1966,12 +1966,6 @@
     "descripcion": "KIT 7.00-12 XTRA MINE TT 12PR PACK",
     "rubro": "XTRAMINE",
     "stock": "9"
-  },
-  {
-    "codigo": "LANDE1016",
-    "descripcion": "LANDE ARMOUR / TRONMAX 10-16.5 12T RG400",
-    "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "2"
   },
   {
     "codigo": "1319",
