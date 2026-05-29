@@ -123,7 +123,7 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "611"
+    "stock": "561"
   },
   {
     "codigo": "RK1956H1",
@@ -168,22 +168,10 @@
     "stock": "1"
   },
   {
-    "codigo": "6056",
-    "descripcion": "175/65R14 82H TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "12"
-  },
-  {
     "codigo": "1RK885H1",
     "descripcion": "175/70R13 82T ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
     "stock": "1"
-  },
-  {
-    "codigo": "6053",
-    "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
-    "rubro": "TRANSERENUS ECO",
-    "stock": "25"
   },
   {
     "codigo": "141202",
@@ -255,7 +243,7 @@
     "codigo": "6569",
     "descripcion": "185/65R14 86H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "10"
+    "stock": "6"
   },
   {
     "codigo": "1RK828H1",
@@ -267,7 +255,7 @@
     "codigo": "6065",
     "descripcion": "185/65R15 88H TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "19"
+    "stock": "15"
   },
   {
     "codigo": "106855",
@@ -369,7 +357,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "452"
+    "stock": "440"
   },
   {
     "codigo": "111462",
@@ -465,7 +453,7 @@
     "codigo": "3238",
     "descripcion": "195/75R16C 107/105R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
-    "stock": "5"
+    "stock": "1"
   },
   {
     "codigo": "5535",
@@ -549,13 +537,13 @@
     "codigo": "6098",
     "descripcion": "205/50ZR17 93W TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "27"
+    "stock": "23"
   },
   {
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "73"
+    "stock": "62"
   },
   {
     "codigo": "111418",
@@ -609,7 +597,7 @@
     "codigo": "1RK800H1",
     "descripcion": "205/60R16 92V ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "47"
+    "stock": "39"
   },
   {
     "codigo": "RK1992H1",
@@ -621,7 +609,7 @@
     "codigo": "6635",
     "descripcion": "205/60R16 92V TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "30"
+    "stock": "28"
   },
   {
     "codigo": "6080",
@@ -1593,7 +1581,7 @@
     "codigo": "AR7972601HD",
     "descripcion": "275/70R22.5 ARIVO BUFFALO ARST1 145/145M",
     "rubro": "DIRECCION",
-    "stock": "38"
+    "stock": "30"
   },
   {
     "codigo": "121526",
@@ -1611,7 +1599,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "334"
+    "stock": "326"
   },
   {
     "codigo": "124475",
@@ -1629,7 +1617,7 @@
     "codigo": "122671",
     "descripcion": "275/80R22.5 KMAX D TRACTION 149/146L H",
     "rubro": "TRACCION",
-    "stock": "22"
+    "stock": "20"
   },
   {
     "codigo": "122673",
@@ -1719,13 +1707,13 @@
     "codigo": "4214",
     "descripcion": "295/80R22.5 ECOSAVER ECO68 TERCELO 152/149L M+S",
     "rubro": "DIRECCION",
-    "stock": "172"
+    "stock": "174"
   },
   {
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "475"
+    "stock": "358"
   },
   {
     "codigo": "122968",
@@ -1833,7 +1821,7 @@
     "codigo": "F41",
     "descripcion": "400/60-15.5 FORERUNNER QH643 14PR TL I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "5"
+    "stock": "3"
   },
   {
     "codigo": "T1111060",
@@ -1857,7 +1845,7 @@
     "codigo": "F79",
     "descripcion": "6.00-9 FORERUNNER QH201 12PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "57"
+    "stock": "50"
   },
   {
     "codigo": "F98",
