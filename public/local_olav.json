@@ -189,7 +189,7 @@
     "codigo": "KB001",
     "descripcion": "165/70R13 79T KINGBOSS G521",
     "rubro": "G521",
-    "stock": "29"
+    "stock": "25"
   },
   {
     "codigo": "6535",
@@ -213,7 +213,7 @@
     "codigo": "6555",
     "descripcion": "165/70R14 85T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "6"
+    "stock": "2"
   },
   {
     "codigo": "F51",
@@ -225,7 +225,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "15"
+    "stock": "5"
   },
   {
     "codigo": "3176",
@@ -285,7 +285,7 @@
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "3208",
@@ -339,7 +339,7 @@
     "codigo": "1RK789H1",
     "descripcion": "195/60R15 88H ROYAL COMFORT TL M+S",
     "rubro": "ROYAL COMFORT",
-    "stock": "5"
+    "stock": "1"
   },
   {
     "codigo": "6627",
@@ -364,12 +364,6 @@
     "descripcion": "195/75R16C 107/105R TRANSMATE WZT705 M+S",
     "rubro": "WZT705",
     "stock": "12"
-  },
-  {
-    "codigo": "111182",
-    "descripcion": "195/75R16C CARGO MARATHON 2 110/108R",
-    "rubro": "CARGO",
-    "stock": "1"
   },
   {
     "codigo": "KB004",
@@ -411,7 +405,7 @@
     "codigo": "6086",
     "descripcion": "205/55R16 91V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "20"
+    "stock": "16"
   },
   {
     "codigo": "5050",
@@ -741,7 +735,7 @@
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "66"
+    "stock": "64"
   },
   {
     "codigo": "122983",
@@ -801,7 +795,7 @@
     "codigo": "AR9191602HD",
     "descripcion": "295/80R22.5 ARIVO BUFFALO ARD1 152/149L",
     "rubro": "TRACCION",
-    "stock": "18"
+    "stock": "16"
   },
   {
     "codigo": "AR9691602HD",
@@ -825,7 +819,7 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "86"
+    "stock": "62"
   },
   {
     "codigo": "3148",
@@ -873,7 +867,7 @@
     "codigo": "7500148",
     "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
     "rubro": "TRACCION",
-    "stock": "80"
+    "stock": "76"
   },
   {
     "codigo": "7500150",
@@ -1029,7 +1023,7 @@
     "codigo": "F79",
     "descripcion": "6.00-9 FORERUNNER QH201 12PR TT",
     "rubro": "INDUSTRIALES IMPORTADO",
-    "stock": "12"
+    "stock": "10"
   },
   {
     "codigo": "F58",
