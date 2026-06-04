@@ -21,7 +21,7 @@
     "codigo": "F42",
     "descripcion": "10.00-16 FORERUNNER QH622 10PR TL F-2",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "15"
+    "stock": "12"
   },
   {
     "codigo": "F46",
@@ -225,7 +225,7 @@
     "codigo": "6053",
     "descripcion": "175/70R13 82T TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "5"
+    "stock": "3"
   },
   {
     "codigo": "3176",
@@ -327,7 +327,7 @@
     "codigo": "6071",
     "descripcion": "195/55R15 85V TRANSMATE TRANSERENUS ECO M+S",
     "rubro": "TRANSERENUS ECO",
-    "stock": "20"
+    "stock": "18"
   },
   {
     "codigo": "108711",
@@ -699,7 +699,7 @@
     "codigo": "6662",
     "descripcion": "265/65R17 112T TRANSMATE WZR505 M+S",
     "rubro": "WZR505",
-    "stock": "12"
+    "stock": "8"
   },
   {
     "codigo": "111569",
@@ -729,13 +729,13 @@
     "codigo": "AR6781703G",
     "descripcion": "275/80R22.5 ARIVO XARD42 149/146M",
     "rubro": "TRACCION",
-    "stock": "146"
+    "stock": "142"
   },
   {
     "codigo": "AR16217038",
     "descripcion": "275/80R22.5 ARIVO XARS92 149/146M",
     "rubro": "DIRECCION",
-    "stock": "64"
+    "stock": "63"
   },
   {
     "codigo": "122983",
@@ -819,19 +819,7 @@
     "codigo": "3147",
     "descripcion": "295/80R22.5 ECOSAVER ECO76 TERCELO 152/149M M+S",
     "rubro": "DIRECCION",
-    "stock": "62"
-  },
-  {
-    "codigo": "3148",
-    "descripcion": "295/80R22.5 ECOSAVER ECO86 TERCELO 152/149J M+S",
-    "rubro": "TRACCION",
-    "stock": "2"
-  },
-  {
-    "codigo": "122967",
-    "descripcion": "295/80R22.5 FUELMAX LHD 152/148L H",
-    "rubro": "TRACCION",
-    "stock": "1"
+    "stock": "51"
   },
   {
     "codigo": "122968",

@@ -66,6 +66,12 @@
     "stock": "1"
   },
   {
+    "codigo": "1120COMPC",
+    "descripcion": "1100-20 PREC COMPACTADOR C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "14"
+  },
+  {
     "codigo": "F44",
     "descripcion": "11L-16 FORERUNNER QH631 12PR TL F-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
@@ -102,9 +108,21 @@
     "stock": "12"
   },
   {
+    "codigo": "12424RJEC",
+    "descripcion": "12.4-24 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
+  },
+  {
     "codigo": "T1159305",
     "descripcion": "12.4-24 SUPREME TFC R1 TL 10T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
+    "stock": "1"
+  },
+  {
+    "codigo": "12428RETC",
+    "descripcion": "12.4-28 RET C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
     "stock": "1"
   },
   {
@@ -112,6 +130,18 @@
     "descripcion": "12.4-36 FORERUNNER QH666 12PR TL R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "22"
+  },
+  {
+    "codigo": "12436MU",
+    "descripcion": "12.4-36 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
+  },
+  {
+    "codigo": "12436RJEC",
+    "descripcion": "12.4-36 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
   },
   {
     "codigo": "T1101422",
@@ -153,7 +183,7 @@
     "codigo": "F37",
     "descripcion": "13.6-38 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
-    "stock": "8"
+    "stock": "6"
   },
   {
     "codigo": "F61",
@@ -168,10 +198,22 @@
     "stock": "10"
   },
   {
+    "codigo": "140020PRC",
+    "descripcion": "14.00-20 PREC VIAL C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
+  },
+  {
     "codigo": "F49",
     "descripcion": "14.00-24 FORERUNNER QH808 16PR TL G-2/L-2",
     "rubro": "VIALES / OTR - DIAGONALES",
     "stock": "7"
+  },
+  {
+    "codigo": "14520RETC",
+    "descripcion": "14.5-20 RET C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
   },
   {
     "codigo": "4AW634",
@@ -186,10 +228,40 @@
     "stock": "1"
   },
   {
+    "codigo": "14928MU",
+    "descripcion": "14.9-28 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "14928RETC",
+    "descripcion": "14.9-28 RET C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "14928RETCSG",
+    "descripcion": "14.9-28 RET C CASCO SIN GARANTIA",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "T1159325",
     "descripcion": "14.9-28 SUPREME 8T TT",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "4"
+  },
+  {
+    "codigo": "1400R24PRC",
+    "descripcion": "1400R24 PREC C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "15525PRC",
+    "descripcion": "15.5-25 PREC C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "11"
   },
   {
     "codigo": "T1150192",
@@ -222,10 +294,28 @@
     "stock": "4"
   },
   {
+    "codigo": "16928MU",
+    "descripcion": "16.9-28 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "T1150221",
     "descripcion": "16.9-28 POWER TORQUE R1 TT 8T",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "4"
+  },
+  {
+    "codigo": "16928RETC",
+    "descripcion": "16.9-28 RET C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "16928RJEC",
+    "descripcion": "16.9-28 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
   },
   {
     "codigo": "F65",
@@ -240,16 +330,46 @@
     "stock": "4"
   },
   {
+    "codigo": "167024MU",
+    "descripcion": "16/70-24 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "4"
+  },
+  {
+    "codigo": "1624PRC",
+    "descripcion": "1600-24 PREC VIAL C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "7"
+  },
+  {
+    "codigo": "1624RJEC",
+    "descripcion": "1600-24 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "3"
+  },
+  {
+    "codigo": "1625MU",
+    "descripcion": "1600-25 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "160025PI",
     "descripcion": "1600-25 PIRELLI 24T E3",
     "rubro": "VARIAS MEDIDAS",
     "stock": "2"
   },
   {
+    "codigo": "160025PRC",
+    "descripcion": "1600-25 PREC C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "5"
+  },
+  {
     "codigo": "6535",
     "descripcion": "165/70R13 79T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
-    "stock": "3939"
+    "stock": "3916"
   },
   {
     "codigo": "RK2087H1",
@@ -270,10 +390,46 @@
     "stock": "28"
   },
   {
+    "codigo": "17525MU",
+    "descripcion": "17.5-25 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "10"
+  },
+  {
+    "codigo": "17525MULLANTA",
+    "descripcion": "17.5-25 MEDIO USO ARMADAS CON LLANTA",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
+  },
+  {
     "codigo": "T1606072",
     "descripcion": "17.5-25 ND LCM L3 TL 16T",
     "rubro": "VIALES / OTR - DIAGONALES",
     "stock": "8"
+  },
+  {
+    "codigo": "17525PRC",
+    "descripcion": "17.5-25 PREC C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "9"
+  },
+  {
+    "codigo": "17525PRCSG",
+    "descripcion": "17.5-25 PREC C CASCO SG",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "17525RETC",
+    "descripcion": "17.5-25 RET C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "17525RJEC",
+    "descripcion": "17.5-25 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "4"
   },
   {
     "codigo": "181056",
@@ -286,6 +442,12 @@
     "descripcion": "18.4-26 FORERUNNER QH611 12PR TT R-1",
     "rubro": "AGRICOLA TRACTOR TRASERO DIAGONAL",
     "stock": "4"
+  },
+  {
+    "codigo": "18426RJEC",
+    "descripcion": "18.4-26 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
   },
   {
     "codigo": "T1150242",
@@ -348,6 +510,24 @@
     "stock": "6"
   },
   {
+    "codigo": "180025RJECL5",
+    "descripcion": "1800-25  L5 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "4"
+  },
+  {
+    "codigo": "180025RJEC",
+    "descripcion": "1800-25 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "5"
+  },
+  {
+    "codigo": "180033MU",
+    "descripcion": "1800-33 MU",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "6571",
     "descripcion": "185/70R14 88T TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
@@ -370,6 +550,18 @@
     "descripcion": "19.5L-24 FORERUNNER QH607 12PR TL R-4",
     "rubro": "VIALES / OTR - DIAGONALES",
     "stock": "6"
+  },
+  {
+    "codigo": "19524MU",
+    "descripcion": "19.5L-24 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "19524MUSG",
+    "descripcion": "19.5L-24 MEDIO USO SIN GARANTIA",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
   },
   {
     "codigo": "4892",
@@ -426,10 +618,40 @@
     "stock": "1"
   },
   {
+    "codigo": "20525MU",
+    "descripcion": "20.5-25 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "9"
+  },
+  {
     "codigo": "T1606075",
     "descripcion": "20.5-25 ND LCM L3 TL 16T",
     "rubro": "VIALES / OTR - DIAGONALES",
     "stock": "2"
+  },
+  {
+    "codigo": "20525PRC",
+    "descripcion": "20.5-25 PREC C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "23"
+  },
+  {
+    "codigo": "20525RETC",
+    "descripcion": "20.5-25 RET C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "4"
+  },
+  {
+    "codigo": "20525RJECMT",
+    "descripcion": "20.5-25 RJE C CASCO MT",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "25"
+  },
+  {
+    "codigo": "20525RJECROC",
+    "descripcion": "20.5-25 RJE C/ CASCO ROC",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "10"
   },
   {
     "codigo": "F40",
@@ -450,6 +672,12 @@
     "stock": "4"
   },
   {
+    "codigo": "20842RETC",
+    "descripcion": "20.8-42 RET C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "6607",
     "descripcion": "205/60R15 91H TRANSMATE TOURING H7 M+S",
     "rubro": "TOURING H7",
@@ -460,6 +688,12 @@
     "descripcion": "20X8.00-8-4PR TL FORERRUNER WAVE",
     "rubro": "WAVE",
     "stock": "30"
+  },
+  {
+    "codigo": "210025RJEC",
+    "descripcion": "21.00-25 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "4"
   },
   {
     "codigo": "5030",
@@ -489,7 +723,7 @@
     "codigo": "7500412",
     "descripcion": "215/75R17.5 ROYAL BLACK RS201 18PR 135/133J M+S",
     "rubro": "DIRECCION",
-    "stock": "535"
+    "stock": "532"
   },
   {
     "codigo": "123344",
@@ -588,6 +822,18 @@
     "stock": "3"
   },
   {
+    "codigo": "23126RETC",
+    "descripcion": "23.1-26 RET C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "23126RJEC",
+    "descripcion": "23.1-26 RJE MT  C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
+  },
+  {
     "codigo": "ADV23525L3",
     "descripcion": "23.5-25 ADVANCE SDLG 16PR TT",
     "rubro": "VIALES / OTR - DIAGONALES",
@@ -618,10 +864,34 @@
     "stock": "2"
   },
   {
+    "codigo": "23525MU",
+    "descripcion": "23.5-25 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "13"
+  },
+  {
+    "codigo": "23525MUSG",
+    "descripcion": "23.5-25 MEDIO USO SIN GARANTIA",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
+  },
+  {
     "codigo": "T1606074",
     "descripcion": "23.5-25 ND LCM E-3 E3 TL 16T",
     "rubro": "VIALES / OTR - DIAGONALES",
     "stock": "6"
+  },
+  {
+    "codigo": "23525RJECE3",
+    "descripcion": "23.5-25 RJE C/ CASCO E3",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
+    "codigo": "23525RJECL5",
+    "descripcion": "23.5-25 RJE C/ CASCO L5",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "4"
   },
   {
     "codigo": "5042",
@@ -678,6 +948,12 @@
     "stock": "45"
   },
   {
+    "codigo": "2435MU",
+    "descripcion": "2400-35 MEDIO US",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "5047",
     "descripcion": "245/40ZR18 97Y TRANSMATE SPORT D1 M+S",
     "rubro": "SPORT D1",
@@ -706,6 +982,18 @@
     "descripcion": "255/55R20 110V TRANSMATE SOLITUDE M+S",
     "rubro": "SOLITUDE",
     "stock": "26"
+  },
+  {
+    "codigo": "26525MUSG",
+    "descripcion": "26.5-25 MEDIO USO SIN GARANTIA",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "2"
+  },
+  {
+    "codigo": "26525RJEC",
+    "descripcion": "26.5-25 RJE C CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
   },
   {
     "codigo": "X1650100",
@@ -798,6 +1086,18 @@
     "stock": "1"
   },
   {
+    "codigo": "29525MU",
+    "descripcion": "29.5-25 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "6"
+  },
+  {
+    "codigo": "29525RJEC",
+    "descripcion": "29.5-25 RJE C CASCO L5",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "29525WOR",
     "descripcion": "29.5-25 WORLDWIDE 28T",
     "rubro": "VARIAS MEDIDAS",
@@ -862,12 +1162,6 @@
     "descripcion": "295/80R22.5 KMAX S GEN-2 152/148L H",
     "rubro": "DIRECCION",
     "stock": "1"
-  },
-  {
-    "codigo": "7500148",
-    "descripcion": "295/80R22.5 ROYAL BLACK RD801 18PR 154/151M M+S",
-    "rubro": "TRACCION",
-    "stock": "47"
   },
   {
     "codigo": "7500150",
@@ -957,7 +1251,7 @@
     "codigo": "F69",
     "descripcion": "400/55-22.5 FORERUNNER QH643 16PR TL",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
-    "stock": "5"
+    "stock": "4"
   },
   {
     "codigo": "F41",
@@ -1002,6 +1296,12 @@
     "stock": "6"
   },
   {
+    "codigo": "4808024RETC",
+    "descripcion": "480/80-24 RET C/ CASCO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "1Q6E9N001",
     "descripcion": "520/85R38 FORERUNNER QH711 155A8/152B TL R-1W (20.8R38)",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
@@ -1035,6 +1335,12 @@
     "codigo": "F70",
     "descripcion": "600/50-22.5 FORERUNNER QH643 16PR TL  I-3",
     "rubro": "AGRICOLA TRACTOR DELANTERO",
+    "stock": "1"
+  },
+  {
+    "codigo": "6207042MU",
+    "descripcion": "620/70R42 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
     "stock": "1"
   },
   {
@@ -1104,6 +1410,12 @@
     "stock": "2"
   },
   {
+    "codigo": "9536MU",
+    "descripcion": "9.5-36 MEDIO USO",
+    "rubro": "CUBIERTAS DE LA CASA",
+    "stock": "1"
+  },
+  {
     "codigo": "T1157700",
     "descripcion": "900/60R32 OPTITRAC DT830 R1W TL 176",
     "rubro": "AGRICOLA TRACTOR TRASERO RADIAL",
@@ -1125,6 +1437,12 @@
     "codigo": "A159",
     "descripcion": "FATE 11.00-20 PCR 16T",
     "rubro": "VARIAS MEDIDAS",
+    "stock": "1"
+  },
+  {
+    "codigo": "FL",
+    "descripcion": "FLETE",
+    "rubro": "ADMINISTRACION",
     "stock": "1"
   },
   {
@@ -1264,6 +1582,12 @@
     "descripcion": "TRONMAX 26.5-25 28T L5 TL",
     "rubro": "VIALES IMPORTADO",
     "stock": "4"
+  },
+  {
+    "codigo": ".",
+    "descripcion": "VARIOS",
+    "rubro": "REPUESTOS TRUCK CORDOBA",
+    "stock": "20"
   },
   {
     "codigo": "1I5E9L002",
