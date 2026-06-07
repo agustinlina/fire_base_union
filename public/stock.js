@@ -1,17 +1,18 @@
 // stock.js
 
-// ====== Dólar manual (override) ======
-// Si querés fijar el dólar manualmente, poné acá un número (e.g., 950).
-// Si es 0, toma el valor desde la API (Oficial) y se actualiza a las 19:01 AR.
-let DOLAR_TOTAL = 1455
+// ====== Dólar tomado únicamente desde Excel ======
+// Se lee desde ofertas.xlsx:
+// A1: dolar
+// A2: valor del dólar
+let DOLAR_TOTAL = 0
 
-function withCacheBuster(url) {
+function withCacheBuster (url) {
   const u = new URL(url, window.location.href)
   u.searchParams.set('_ts', Date.now().toString())
   return u.toString()
 }
 
-async function fetchJson(url) {
+async function fetchJson (url) {
   const finalUrl = withCacheBuster(url)
 
   const res = await fetch(finalUrl, {
@@ -33,13 +34,12 @@ const ENDPOINTS = {
     'https://crossorigin.me/https://api-stock-live.vercel.app/api/stock_olav',
   cordoba:
     'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_cba',
-  polo:
-    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_polo',
+  polo: 'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_polo',
   camaras:
     'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_camaras'
 }
 
-// ====== Fallbacks locales (mismo directorio) ======
+// ====== Fallbacks locales ======
 const LOCAL_ENDPOINTS = {
   olavarria: './local_olav.json',
   cordoba: './local_cba.json',
@@ -47,35 +47,32 @@ const LOCAL_ENDPOINTS = {
   prices: './local_prices.json'
 }
 
-// Endpoint de precios (via proxy CORS) -> USD
+// Endpoint de precios base en USD
 const PRICES_URL =
   'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
-
-// Cotización USD Oficial (venta)
-const USD_API_URL = 'https://dolarapi.com/v1/dolares/oficial'
 
 // ====== Referencias DOM ======
 const tableBody = document.querySelector('#stock-table tbody')
 const loading = document.getElementById('loading')
 const error = document.getElementById('error')
 const buscador = document.getElementById('buscador')
-const clearBuscador = document.getElementById('clear-buscador') // NUEVO
+const clearBuscador = document.getElementById('clear-buscador')
 const filtroCamion = document.getElementById('filtro-camion')
 const filtroAuto = document.getElementById('filtro-auto')
 const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
 const pinnedBar = document.getElementById('pinned-bar')
 
-// ====== Override de cantidades (opcional, ahora desactivado) ======
-// Si querés usarlo de nuevo, cargá códigos en el array y dejá esta
-// parte como está. Por defecto viene vacío para no tocar nada.
-const CODIGOS_OVERRIDE = [] // p.ej. ['3147', 'CODE2']
+// ====== Override de cantidades opcional ======
+const CODIGOS_OVERRIDE = []
 let CANTIDAD_OVERRIDE = 1
 
-function aplicarOverrideCantidad(data) {
+function aplicarOverrideCantidad (data) {
   const setCodigos = new Set(
     CODIGOS_OVERRIDE.map(c =>
-      String(c || '').trim().toUpperCase()
+      String(c || '')
+        .trim()
+        .toUpperCase()
     )
   )
 
@@ -100,117 +97,71 @@ const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 let allData = []
 let stockActual = 'cordoba'
 
-// ====== Estado de cotización (API) ======
-let usdRate = null // número (venta) desde API
-let usdInfo = null // objeto completo de la API
-let usdRateUpdatedAt = null
+// ====== Estado de cotización desde Excel ======
+let usdRate = null
 
-// ====== Utilidad override/manual ======
 const isManualDollar = () =>
-  Number(DOLAR_TOTAL) !== 0 && Number.isFinite(Number(DOLAR_TOTAL))
-const effectiveUsdRate = () =>
-  (isManualDollar() ? Number(DOLAR_TOTAL) : usdRate)
+  Number(DOLAR_TOTAL) > 0 && Number.isFinite(Number(DOLAR_TOTAL))
 
-// ==== Scheduler: actualizar SOLO 19:01 AR (si NO hay manual) ====
-const AR_TZ = 'America/Argentina/Buenos_Aires'
-let lastScheduledFetchDay = null // 'YYYY-MM-DD' en zona AR
-let schedulerInterval = null
-
-function getARDateParts(d = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: AR_TZ,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
-  })
-    .formatToParts(d)
-    .reduce((acc, p) => {
-      if (p.type !== 'literal') acc[p.type] = p.value
-      return acc
-    }, {})
-  const num = k => Number(parts[k])
-  return {
-    year: parts.year,
-    month: parts.month,
-    day: parts.day,
-    hour: num('hour'),
-    minute: num('minute'),
-    second: num('second'),
-    ymd: `${parts.year}-${parts.month}-${parts.day}`
-  }
-}
-
-function startUsdDailyScheduler() {
-  if (schedulerInterval) clearInterval(schedulerInterval)
-
-  const check = () => {
-    if (isManualDollar()) return // con manual NO se actualiza por API
-    const nowAR = getARDateParts()
-    const isAfter1901 =
-      nowAR.hour > 19 || (nowAR.hour === 19 && nowAR.minute >= 1)
-    if (isAfter1901 && lastScheduledFetchDay !== nowAR.ymd) {
-      fetchUsdRate().then(() => {
-        aplicarFiltros()
-        renderPinnedBar()
-      })
-      lastScheduledFetchDay = nowAR.ymd
-    }
-  }
-
-  schedulerInterval = setInterval(check, 15000)
-  check()
-}
+const effectiveUsdRate = () => Number(DOLAR_TOTAL) || null
 
 // ====== Helpers generales ======
-function normalizar(str) {
+function normalizar (str) {
   return (str || '')
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '')
 }
-function clean(str) {
+
+function clean (str) {
   return String(str || '')
     .trim()
     .toUpperCase()
 }
-function splitCandidates(raw) {
+
+function splitCandidates (raw) {
   if (!raw) return []
   return String(raw)
     .split('/')
     .map(s => clean(s))
     .filter(Boolean)
 }
-function primaryCode(raw) {
+
+function primaryCode (raw) {
   const parts = splitCandidates(raw)
   return parts[0] || ''
 }
-function codeKeysOne(raw) {
+
+function codeKeysOne (raw) {
   const keys = new Set()
-  function addVariants(base) {
+
+  function addVariants (base) {
     const c = clean(base)
     if (!c) return
+
     keys.add(c)
+
     const noSep = c.replace(/[\s\-_.]/g, '')
     keys.add(noSep)
 
     let m = /^T(\d+)$/.exec(noSep)
+
     if (m) {
       const num = (m[1] || '').replace(/^0+/, '') || '0'
       keys.add(num)
       keys.add('T' + num)
       return
     }
+
     m = /^([A-Z])(\d+)$/.exec(noSep)
+
     if (m) {
       const num = (m[2] || '').replace(/^0+/, '') || '0'
       keys.add(num)
     } else {
       m = /^(\d+)$/.exec(noSep)
+
       if (m) {
         const num = (m[1] || '').replace(/^0+/, '') || '0'
         keys.add(num)
@@ -218,16 +169,27 @@ function codeKeysOne(raw) {
       }
     }
   }
+
   addVariants(raw)
+
   const noSepRaw = clean(raw).replace(/[\s\-_.]/g, '')
-  if (noSepRaw.endsWith('COPIA')) addVariants(noSepRaw.slice(0, -5))
-  if (noSepRaw.startsWith('LANDE')) addVariants(noSepRaw.slice(5))
+
+  if (noSepRaw.endsWith('COPIA')) {
+    addVariants(noSepRaw.slice(0, -5))
+  }
+
+  if (noSepRaw.startsWith('LANDE')) {
+    addVariants(noSepRaw.slice(5))
+  }
+
   return Array.from(keys)
 }
-function codeKeys(raw) {
+
+function codeKeys (raw) {
   const parts = splitCandidates(raw)
   const out = []
   const seen = new Set()
+
   for (const p of parts) {
     for (const k of codeKeysOne(p)) {
       if (!seen.has(k)) {
@@ -236,34 +198,34 @@ function codeKeys(raw) {
       }
     }
   }
+
   return out
 }
 
-// ====== Códigos que deben mostrarse SOLO en pesos (ocultar USD) ======
-const noMostrarPesos = ['3147', '3148', '7500584', '7500589'] // agregá/quita códigos acá
-
-const SOLO_PESOS_SET = new Set(noMostrarPesos.map(c => clean(c)))
-
-function isSoloPesosByCodigo(codigoRaw) {
-  const keys = codeKeys(codigoRaw)
-  return keys.some(k => SOLO_PESOS_SET.has(clean(k)))
+// ====== Mostrar solo pesos en productos promocionales ======
+function isSoloPesosItem (item) {
+  return Boolean(item?.enPromocion)
 }
 
-function canonicalKey(raw) {
+function canonicalKey (raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
   return variants[0] || clean(p) || ''
 }
-function cssEscape(s) {
+
+function cssEscape (s) {
   if (window.CSS && CSS.escape) return CSS.escape(s)
   return String(s).replace(/[^a-zA-Z0-9_\-]/g, ch => '\\' + ch)
 }
-function esCamionImportado(rubro) {
+
+function esCamionImportado (rubro) {
   const n = normalizar(rubro)
   return n === 'direccion' || n === 'traccion'
 }
-function esAutoImportado(rubro) {
+
+function esAutoImportado (rubro) {
   const n = normalizar(rubro)
+
   const exactos = [
     'touringh7',
     'royalcomfort',
@@ -271,35 +233,157 @@ function esAutoImportado(rubro) {
     'royaleco',
     'transerenuseco'
   ]
+
   if (exactos.includes(n)) return true
+
   return n.startsWith('royal') || n.startsWith('trans')
 }
 
-// ====== Ofertas desde config.json ======
-async function loadOfertasConfig() {
+// ====== Ofertas y dólar desde Excel ======
+// Archivo esperado: ofertas.xlsx
+//
+// Estructura:
+// A1: dolar
+// A2: valor del dólar
+//
+// A3: codigo
+// B3: descripcion
+// C3: precio
+//
+// Desde fila 4:
+// Columna A: codigo
+// Columna B: descripcion interna, solo referencia
+// Columna C: precio promocional en pesos
+
+const OFERTAS_EXCEL_URL = './ofertas.xlsx'
+
+function parseNumeroExcel (value) {
+  if (value === null || value === undefined || value === '') return null
+
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+
+  const texto = String(value).trim().replace(/\$/g, '').replace(/\s/g, '')
+
+  if (!texto) return null
+
+  let normalizado = texto
+
+  if (texto.includes('.') && texto.includes(',')) {
+    normalizado = texto.replace(/\./g, '').replace(',', '.')
+  } else if (texto.includes(',')) {
+    normalizado = texto.replace(',', '.')
+  } else if (/^\d{1,3}(\.\d{3})+$/.test(texto)) {
+    normalizado = texto.replace(/\./g, '')
+  }
+
+  const numero = Number(normalizado)
+
+  return Number.isFinite(numero) ? numero : null
+}
+
+async function loadOfertasConfig () {
   try {
-    const res = await fetch('./config.json', { cache: 'no-store' })
-    if (!res.ok) return []
-    const json = await res.json()
-    if (Array.isArray(json)) return json
-    if (Array.isArray(json?.ofertas)) return json.ofertas
-    return []
+    if (typeof XLSX === 'undefined') {
+      console.warn('No está cargada la librería XLSX.')
+      return []
+    }
+
+    const res = await fetch(withCacheBuster(OFERTAS_EXCEL_URL), {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    })
+
+    if (!res.ok) {
+      console.warn('No se pudo cargar ofertas.xlsx')
+      return []
+    }
+
+    const buffer = await res.arrayBuffer()
+    const workbook = XLSX.read(buffer, { type: 'array' })
+
+    const firstSheetName = workbook.SheetNames[0]
+    const sheet = workbook.Sheets[firstSheetName]
+
+    const rows = XLSX.utils.sheet_to_json(sheet, {
+      header: 1,
+      defval: ''
+    })
+
+    const dolarExcel = parseNumeroExcel(rows?.[1]?.[0])
+
+    if (dolarExcel && dolarExcel > 0) {
+      DOLAR_TOTAL = dolarExcel
+      usdRate = dolarExcel
+      updateUsdInlineUIFromExcel()
+    } else {
+      DOLAR_TOTAL = 0
+      usdRate = null
+
+      const refs = usdLineRef || ensureUsdInline()
+      refs.precio.textContent = '—'
+      refs.label.textContent = 'Excel'
+      refs.updated.textContent = 'Sin valor en ofertas.xlsx'
+    }
+
+    const filasOfertas = rows.slice(3)
+
+    return filasOfertas
+      .filter(row => Array.isArray(row) && row.length >= 3)
+      .map(row => {
+        const codigo = String(row[0] || '').trim()
+        const precio = parseNumeroExcel(row[2])
+
+        return {
+          codigo,
+          precio,
+          moneda: 'ars'
+        }
+      })
+      .filter(item => {
+        const codigoNormalizado = item.codigo.toLowerCase()
+
+        const esEncabezado =
+          codigoNormalizado === 'codigo' ||
+          codigoNormalizado === 'código' ||
+          codigoNormalizado === 'dolar' ||
+          codigoNormalizado === 'dólar'
+
+        const codigoValido = item.codigo && !esEncabezado
+        const precioValido = Number.isFinite(item.precio) && item.precio > 0
+
+        return codigoValido && precioValido
+      })
   } catch (e) {
-    console.warn('No se pudo cargar config.json:', e)
+    console.warn('No se pudo cargar ofertas desde Excel:', e)
+
+    DOLAR_TOTAL = 0
+    usdRate = null
+
+    const refs = usdLineRef || ensureUsdInline()
+    refs.precio.textContent = '—'
+    refs.label.textContent = 'Excel'
+    refs.updated.textContent = 'Error al leer ofertas.xlsx'
+
     return []
   }
 }
 
 /**
  * Soporta:
- *  - ['3147', 100000, 'ars']
- *  - { codigo: '3147', precio: 100000, moneda: 'ars' }
- *  - { codigo: '3147', precio: 250, moneda: 'usd' }
+ * - ['3147', 100000, 'ars']
+ * - { codigo: '3147', precio: 100000, moneda: 'ars' }
+ * - { codigo: '3147', precio: 250, moneda: 'usd' }
  *
  * Devuelve Map<codigoNormalizado, { precio, tipo }>
- *  tipo = 'ars' | 'usd'
+ * tipo = 'ars' | 'usd'
  */
-function buildOfertasMap(ofertasRaw) {
+function buildOfertasMap (ofertasRaw) {
   const map = new Map()
   const arr = Array.isArray(ofertasRaw) ? ofertasRaw : []
 
@@ -321,10 +405,7 @@ function buildOfertasMap(ofertasRaw) {
     const numPrecio = Number(precio)
     if (!Number.isFinite(numPrecio) || numPrecio <= 0) return
 
-    const tipo =
-      String(moneda || 'ars').toLowerCase() === 'usd'
-        ? 'usd'
-        : 'ars'
+    const tipo = String(moneda || 'ars').toLowerCase() === 'usd' ? 'usd' : 'ars'
 
     codeKeysOne(codigo).forEach(k => {
       if (!map.has(k)) {
@@ -336,20 +417,20 @@ function buildOfertasMap(ofertasRaw) {
   return map
 }
 
-// Formateos de moneda
-function fmtARS(n) {
+// ====== Formateos ======
+function fmtARS (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
-  return (
-    '$ ' +
-    Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
-  )
+
+  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
 }
-function fmtUSD(n) {
+
+function fmtUSD (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
+
   return (
     'US$ ' +
     Number(n).toLocaleString('en-US', {
@@ -359,42 +440,44 @@ function fmtUSD(n) {
   )
 }
 
-// 🔧 NUEVA parseStock: toma 3,000 / 3.000 / 3000 como 3000
-function parseStock(s) {
+function parseStock (s) {
   if (s === null || s === undefined) return 0
   if (typeof s === 'number' && Number.isFinite(s)) return s
 
-  // Dejar solo dígitos (sacamos puntos, comas, espacios, etc.)
   const cleaned = String(s).replace(/[^\d]/g, '').trim()
+
   if (!cleaned) return 0
 
   const n = Number(cleaned)
+
   return Number.isFinite(n) ? n : 0
 }
 
-function shorten(t, max = 36) {
+function shorten (t, max = 36) {
   const s = String(t || '').trim()
   return s.length > max ? s.slice(0, max - 1) + '…' : s
 }
+
 const fmtISOToLocal = iso => {
   if (!iso) return '—'
+
   const d = new Date(iso)
+
   if (isNaN(d)) return '—'
+
   return d.toLocaleString('es-AR', {
     dateStyle: 'medium',
     timeStyle: 'short'
   })
 }
 
-// === Helper: texto de copiado (Descripción – Precio – Código al final) ===
-function buildCopyTextForItem(item = {}) {
+// ====== Texto de copiado ======
+function buildCopyTextForItem (item = {}) {
   const desc = (item.descripcion || '').trim()
   let price = ''
 
   const preferArs =
-    item.precioArsOverride != null
-      ? item.precioArsOverride
-      : item.precioArs
+    item.precioArsOverride != null ? item.precioArsOverride : item.precioArs
 
   if (preferArs != null && !Number.isNaN(Number(preferArs))) {
     price = fmtARS(preferArs)
@@ -404,15 +487,17 @@ function buildCopyTextForItem(item = {}) {
 
   const code = primaryCode(item.codigo || item.__key || '')
   const parts = []
+
   if (desc) parts.push(desc)
   if (price) parts.push(price)
   if (code) parts.push(`Código: ${code}`)
+
   return parts.join(' ').trim()
 }
 
-// === Helper: texto de TODAS las ancladas, una por línea ===
-function buildPinnedListText() {
+function buildPinnedListText () {
   if (!pinned.size) return ''
+
   return Array.from(pinned.values())
     .map(it => buildCopyTextForItem(it))
     .filter(Boolean)
@@ -421,19 +506,21 @@ function buildPinnedListText() {
 
 // ====== Toast copiar ======
 let __copyToastTimer = null
-function showCopied(text = 'Copiado') {
+
+function showCopied (text = 'Copiado') {
   const toast = document.getElementById('copy-toast')
+
   if (!toast) return
+
   toast.textContent = text
   toast.classList.add('show')
+
   clearTimeout(__copyToastTimer)
-  __copyToastTimer = setTimeout(
-    () => toast.classList.remove('show'),
-    1200
-  )
+
+  __copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1200)
 }
 
-async function writeToClipboard(payload) {
+async function writeToClipboard (payload) {
   try {
     await navigator.clipboard.writeText(payload)
     showCopied('Copiado')
@@ -443,10 +530,13 @@ async function writeToClipboard(payload) {
       ta.value = payload
       ta.style.position = 'fixed'
       ta.style.opacity = '0'
+
       document.body.appendChild(ta)
+
       ta.select()
       document.execCommand('copy')
       document.body.removeChild(ta)
+
       showCopied('Copiado')
     } catch (e) {
       showCopied('No se pudo copiar')
@@ -455,39 +545,76 @@ async function writeToClipboard(payload) {
   }
 }
 
-// ====== Placeholder en tabla ======
-function renderPlaceholder(message = 'Escribí para buscar') {
+// ====== Placeholder tabla ======
+function renderPlaceholder (message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
       <td colspan="5" style="text-align:center; opacity:.7; padding:16px;">${message}</td>
     </tr>`
 }
 
+// ====== Estilos label promoción ======
+function ensurePromoLabelStyles () {
+  if (document.getElementById('promo-label-styles')) return
+
+  const style = document.createElement('style')
+  style.id = 'promo-label-styles'
+  style.textContent = `
+    .promo-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 6px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #ffd54a;
+      color: #1b1b1b;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+      box-shadow: 0 2px 6px rgba(0,0,0,.25);
+      pointer-events: none;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+  `
+
+  document.head.appendChild(style)
+}
+
 // ====== Anclados ======
-const pinned = new Map() // key -> { codigo, descripcion, precioUsd, precioArs, rubro, stock }
-function renderPinnedBar() {
+const pinned = new Map()
+
+function renderPinnedBar () {
   if (!pinnedBar) return
+
   if (pinned.size === 0) {
     pinnedBar.classList.remove('show')
     pinnedBar.innerHTML = ''
     return
   }
+
   pinnedBar.classList.add('show')
+
   pinnedBar.innerHTML = Array.from(pinned.values())
     .map(it => {
       const soloPesos = isSoloPesosByCodigo(it.codigo || it.__key)
       const ars = it.precioArs != null ? fmtARS(it.precioArs) : ''
+
       const usd =
         !soloPesos && it.precioUsd != null
           ? ` <small style="opacity:.7">(${fmtUSD(it.precioUsd)})</small>`
           : ''
+
       return `
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
         <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
-        ${ars
-          ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
-          : usd
+        ${
+          ars
+            ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
+            : usd
             ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
             : ''
         }
@@ -496,18 +623,19 @@ function renderPinnedBar() {
     })
     .join('')
 
-  // Botón ✕: borrar sin copiar
   pinnedBar.querySelectorAll('.pin-chip .remove').forEach(btn => {
     btn.addEventListener('click', e => {
-      e.stopPropagation() // para que NO dispare el click del chip
+      e.stopPropagation()
+
       const key = btn.closest('.pin-chip')?.dataset?.key
+
       if (!key) return
+
       pinned.delete(key)
       renderPinnedBar()
+
       document
-        .querySelectorAll(
-          `.anchor-btn[data-key="${cssEscape(key)}"]`
-        )
+        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
         .forEach(b => {
           b.classList.remove('active')
           b.setAttribute('aria-pressed', 'false')
@@ -516,33 +644,40 @@ function renderPinnedBar() {
     })
   })
 
-  // Click en cualquier producto anclado -> copiar TODA la lista (una por línea)
   pinnedBar.querySelectorAll('.pin-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const payload = buildPinnedListText()
+
       if (!payload) {
         showCopied('No hay productos anclados')
         return
       }
+
       writeToClipboard(payload)
     })
   })
 }
 
-function togglePin(item) {
+function togglePin (item) {
   const key = canonicalKey(item?.codigo)
+
   if (!key) return
+
   const toSave = { ...item, __key: key }
   const rate = effectiveUsdRate()
+
   if (rate && item?.precioUsd != null && item.precioArs == null) {
     toSave.precioArs = Math.round(Number(item.precioUsd) * rate)
   }
+
   if (pinned.has(key)) {
     pinned.delete(key)
   } else {
     pinned.set(key, toSave)
   }
+
   renderPinnedBar()
+
   document
     .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
     .forEach(b => {
@@ -553,11 +688,11 @@ function togglePin(item) {
     })
 }
 
-// ====== Mini-menú / Modal responsive ======
+// ====== Mini menú ======
 let anchorMenuOverlay = null
 let anchorMenuPanel = null
 
-function ensureAnchorMenu() {
+function ensureAnchorMenu () {
   if (anchorMenuOverlay && anchorMenuPanel) {
     return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
   }
@@ -588,13 +723,14 @@ function ensureAnchorMenu() {
   panel.innerHTML = `
     <button data-action="copy" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">📋 Copiar cubierta</button>
     <button data-action="copy-all" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">📋 Copiar ancladas</button>
-    <button data-action="pin"  style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">⚓ Anclar</button>
+    <button data-action="pin" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">⚓ Anclar</button>
   `
 
   panel.addEventListener('mouseover', e => {
     const b = e.target.closest('button')
     if (b) b.style.background = 'var(--card)'
   })
+
   panel.addEventListener('mouseout', e => {
     const b = e.target.closest('button')
     if (b) b.style.background = 'transparent'
@@ -606,6 +742,7 @@ function ensureAnchorMenu() {
   overlay.addEventListener('click', e => {
     if (e.target === overlay) hideAnchorMenu()
   })
+
   window.addEventListener('keydown', e => {
     if (overlay.style.display === 'flex' && e.key === 'Escape') {
       hideAnchorMenu()
@@ -614,17 +751,20 @@ function ensureAnchorMenu() {
 
   anchorMenuOverlay = overlay
   anchorMenuPanel = panel
+
   return { overlay, panel }
 }
 
-function showAnchorMenu(btn, { item, copyText }) {
+function showAnchorMenu (btn, { item, copyText }) {
   const { overlay, panel } = ensureAnchorMenu()
   const key = canonicalKey(item.codigo)
+
   overlay.dataset.key = key
   overlay.dataset.copy = copyText
 
   const isPinned = pinned.has(key)
   const pinBtn = panel.querySelector('[data-action="pin"]')
+
   pinBtn.textContent = isPinned ? '✖ Desanclar' : '⚓ Anclar'
 
   const isPhone = window.innerWidth <= 640
@@ -637,93 +777,90 @@ function showAnchorMenu(btn, { item, copyText }) {
   } else {
     overlay.style.background = 'transparent'
     overlay.style.display = 'block'
+
     const r = btn.getBoundingClientRect()
     const margin = 6
+
     panel.style.position = 'fixed'
     panel.style.left =
-      Math.min(
-        window.innerWidth - panel.offsetWidth - 8,
-        Math.max(8, r.left)
-      ) + 'px'
+      Math.min(window.innerWidth - panel.offsetWidth - 8, Math.max(8, r.left)) +
+      'px'
+
     panel.style.top = r.bottom + margin + 'px'
     panel.style.transform = 'none'
   }
 
   panel.onclick = e => {
     const actionBtn = e.target.closest('button[data-action]')
+
     if (!actionBtn) return
+
     const action = actionBtn.dataset.action
     const key = overlay.dataset.key
     const copy = overlay.dataset.copy || ''
+
     hideAnchorMenu()
+
     if (action === 'copy') {
       writeToClipboard(copy)
       return
     }
+
     if (action === 'copy-all') {
       const payload = buildPinnedListText()
+
       if (payload) writeToClipboard(payload)
       else showCopied('No hay productos anclados')
+
       return
     }
+
     if (action === 'pin') {
       const it =
-        (tableBody._lastRowMap &&
-          tableBody._lastRowMap.get(key)) ||
-        item
+        (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) || item
+
       togglePin(it)
     }
   }
 }
 
-function hideAnchorMenu() {
+function hideAnchorMenu () {
   if (!anchorMenuOverlay) return
   anchorMenuOverlay.style.display = 'none'
 }
 
 // ====== Fetch con fallback local ======
-function isNonEmptyArray(j) {
+function isNonEmptyArray (j) {
   return Array.isArray(j) && j.length > 0
 }
 
-async function fetchJson(url) {
-  const res = await fetch(url, { cache: 'no-store' })
-  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
-  return await res.json()
-}
-
-/**
- * Intenta remoto, y si falla o viene sin datos => usa local.
- * - Si expectArray=true, considera "sin datos" cuando no es array o está vacío.
- */
-async function fetchPreferRemoteThenLocal({
+async function fetchPreferRemoteThenLocal ({
   remoteUrl,
   localUrl,
   label = '',
   expectArray = true
 }) {
-  // 1) Remoto
   try {
     const json = await fetchJson(remoteUrl)
+
     if (!expectArray) return json
     if (isNonEmptyArray(json)) return json
 
-    // remoto ok pero vacío / sin data
     console.warn(`[fallback] ${label}: remoto vacío, uso local`)
   } catch (e) {
     console.warn(`[fallback] ${label}: remoto falló, uso local`, e)
   }
 
-  // 2) Local
   if (!localUrl) {
-    // si no hay local, devolvemos []
     return expectArray ? [] : null
   }
 
   try {
     const jsonLocal = await fetchJson(localUrl)
+
     if (!expectArray) return jsonLocal
     if (Array.isArray(jsonLocal)) return jsonLocal
+
     return []
   } catch (e) {
     console.warn(`[fallback] ${label}: local falló`, e)
@@ -732,8 +869,9 @@ async function fetchPreferRemoteThenLocal({
 }
 
 // ====== Render tabla ======
-function renderTable(data) {
+function renderTable (data) {
   tableBody.innerHTML = ''
+
   if (!data || data.length === 0) {
     renderPlaceholder('Sin resultados. Refiná tu búsqueda.')
     return
@@ -748,17 +886,14 @@ function renderTable(data) {
     tr.tabIndex = 0
 
     const stockNum = parseStock(item.stock)
-
-    // 👇 límite visual en 100 (podés cambiarlo o sacarlo)
     const stockDisplay = stockNum > 100 ? 100 : stockNum
 
     const key = canonicalKey(item.codigo)
 
-    // Precios
-    const precioUsd =
-      item.precioUsd != null ? Number(item.precioUsd) : null
+    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
 
     let precioArs = null
+
     if (
       item.precioArsOverride != null &&
       !Number.isNaN(Number(item.precioArsOverride))
@@ -768,27 +903,28 @@ function renderTable(data) {
       precioArs = Math.round(precioUsd * rate)
     }
 
-    const soloPesos = isSoloPesosByCodigo(item.codigo)
+    const soloPesos = isSoloPesosItem(item)
 
     const priceHtml =
       precioUsd != null || precioArs != null
         ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
-           ${precioArs != null
-          ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
-            precioArs
-          )}</span>`
-          : ''
-        }
-           ${!soloPesos && precioUsd != null
-          ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(
-            precioUsd
-          )}</span>`
-          : ''
-        }
+           ${
+             precioArs != null
+               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
+                   precioArs
+                 )}</span>`
+               : ''
+           }
+           ${
+             !soloPesos && precioUsd != null
+               ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(
+                   precioUsd
+                 )}</span>`
+               : ''
+           }
          </div>`
         : ''
 
-    // Texto que se copia al hacer click en la fila (código al final)
     const copyText = buildCopyTextForItem({
       codigo: item.codigo,
       descripcion: item.descripcion,
@@ -806,12 +942,24 @@ function renderTable(data) {
               aria-pressed="${pinned.has(key) ? 'true' : 'false'}"
               data-key="${key}"><img src="./media/3dots.png"></button>`
 
+    const promoLabelHTML = item.enPromocion
+      ? `<span class="promo-label" title="Producto en promoción">★ Promo</span>`
+      : ''
+
     tr.innerHTML = `
-      <td class="descycode"><span>${item.descripcion || ''}</span><span style="height:16px"></span><span style="font-size:12px">Código:<code> ${item.codigo}</code></span></td>
-      <td>${item.rubro || ''}</td>
-      <td>${stockDisplay}</td>
-      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${anchorBtnHTML}</td>
-    `
+  <td class="descycode">
+    <span>${item.descripcion || ''}</span>
+    <span style="height:16px"></span>
+    <span style="font-size:12px">
+      Código:<code> ${item.codigo}</code>
+      ${promoLabelHTML}
+    </span>
+  </td>
+  <td>${item.rubro || ''}</td>
+  <td>${stockDisplay}</td>
+  <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${anchorBtnHTML}</td>
+`
+
     tableBody.appendChild(tr)
 
     rowItemByKey.set(key, { ...item, precioUsd, precioArs })
@@ -822,56 +970,67 @@ function renderTable(data) {
 
     tableBody.addEventListener('click', e => {
       const anchorBtn = e.target.closest('.anchor-btn')
+
       if (anchorBtn) {
         e.stopPropagation()
+
         const k = anchorBtn.dataset.key
         const row = anchorBtn.closest('tr')
         const copyText = row?.dataset?.copy || ''
-        const it =
-          (tableBody._lastRowMap &&
-            tableBody._lastRowMap.get(k)) || {
-            codigo: k,
-            descripcion:
-              row?.querySelector('td')?.innerText || '',
-            precioUsd: null,
-            precioArs: null
-          }
+
+        const it = (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) || {
+          codigo: k,
+          descripcion: row?.querySelector('td')?.innerText || '',
+          precioUsd: null,
+          precioArs: null
+        }
+
         showAnchorMenu(anchorBtn, { item: it, copyText })
         return
       }
 
       const tr = e.target.closest('tr')
+
       if (!tr || !tr.dataset.copy) return
+
       tr.classList.remove('copy-flash')
       void tr.offsetWidth
       tr.classList.add('copy-flash')
+
       writeToClipboard(tr.dataset.copy)
+
       tr.focus?.()
     })
 
     tableBody.addEventListener('keydown', e => {
       const tr = e.target.closest('tr.copy-row')
+
       if (!tr) return
+
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault()
+
         tr.classList.remove('copy-flash')
         void tr.offsetWidth
         tr.classList.add('copy-flash')
+
         writeToClipboard(tr.dataset.copy || '')
       }
+
       if (e.key.toLowerCase() === 'm') {
         const btn = tr.querySelector('.anchor-btn')
+
         if (btn) {
           const k = tr.dataset.key
-          const it =
-            (tableBody._lastRowMap &&
-              tableBody._lastRowMap.get(k)) || {
-              codigo: k,
-              descripcion:
-                tr.querySelector('td')?.innerText || '',
-              precioUsd: null,
-              precioArs: null
-            }
+
+          const it = (tableBody._lastRowMap &&
+            tableBody._lastRowMap.get(k)) || {
+            codigo: k,
+            descripcion: tr.querySelector('td')?.innerText || '',
+            precioUsd: null,
+            precioArs: null
+          }
+
           showAnchorMenu(btn, {
             item: it,
             copyText: tr.dataset.copy || ''
@@ -881,12 +1040,10 @@ function renderTable(data) {
     })
 
     window.addEventListener('resize', () => {
-      if (
-        !anchorMenuOverlay ||
-        anchorMenuOverlay.style.display === 'none'
-      ) {
+      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') {
         return
       }
+
       hideAnchorMenu()
     })
   }
@@ -895,20 +1052,22 @@ function renderTable(data) {
 }
 
 // ====== Filtros ======
-function setActiveBtn(btn) {
+function setActiveBtn (btn) {
   filtroBtns.forEach(b => b && b.classList.remove('active'))
+
   if (btn) btn.classList.add('active')
 }
-function aplicarFiltros() {
+
+function aplicarFiltros () {
   const valor = buscador.value.trim().toLowerCase()
+
   if (!valor) {
-    renderPlaceholder(
-      'Utiliza la barra de búsqueda para ver resultados'
-    )
+    renderPlaceholder('Utiliza la barra de búsqueda para ver resultados')
     return
   }
 
   let datos = [...allData]
+
   if (window.filtroActivo === 'camion') {
     datos = datos.filter(it => esCamionImportado(it.rubro))
   } else if (window.filtroActivo === 'auto') {
@@ -917,45 +1076,55 @@ function aplicarFiltros() {
 
   datos = datos.filter(
     it =>
-      (it.codigo &&
-        String(it.codigo).toLowerCase().includes(valor)) ||
-      (it.descripcion &&
-        it.descripcion.toLowerCase().includes(valor))
+      (it.codigo && String(it.codigo).toLowerCase().includes(valor)) ||
+      (it.descripcion && it.descripcion.toLowerCase().includes(valor))
   )
 
-  renderTable(datos) // recalcula ARS con effectiveUsdRate()
+  renderTable(datos)
 }
 
 // ====== Carga y merge ======
-function mergeStocksSum(arrA, arrB) {
+function mergeStocksSum (arrA, arrB) {
   const map = new Map()
-  function upsert(it) {
+
+  function upsert (it) {
     const key = canonicalKey(it?.codigo)
+
     if (!key) return
+
     const curr = map.get(key)
     const stockNum = parseStock(it?.stock)
-    if (!curr) map.set(key, { ...it, stock: stockNum })
-    else {
+
+    if (!curr) {
+      map.set(key, { ...it, stock: stockNum })
+    } else {
       curr.stock = parseStock(curr.stock) + stockNum
+
       if (!curr.descripcion && it.descripcion) {
         curr.descripcion = it.descripcion
       }
-      if (!curr.rubro && it.rubro) curr.rubro = it.rubro
+
+      if (!curr.rubro && it.rubro) {
+        curr.rubro = it.rubro
+      }
     }
   }
-  ; (Array.isArray(arrA) ? arrA : []).forEach(upsert)
-    ; (Array.isArray(arrB) ? arrB : []).forEach(upsert)
+
+  ;(Array.isArray(arrA) ? arrA : []).forEach(upsert)
+  ;(Array.isArray(arrB) ? arrB : []).forEach(upsert)
+
   return Array.from(map.values())
 }
 
-async function cargarDatos(stock) {
+async function cargarDatos (stock) {
   loading && (loading.style.display = '')
+
   if (error) error.textContent = ''
+
   window.filtroActivo = null
   setActiveBtn(null)
 
   try {
-    // Traer precios USD, ofertas y, si no hay manual, intentar cotización inicial
     const [dataPrices, ofertas] = await Promise.all([
       fetchPreferRemoteThenLocal({
         remoteUrl: PRICES_URL,
@@ -963,17 +1132,14 @@ async function cargarDatos(stock) {
         label: 'PRICES',
         expectArray: true
       }),
-      loadOfertasConfig(),
-      (async () => {
-        if (!isManualDollar() && !usdRate) await fetchUsdRate()
-      })()
+      loadOfertasConfig()
     ])
 
     const ofertasMap = buildOfertasMap(ofertas)
 
     let dataStock
+
     if (stock === 'cordoba') {
-      // Depósito 1: CBA + POLO + CAMARAS
       const [dataCba, dataPolo, dataCamaras] = await Promise.all([
         fetchPreferRemoteThenLocal({
           remoteUrl: ENDPOINTS.cordoba,
@@ -987,7 +1153,6 @@ async function cargarDatos(stock) {
           label: 'STOCK POLO',
           expectArray: true
         }),
-        // Camaras: si falla, no rompe (sin local)
         fetchPreferRemoteThenLocal({
           remoteUrl: ENDPOINTS.camaras,
           localUrl: null,
@@ -999,7 +1164,6 @@ async function cargarDatos(stock) {
       const cbaMasPolo = mergeStocksSum(dataCba, dataPolo)
       dataStock = mergeStocksSum(cbaMasPolo, dataCamaras)
     } else {
-      // Depósito 2: Olavarría
       dataStock = await fetchPreferRemoteThenLocal({
         remoteUrl: ENDPOINTS[stock],
         localUrl: LOCAL_ENDPOINTS[stock],
@@ -1008,67 +1172,78 @@ async function cargarDatos(stock) {
       })
     }
 
-    // 👉 Override de cantidades (por ahora no hace nada porque CODIGOS_OVERRIDE está vacío)
     dataStock = aplicarOverrideCantidad(dataStock)
 
-    // Price map por claves (USD)
     const priceMap = new Map()
-      ; (Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
-        const precio = p?.precio ?? null // USD
-        codeKeysOne(p?.codigo).forEach(k => {
-          if (!priceMap.has(k)) priceMap.set(k, precio)
-        })
+
+    ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
+      const precio = p?.precio ?? null
+
+      codeKeysOne(p?.codigo).forEach(k => {
+        if (!priceMap.has(k)) {
+          priceMap.set(k, precio)
+        }
       })
+    })
 
-    // Unificar dataset y agregar precioUsd + ofertas
-    allData = (Array.isArray(dataStock) ? dataStock : []).map(
-      item => {
-        const keys = codeKeys(item?.codigo)
-        let precioUsd = null
-        let precioArsOverride = null
+    allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
+      const keys = codeKeys(item?.codigo)
+      let precioUsd = null
+      let precioArsOverride = null
+      let enPromocion = false
 
-        // 1) Precio base desde API de precios (USD)
-        for (const k of keys) {
-          if (priceMap.has(k)) {
-            precioUsd = priceMap.get(k)
-            break
-          }
+      // Precio base desde API de precios en USD
+      for (const k of keys) {
+        if (priceMap.has(k)) {
+          precioUsd = priceMap.get(k)
+          break
         }
-
-        // 2) Ofertas del config.json pisan el precio
-        for (const k of keys) {
-          if (ofertasMap.has(k)) {
-            const of = ofertasMap.get(k)
-            if (of.tipo === 'usd') {
-              // Oferta expresada en USD
-              precioUsd = of.precio
-              precioArsOverride = null
-            } else {
-              // Oferta expresada en ARS
-              precioArsOverride = of.precio
-            }
-            break
-          }
-        }
-
-        return { ...item, precioUsd, precioArsOverride }
       }
-    )
+
+      // Oferta desde Excel pisa el precio normal
+      for (const k of keys) {
+        if (ofertasMap.has(k)) {
+          const of = ofertasMap.get(k)
+
+          enPromocion = true
+
+          if (of.tipo === 'usd') {
+            precioUsd = of.precio
+            precioArsOverride = null
+          } else {
+            precioArsOverride = of.precio
+          }
+
+          break
+        }
+      }
+
+      return {
+        ...item,
+        precioUsd,
+        precioArsOverride,
+        enPromocion
+      }
+    })
 
     if (loading) loading.style.display = 'none'
+
     aplicarFiltros()
+    renderPinnedBar()
   } catch (err) {
     console.error('Error al cargar datos:', err)
+
     if (loading) loading.style.display = 'none'
     if (error) error.textContent = 'Error al cargar datos'
+
     renderPlaceholder('No pudimos cargar los datos.')
   }
 }
 
-// ====== UI Cotización (línea compacta) ======
+// ====== UI Cotización ======
 let usdLineRef = null
 
-function ensureUsdInline() {
+function ensureUsdInline () {
   if (usdLineRef) return usdLineRef
 
   const container = document.querySelector('main') || document.body
@@ -1078,15 +1253,29 @@ function ensureUsdInline() {
     style.id = 'usd-inline-styles'
     style.textContent = `
       .usd-inline {
-        display:block; width:100%;
-        font-size:.95rem; line-height:1.3;
-        padding:6px 0; margin: 4px 0 10px 0;
+        display:block;
+        width:100%;
+        font-size:.95rem;
+        line-height:1.3;
+        padding:6px 0;
+        margin:4px 0 10px 0;
         color:var(--text,#eee);
       }
-      .usd-inline .muted { opacity:.75 }
-      .usd-inline .strong { font-weight:700 }
-      .usd-inline .sep { opacity:.5; padding:0 6px }
+
+      .usd-inline .muted {
+        opacity:.75;
+      }
+
+      .usd-inline .strong {
+        font-weight:700;
+      }
+
+      .usd-inline .sep {
+        opacity:.5;
+        padding:0 6px;
+      }
     `
+
     document.head.appendChild(style)
   }
 
@@ -1096,11 +1285,12 @@ function ensureUsdInline() {
   line.innerHTML = `
     <span class="muted">Dólar:</span>
     <span id="usd-inline-precio" class="strong">—</span>
-    <span class="muted">(<span id="usd-inline-label">Oficial</span>)</span>
+    <span class="muted">(<span id="usd-inline-label">Excel</span>)</span>
     <span class="sep">—</span>
     <span class="muted">Actualizado:</span>
     <span id="usd-inline-updated">—</span>
   `
+
   container.prepend(line)
 
   usdLineRef = {
@@ -1108,63 +1298,40 @@ function ensureUsdInline() {
     updated: line.querySelector('#usd-inline-updated'),
     label: line.querySelector('#usd-inline-label')
   }
+
   return usdLineRef
 }
 
-function updateUsdInlineUIFromManual() {
+function updateUsdInlineUIFromExcel () {
   const refs = ensureUsdInline()
-  refs.precio.textContent = fmtARS(Number(DOLAR_TOTAL))
-  refs.label.textContent = 'Absoluto'
-  refs.updated.textContent = fmtISOToLocal(
-    new Date().toISOString()
-  )
+
+  refs.precio.textContent = DOLAR_TOTAL > 0 ? fmtARS(Number(DOLAR_TOTAL)) : '—'
+
+  refs.label.textContent = 'Excel'
+
+  refs.updated.textContent = fmtISOToLocal(new Date().toISOString())
 }
 
-function updateUsdInlineUI(data) {
-  const refs = ensureUsdInline()
-  if (isManualDollar()) return updateUsdInlineUIFromManual()
-  const venta =
-    typeof data?.venta === 'number' ? data.venta : null
-  refs.precio.textContent =
-    venta != null ? fmtARS(venta) : '—'
-  refs.label.textContent = 'Oficial'
-  refs.updated.textContent = fmtISOToLocal(
-    data?.fechaActualizacion
-  )
-}
-
-// ====== Cotización: fetch (sincroniza UI si NO manual) ======
-async function fetchUsdRate() {
-  try {
-    if (isManualDollar()) {
-      // Usar valor manual y actualizar UI acorde
-      usdRate = Number(DOLAR_TOTAL)
-      updateUsdInlineUIFromManual()
-      return
-    }
-    const res = await fetch(USD_API_URL, { cache: 'no-store' })
-    const json = await res.json()
-    const venta = Number(json?.venta)
-    if (Number.isFinite(venta) && venta > 0) {
-      usdRate = venta
-      usdInfo = json
-      usdRateUpdatedAt =
-        json?.fechaActualizacion || new Date().toISOString()
-      updateUsdInlineUI(usdInfo)
-    }
-  } catch (e) {
-    console.warn('No se pudo obtener la cotización oficial:', e)
-    const refs = usdLineRef || ensureUsdInline()
-    if (refs?.updated) {
-      refs.updated.textContent = 'No se pudo actualizar'
-    }
+function fetchUsdRate () {
+  if (isManualDollar()) {
+    usdRate = Number(DOLAR_TOTAL)
+    updateUsdInlineUIFromExcel()
+    return
   }
+
+  const refs = usdLineRef || ensureUsdInline()
+
+  refs.precio.textContent = '—'
+  refs.label.textContent = 'Excel'
+  refs.updated.textContent = 'Sin valor en ofertas.xlsx'
 }
 
 // ====== Listeners ======
-function updateClearBtn() {
+function updateClearBtn () {
   if (!clearBuscador) return
+
   const has = (buscador?.value || '').length > 0
+
   clearBuscador.style.display = has ? 'block' : 'none'
 }
 
@@ -1177,6 +1344,7 @@ buscador &&
 clearBuscador &&
   clearBuscador.addEventListener('click', () => {
     buscador.value = ''
+
     updateClearBtn()
     aplicarFiltros()
     buscador.focus()
@@ -1185,21 +1353,27 @@ clearBuscador &&
 filtroCamion &&
   filtroCamion.addEventListener('click', () => {
     window.filtroActivo = 'camion'
+
     setActiveBtn(filtroCamion)
     aplicarFiltros()
   })
+
 filtroAuto &&
   filtroAuto.addEventListener('click', () => {
     window.filtroActivo = 'auto'
+
     setActiveBtn(filtroAuto)
     aplicarFiltros()
   })
+
 filtroTodos &&
   filtroTodos.addEventListener('click', () => {
     window.filtroActivo = null
+
     setActiveBtn(filtroTodos)
     aplicarFiltros()
   })
+
 stockSelect &&
   stockSelect.addEventListener('change', e => {
     stockActual = e.target.value
@@ -1209,22 +1383,15 @@ stockSelect &&
 // ====== Inicial ======
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
-  renderPlaceholder(
-    'Utiliza la barra de busqueda para en encontrar cubiertas'
-  )
+
+  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
+
   renderPinnedBar()
-
   ensureUsdInline()
+  ensurePromoLabelStyles()
 
-  // 1) Si hay dólar manual, usarlo y mostrar "Absoluto".
-  //    Si no, traer una vez de API para no mostrar vacío.
-  if (isManualDollar()) {
-    usdRate = Number(DOLAR_TOTAL)
-    updateUsdInlineUIFromManual()
-  } else {
-    fetchUsdRate()
-    startUsdDailyScheduler() // actualiza solo 19:01 AR
-  }
+  // El valor real del dólar se carga desde ofertas.xlsx dentro de cargarDatos().
+  fetchUsdRate()
 
   cargarDatos(stockActual)
   updateClearBtn()
