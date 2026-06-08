@@ -8,23 +8,6 @@ function withCacheBuster (url) {
   return u.toString()
 }
 
-async function fetchJson (url) {
-  const finalUrl = withCacheBuster(url)
-
-  const res = await fetch(finalUrl, {
-    cache: 'no-store',
-    credentials: 'omit',
-    headers: {
-      'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
-      Pragma: 'no-cache',
-      Expires: '0'
-    }
-  })
-
-  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
-  return await res.json()
-}
-
 // ====== Stock desde CSV ======
 const STOCK_CSV_URLS = [
   './stock.csv',
@@ -45,9 +28,6 @@ const PRICES_EXCEL_URLS = [
   '/PRICES.xlsx'
 ]
 
-// ====== Ofertas desde Excel ======
-const OFERTAS_EXCEL_URL = './ofertas.xlsx'
-
 // ====== Referencias DOM ======
 const tableBody = document.querySelector('#stock-table tbody')
 const loading = document.getElementById('loading')
@@ -60,7 +40,7 @@ const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
 const pinnedBar = document.getElementById('pinned-bar')
 
-// ====== Override cantidades opcional ======
+// ====== Override de cantidades opcional ======
 const CODIGOS_OVERRIDE = []
 let CANTIDAD_OVERRIDE = 1
 
@@ -79,7 +59,10 @@ function aplicarOverrideCantidad (data) {
       .toUpperCase()
 
     if (setCodigos.has(codigoNormalizado)) {
-      return { ...item, stock: CANTIDAD_OVERRIDE }
+      return {
+        ...item,
+        stock: CANTIDAD_OVERRIDE
+      }
     }
 
     return item
@@ -91,6 +74,9 @@ const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 let allData = []
 let stockActual = 'cordoba'
 let usdRate = null
+
+// ====== Recargo manual sobre precios ======
+let priceExtraPercent = 0
 
 const isManualDollar = () =>
   Number(DOLAR_TOTAL) > 0 && Number.isFinite(Number(DOLAR_TOTAL))
@@ -167,8 +153,13 @@ function codeKeysOne (raw) {
 
   const noSepRaw = clean(raw).replace(/[\s\-_.]/g, '')
 
-  if (noSepRaw.endsWith('COPIA')) addVariants(noSepRaw.slice(0, -5))
-  if (noSepRaw.startsWith('LANDE')) addVariants(noSepRaw.slice(5))
+  if (noSepRaw.endsWith('COPIA')) {
+    addVariants(noSepRaw.slice(0, -5))
+  }
+
+  if (noSepRaw.startsWith('LANDE')) {
+    addVariants(noSepRaw.slice(5))
+  }
 
   return Array.from(keys)
 }
@@ -226,7 +217,9 @@ function esAutoImportado (rubro) {
   return n.startsWith('royal') || n.startsWith('trans')
 }
 
-// ====== Números ======
+// ====== Ofertas y dólar desde Excel ======
+const OFERTAS_EXCEL_URL = './ofertas.xlsx'
+
 function parseNumeroExcel (value) {
   if (value === null || value === undefined || value === '') return null
 
@@ -238,8 +231,8 @@ function parseNumeroExcel (value) {
     .trim()
     .toUpperCase()
     .replace(/\$/g, '')
-    .replace(/USD/g, '')
     .replace(/US\$/g, '')
+    .replace(/USD/g, '')
     .replace(/\s/g, '')
 
   if (!texto) return null
@@ -259,7 +252,6 @@ function parseNumeroExcel (value) {
   return Number.isFinite(numero) ? numero : null
 }
 
-// ====== Ofertas y dólar desde Excel ======
 async function loadOfertasConfig () {
   try {
     if (typeof XLSX === 'undefined') {
@@ -283,6 +275,7 @@ async function loadOfertasConfig () {
 
     const buffer = await res.arrayBuffer()
     const workbook = XLSX.read(buffer, { type: 'array' })
+
     const firstSheetName = workbook.SheetNames[0]
     const sheet = workbook.Sheets[firstSheetName]
 
@@ -423,28 +416,6 @@ function normalizarHeaderExcel (value) {
     .trim()
 }
 
-function findPricesHeaderIndex (rows) {
-  return rows.findIndex(row => {
-    const colA = normalizarHeaderExcel(row?.[0])
-    const colB = normalizarHeaderExcel(row?.[1])
-    const colC = normalizarHeaderExcel(row?.[2])
-
-    const tieneCodigo =
-      colA === 'codigo' ||
-      colA === 'código' ||
-      colA.includes('codigo') ||
-      colA.includes('cod')
-
-    const tienePrecio =
-      colB.includes('precio') ||
-      colC.includes('precio') ||
-      colB.includes('usd') ||
-      colC.includes('usd')
-
-    return tieneCodigo && tienePrecio
-  })
-}
-
 async function loadPricesFromExcel () {
   try {
     if (typeof XLSX === 'undefined') {
@@ -534,7 +505,177 @@ function shorten (t, max = 36) {
   return s.length > max ? s.slice(0, max - 1) + '…' : s
 }
 
-// ====== Texto copiado ======
+// ====== Recargo de precios ======
+function aplicarRecargoPrecio (precio) {
+  const n = Number(precio)
+
+  if (!Number.isFinite(n)) return precio
+  if (
+    !Number.isFinite(Number(priceExtraPercent)) ||
+    Number(priceExtraPercent) <= 0
+  ) {
+    return n
+  }
+
+  return Math.round(n * (1 + Number(priceExtraPercent) / 100))
+}
+
+function ensurePriceExtraControls () {
+  if (document.getElementById('price-extra-controls')) return
+
+  const table = document.getElementById('stock-table')
+  if (!table) return
+
+  if (!document.getElementById('price-extra-styles')) {
+    const style = document.createElement('style')
+    style.id = 'price-extra-styles'
+    style.textContent = `
+      .price-extra-controls {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        margin: 8px 0 10px 0;
+        padding: 8px;
+        border-radius: 10px;
+        background: rgba(255,255,255,.04);
+        border: 1px solid rgba(255,255,255,.08);
+      }
+
+      .price-extra-controls .extra-label {
+        font-size: 13px;
+        opacity: .85;
+        margin-right: 4px;
+      }
+
+      .price-extra-controls button {
+        border: 1px solid rgba(255,255,255,.16);
+        background: rgba(255,255,255,.08);
+        color: var(--text, #fff);
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .price-extra-controls button.active {
+        background: #ffd54a;
+        color: #1b1b1b;
+        font-weight: 700;
+      }
+
+      .price-extra-controls input {
+        width: 86px;
+        border: 1px solid rgba(255,255,255,.16);
+        background: rgba(0,0,0,.18);
+        color: var(--text, #fff);
+        border-radius: 8px;
+        padding: 5px 8px;
+        font-size: 12px;
+        outline: none;
+      }
+
+      .price-extra-controls .clear-extra {
+        color: #ff6b6b;
+        font-weight: 700;
+        padding: 5px 9px;
+      }
+
+      .price-extra-controls .extra-current {
+        font-size: 12px;
+        opacity: .8;
+        margin-left: 4px;
+      }
+    `
+
+    document.head.appendChild(style)
+  }
+
+  const controls = document.createElement('div')
+  controls.id = 'price-extra-controls'
+  controls.className = 'price-extra-controls'
+
+  controls.innerHTML = `
+    <span class="extra-label">Recargo:</span>
+    <button type="button" data-extra="5">+5%</button>
+    <button type="button" data-extra="10">+10%</button>
+    <input id="manual-extra-percent" type="number" min="0" step="0.1" placeholder="Manual %">
+    <button type="button" id="apply-manual-extra">Aplicar</button>
+    <button type="button" id="clear-extra-percent" class="clear-extra" title="Quitar recargo">×</button>
+    <span id="extra-current-label" class="extra-current">Sin recargo</span>
+  `
+
+  table.parentNode.insertBefore(controls, table)
+
+  controls.querySelectorAll('button[data-extra]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = Number(btn.dataset.extra)
+
+      if (!Number.isFinite(value) || value < 0) return
+
+      priceExtraPercent = value
+      updatePriceExtraControlsUI()
+      aplicarFiltros()
+      renderPinnedBar()
+    })
+  })
+
+  const manualInput = controls.querySelector('#manual-extra-percent')
+  const applyManual = controls.querySelector('#apply-manual-extra')
+  const clearBtn = controls.querySelector('#clear-extra-percent')
+
+  applyManual.addEventListener('click', () => {
+    const value = Number(String(manualInput.value || '').replace(',', '.'))
+
+    if (!Number.isFinite(value) || value < 0) {
+      showCopied('Recargo inválido')
+      return
+    }
+
+    priceExtraPercent = value
+    updatePriceExtraControlsUI()
+    aplicarFiltros()
+    renderPinnedBar()
+  })
+
+  manualInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      applyManual.click()
+    }
+  })
+
+  clearBtn.addEventListener('click', () => {
+    priceExtraPercent = 0
+    manualInput.value = ''
+    updatePriceExtraControlsUI()
+    aplicarFiltros()
+    renderPinnedBar()
+  })
+
+  updatePriceExtraControlsUI()
+}
+
+function updatePriceExtraControlsUI () {
+  const controls = document.getElementById('price-extra-controls')
+  if (!controls) return
+
+  controls.querySelectorAll('button[data-extra]').forEach(btn => {
+    const value = Number(btn.dataset.extra)
+    btn.classList.toggle('active', Number(priceExtraPercent) === value)
+  })
+
+  const label = controls.querySelector('#extra-current-label')
+
+  if (label) {
+    label.textContent =
+      priceExtraPercent > 0
+        ? `Recargo aplicado: +${priceExtraPercent}%`
+        : 'Sin recargo'
+  }
+}
+
+// ====== Texto de copiado ======
 function buildCopyTextForItem (item = {}) {
   const desc = (item.descripcion || '').trim()
   let price = ''
@@ -543,7 +684,7 @@ function buildCopyTextForItem (item = {}) {
     item.precioArsOverride != null ? item.precioArsOverride : item.precioArs
 
   if (preferArs != null && !Number.isNaN(Number(preferArs))) {
-    price = fmtARS(preferArs)
+    price = fmtARS(aplicarRecargoPrecio(preferArs))
   } else if (item.precioUsd != null && !Number.isNaN(Number(item.precioUsd))) {
     price = fmtUSD(item.precioUsd)
   }
@@ -567,7 +708,7 @@ function buildPinnedListText () {
     .join('\n')
 }
 
-// ====== Toast ======
+// ====== Toast copiar ======
 let __copyToastTimer = null
 
 function showCopied (text = 'Copiado') {
@@ -595,6 +736,7 @@ async function writeToClipboard (payload) {
       ta.style.opacity = '0'
 
       document.body.appendChild(ta)
+
       ta.select()
       document.execCommand('copy')
       document.body.removeChild(ta)
@@ -607,7 +749,7 @@ async function writeToClipboard (payload) {
   }
 }
 
-// ====== Placeholder ======
+// ====== Placeholder tabla ======
 function renderPlaceholder (message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
@@ -615,7 +757,7 @@ function renderPlaceholder (message = 'Escribí para buscar') {
     </tr>`
 }
 
-// ====== Label promo ======
+// ====== Estilos label promoción ======
 function ensurePromoLabelStyles () {
   if (document.getElementById('promo-label-styles')) return
 
@@ -662,7 +804,8 @@ function renderPinnedBar () {
   pinnedBar.innerHTML = Array.from(pinned.values())
     .map(it => {
       const soloPesos = isSoloPesosItem(it)
-      const ars = it.precioArs != null ? fmtARS(it.precioArs) : ''
+      const ars =
+        it.precioArs != null ? fmtARS(aplicarRecargoPrecio(it.precioArs)) : ''
 
       const usd =
         !soloPesos && it.precioUsd != null
@@ -1089,6 +1232,8 @@ async function fetchStockFromCsv (stock) {
     )
   }
 
+  console.log('[stock.csv] Encabezado encontrado en fila:', headerIndex + 1)
+
   const productRows = rows
     .slice(headerIndex + 1)
     .filter(row => !isEmptyCsvRow(row))
@@ -1131,9 +1276,9 @@ async function fetchStockFromCsv (stock) {
         codigoNormalizado !== 'código'
 
       const descripcionValida = Boolean(item.descripcion)
-      const tieneStock = Number(item.stock) > 0
+      const stockValido = Number(item.stock) > 0
 
-      return codigoValido && descripcionValida && tieneStock
+      return codigoValido && descripcionValida && stockValido
     })
 
   console.log('[stock.csv] Productos procesados:', data.length)
@@ -1181,6 +1326,10 @@ function renderTable (data) {
       precioArs = Number(item.precioArsOverride)
     } else if (rate && precioUsd != null) {
       precioArs = Math.round(precioUsd * rate)
+    }
+
+    if (precioArs != null) {
+      precioArs = aplicarRecargoPrecio(precioArs)
     }
 
     const soloPesos = isSoloPesosItem(item)
@@ -1443,17 +1592,17 @@ async function cargarDatos (stock) {
 
     if (loading) loading.style.display = 'none'
 
-    const mensaje = err?.message || 'Error desconocido al cargar datos'
+    const mensaje = err?.message || 'Error desconocido al cargar stock'
 
     if (error) {
-      error.textContent = `Error al cargar datos: ${mensaje}`
+      error.textContent = `Error al cargar stock: ${mensaje}`
     }
 
-    renderPlaceholder(`No pudimos cargar los datos: ${mensaje}`)
+    renderPlaceholder(`No pudimos cargar stock: ${mensaje}`)
   }
 }
 
-// ====== UI dólar ======
+// ====== UI Cotización ======
 let usdLineRef = null
 
 function ensureUsdInline () {
@@ -1590,6 +1739,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPinnedBar()
   ensureUsdInline()
   ensurePromoLabelStyles()
+  ensurePriceExtraControls()
 
   fetchUsdRate()
 
