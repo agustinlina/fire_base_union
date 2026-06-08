@@ -665,122 +665,6 @@ function ensurePriceExtraControls() {
     document.head.appendChild(style)
   }
 
-  const controls = document.createElement('div')
-  controls.id = 'price-extra-controls'
-  controls.className = 'price-extra-controls'
-
-  controls.innerHTML = `
-    <div class="price-adjust-box">
-      <div class="price-adjust-title">Recargo:</div>
-
-      <div class="price-adjust-row">
-        <button type="button" data-extra="5">+5%</button>
-        <button type="button" data-extra="10">+10%</button>
-        <input id="manual-extra-percent" type="number" min="0" step="0.1" placeholder="Manual %">
-        <button type="button" id="clear-extra-percent" class="clear-extra" title="Quitar recargo">×</button>
-        <span id="extra-current-label" class="extra-current">Sin recargo</span>
-      </div>
-    </div>
-
-    <div class="price-adjust-box">
-      <div class="price-adjust-title">Descuento:</div>
-
-      <div class="price-adjust-row">
-        <button type="button" data-discount="5">-5%</button>
-        <button type="button" data-discount="3">-3%</button>
-        <input id="manual-discount-percent" type="number" min="0" step="0.1" placeholder="Manual %">
-        <button type="button" id="clear-discount-percent" class="clear-discount" title="Quitar descuento">×</button>
-        <span id="discount-current-label" class="extra-current">Sin descuento</span>
-      </div>
-    </div>
-  `
-
-  table.parentNode.insertBefore(controls, table)
-
-  const manualExtraInput = controls.querySelector('#manual-extra-percent')
-  const clearExtraBtn = controls.querySelector('#clear-extra-percent')
-  const manualDiscountInput = controls.querySelector('#manual-discount-percent')
-  const clearDiscountBtn = controls.querySelector('#clear-discount-percent')
-
-  function refreshPrices() {
-    updatePriceExtraControlsUI()
-    aplicarFiltros()
-    renderPinnedBar()
-  }
-
-  controls.querySelectorAll('button[data-extra]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const value = Number(btn.dataset.extra)
-
-      if (!Number.isFinite(value) || value < 0) return
-
-      priceExtraPercent = value
-      manualExtraInput.value = ''
-      refreshPrices()
-    })
-  })
-
-  controls.querySelectorAll('button[data-discount]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const value = Number(btn.dataset.discount)
-
-      if (!Number.isFinite(value) || value < 0) return
-
-      priceDiscountPercent = value
-      manualDiscountInput.value = ''
-      refreshPrices()
-    })
-  })
-
-  manualExtraInput.addEventListener('input', () => {
-    const raw = String(manualExtraInput.value || '').replace(',', '.')
-
-    if (raw.trim() === '') {
-      priceExtraPercent = 0
-      refreshPrices()
-      return
-    }
-
-    const value = Number(raw)
-
-    if (!Number.isFinite(value) || value < 0) return
-
-    priceExtraPercent = value
-    refreshPrices()
-  })
-
-  clearExtraBtn.addEventListener('click', () => {
-    priceExtraPercent = 0
-    manualExtraInput.value = ''
-    refreshPrices()
-  })
-
-  manualDiscountInput.addEventListener('input', () => {
-    const raw = String(manualDiscountInput.value || '').replace(',', '.')
-
-    if (raw.trim() === '') {
-      priceDiscountPercent = 0
-      refreshPrices()
-      return
-    }
-
-    const value = Number(raw)
-
-    if (!Number.isFinite(value) || value < 0 || value >= 100) return
-
-    priceDiscountPercent = value
-    refreshPrices()
-  })
-
-  clearDiscountBtn.addEventListener('click', () => {
-    priceDiscountPercent = 0
-    manualDiscountInput.value = ''
-    refreshPrices()
-  })
-
-  updatePriceExtraControlsUI()
-}
-
 function updatePriceExtraControlsUI() {
   const controls = document.getElementById('price-extra-controls')
   if (!controls) return
@@ -980,12 +864,11 @@ function renderPinnedBar() {
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
         <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
-        ${
-          ars
-            ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
-            : usd
-              ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
-              : ''
+        ${ars
+          ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
+          : usd
+            ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
+            : ''
         }
         <button class="remove" title="Quitar" style="color:red;">×</button>
       </div>`
@@ -1512,16 +1395,14 @@ function renderTable(data) {
     const priceHtml =
       precioUsd != null || precioArsFinal != null
         ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
-           ${
-             precioArsFinal != null
-               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArsFinal)}</span>`
-               : ''
-           }
-           ${
-             !soloPesos && precioUsd != null
-               ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>`
-               : ''
-           }
+           ${precioArsFinal != null
+          ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArsFinal)}</span>`
+          : ''
+        }
+           ${!soloPesos && precioUsd != null
+          ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>`
+          : ''
+        }
          </div>`
         : ''
 
@@ -1749,15 +1630,15 @@ async function cargarDatos(stock) {
 
     const priceMap = new Map()
 
-    ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
-      const precio = p?.precio ?? null
+      ; (Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
+        const precio = p?.precio ?? null
 
-      codeKeysOne(p?.codigo).forEach(k => {
-        if (!priceMap.has(k)) {
-          priceMap.set(k, precio)
-        }
+        codeKeysOne(p?.codigo).forEach(k => {
+          if (!priceMap.has(k)) {
+            priceMap.set(k, precio)
+          }
+        })
       })
-    })
 
     allData = (Array.isArray(dataStock) ? dataStock : []).map(
       item => {
