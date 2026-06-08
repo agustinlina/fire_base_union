@@ -552,7 +552,6 @@ function ensurePriceExtraControls() {
         padding: 10px;
         border-radius: 12px;
         background: var(--background);
-        border: 1px solid var(--secondary);
         box-shadow: 0 6px 18px rgba(0,0,0,.18);
       }
 
@@ -563,12 +562,11 @@ function ensurePriceExtraControls() {
         gap: 8px;
         padding: 10px;
         border-radius: 10px;
-        background: #16245a;
         border: 1px solid var(--secondary);
+        background: #16245a;
       }
 
       .price-adjust-box + .price-adjust-box {
-        border-top: 2px solid var(--accent_selected);
         padding-top: 12px;
       }
 
@@ -608,7 +606,7 @@ function ensurePriceExtraControls() {
       .price-extra-controls button.active {
         background: var(--accent);
         border-color: var(--accent);
-        color: #fff;
+        color:  var(--background)!important;;
         font-weight: 700;
       }
 
@@ -664,6 +662,122 @@ function ensurePriceExtraControls() {
 
     document.head.appendChild(style)
   }
+
+  const controls = document.createElement('div')
+  controls.id = 'price-extra-controls'
+  controls.className = 'price-extra-controls'
+
+  controls.innerHTML = `
+    <div class="price-adjust-box">
+      <div class="price-adjust-title">Recargo:</div>
+
+      <div class="price-adjust-row">
+        <button type="button" data-extra="5">+5%</button>
+        <button type="button" data-extra="10">+10%</button>
+        <input id="manual-extra-percent" type="number" min="0" step="0.1" placeholder="Manual %">
+        <button type="button" id="clear-extra-percent" class="clear-extra" title="Quitar recargo">×</button>
+        <span id="extra-current-label" class="extra-current">Sin recargo</span>
+      </div>
+    </div>
+
+    <div class="price-adjust-box">
+      <div class="price-adjust-title">Descuento:</div>
+
+      <div class="price-adjust-row">
+        <button type="button" data-discount="5">-5%</button>
+        <button type="button" data-discount="3">-3%</button>
+        <input id="manual-discount-percent" type="number" min="0" step="0.1" placeholder="Manual %">
+        <button type="button" id="clear-discount-percent" class="clear-discount" title="Quitar descuento">×</button>
+        <span id="discount-current-label" class="extra-current">Sin descuento</span>
+      </div>
+    </div>
+  `
+
+  table.parentNode.insertBefore(controls, table)
+
+  const manualExtraInput = controls.querySelector('#manual-extra-percent')
+  const clearExtraBtn = controls.querySelector('#clear-extra-percent')
+  const manualDiscountInput = controls.querySelector('#manual-discount-percent')
+  const clearDiscountBtn = controls.querySelector('#clear-discount-percent')
+
+  function refreshPrices() {
+    updatePriceExtraControlsUI()
+    aplicarFiltros()
+    renderPinnedBar()
+  }
+
+  controls.querySelectorAll('button[data-extra]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = Number(btn.dataset.extra)
+
+      if (!Number.isFinite(value) || value < 0) return
+
+      priceExtraPercent = value
+      manualExtraInput.value = ''
+      refreshPrices()
+    })
+  })
+
+  controls.querySelectorAll('button[data-discount]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = Number(btn.dataset.discount)
+
+      if (!Number.isFinite(value) || value < 0) return
+
+      priceDiscountPercent = value
+      manualDiscountInput.value = ''
+      refreshPrices()
+    })
+  })
+
+  manualExtraInput.addEventListener('input', () => {
+    const raw = String(manualExtraInput.value || '').replace(',', '.')
+
+    if (raw.trim() === '') {
+      priceExtraPercent = 0
+      refreshPrices()
+      return
+    }
+
+    const value = Number(raw)
+
+    if (!Number.isFinite(value) || value < 0) return
+
+    priceExtraPercent = value
+    refreshPrices()
+  })
+
+  clearExtraBtn.addEventListener('click', () => {
+    priceExtraPercent = 0
+    manualExtraInput.value = ''
+    refreshPrices()
+  })
+
+  manualDiscountInput.addEventListener('input', () => {
+    const raw = String(manualDiscountInput.value || '').replace(',', '.')
+
+    if (raw.trim() === '') {
+      priceDiscountPercent = 0
+      refreshPrices()
+      return
+    }
+
+    const value = Number(raw)
+
+    if (!Number.isFinite(value) || value < 0 || value >= 100) return
+
+    priceDiscountPercent = value
+    refreshPrices()
+  })
+
+  clearDiscountBtn.addEventListener('click', () => {
+    priceDiscountPercent = 0
+    manualDiscountInput.value = ''
+    refreshPrices()
+  })
+
+  updatePriceExtraControlsUI()
+}
 
 function updatePriceExtraControlsUI() {
   const controls = document.getElementById('price-extra-controls')
