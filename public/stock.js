@@ -75,8 +75,9 @@ let allData = []
 let stockActual = 'cordoba'
 let usdRate = null
 
-// ====== Recargo manual sobre precios ======
+// ====== Ajustes manuales sobre precios ======
 let priceExtraPercent = 0
+let priceDiscountPercent = 0
 
 const isManualDollar = () =>
   Number(DOLAR_TOTAL) > 0 && Number.isFinite(Number(DOLAR_TOTAL))
@@ -505,19 +506,26 @@ function shorten (t, max = 36) {
   return s.length > max ? s.slice(0, max - 1) + '…' : s
 }
 
-// ====== Recargo de precios ======
-function aplicarRecargoPrecio (precio) {
+// ====== Ajustes de precios ======
+function aplicarAjustePrecio (precio) {
   const n = Number(precio)
 
   if (!Number.isFinite(n)) return precio
-  if (
-    !Number.isFinite(Number(priceExtraPercent)) ||
-    Number(priceExtraPercent) <= 0
-  ) {
-    return n
+
+  const recargo = Number(priceExtraPercent) || 0
+  const descuento = Number(priceDiscountPercent) || 0
+
+  let precioFinal = n
+
+  if (recargo > 0) {
+    precioFinal = precioFinal * (1 + recargo / 100)
   }
 
-  return Math.round(n * (1 + Number(priceExtraPercent) / 100))
+  if (descuento > 0) {
+    precioFinal = precioFinal * (1 - descuento / 100)
+  }
+
+  return Math.round(precioFinal)
 }
 
 function ensurePriceExtraControls () {
@@ -533,59 +541,117 @@ function ensurePriceExtraControls () {
       .price-extra-controls {
         width: 100%;
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 6px;
-        margin: 8px 0 10px 0;
-        padding: 8px;
-        border-radius: 10px;
-        background: rgba(255,255,255,.04);
-        border: 1px solid rgba(255,255,255,.08);
+        flex-direction: column;
+        gap: 10px;
+        margin: 8px 0 12px 0;
+        padding: 10px;
+        border-radius: 12px;
+        background: var(--background);
+        box-shadow: 0 6px 18px rgba(0,0,0,.18);
       }
 
-      .price-extra-controls .extra-label {
+      .price-adjust-box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid var(--secondary);
+        background: #16245a;
+      }
+
+      .price-adjust-box + .price-adjust-box {
+        padding-top: 12px;
+      }
+
+      .price-adjust-title {
         font-size: 13px;
-        opacity: .85;
-        margin-right: 4px;
+        font-weight: 700;
+        color: var(--text);
+        opacity: .95;
+      }
+
+      .price-adjust-row {
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 6px;
       }
 
       .price-extra-controls button {
-        border: 1px solid rgba(255,255,255,.16);
-        background: rgba(255,255,255,.08);
-        color: var(--text, #fff);
+        border: 1px solid var(--accent_selected);
+        background: var(--secondary);
+        color: var(--text);
         border-radius: 999px;
-        padding: 5px 10px;
+        padding: 6px 10px;
         font-size: 12px;
         cursor: pointer;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .price-extra-controls button:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
       }
 
       .price-extra-controls button.active {
-        background: #ffd54a;
-        color: #1b1b1b;
+        background: var(--accent);
+        border-color: var(--accent);
+        color:  var(--background)!important;;
         font-weight: 700;
       }
 
       .price-extra-controls input {
-        width: 86px;
-        border: 1px solid rgba(255,255,255,.16);
-        background: rgba(0,0,0,.18);
-        color: var(--text, #fff);
+        width: 90px;
+        border: 1px solid var(--accent_selected);
+        background: var(--background);
+        color: var(--text);
         border-radius: 8px;
-        padding: 5px 8px;
+        padding: 6px 8px;
         font-size: 12px;
         outline: none;
+        line-height: 1;
       }
 
-      .price-extra-controls .clear-extra {
+      .price-extra-controls input:focus {
+        outline: 2px solid var(--accent);
+        border-color: var(--accent);
+      }
+
+      .price-extra-controls .clear-extra,
+      .price-extra-controls .clear-discount {
         color: #ff6b6b;
         font-weight: 700;
-        padding: 5px 9px;
+        min-width: 30px;
+        padding: 6px 9px;
       }
 
       .price-extra-controls .extra-current {
         font-size: 12px;
-        opacity: .8;
+        color: var(--text);
+        opacity: .85;
         margin-left: 4px;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 600px) {
+        .price-adjust-row {
+          flex-wrap: wrap;
+        }
+
+        .price-extra-controls input {
+          width: 92px;
+        }
+
+        .price-extra-controls .extra-current {
+          width: 100%;
+          margin-left: 0;
+          margin-top: 2px;
+        }
       }
     `
 
@@ -597,16 +663,44 @@ function ensurePriceExtraControls () {
   controls.className = 'price-extra-controls'
 
   controls.innerHTML = `
-    <span class="extra-label">Recargo:</span>
-    <button type="button" data-extra="5">+5%</button>
-    <button type="button" data-extra="10">+10%</button>
-    <input id="manual-extra-percent" type="number" min="0" step="0.1" placeholder="Manual %">
-    <button type="button" id="apply-manual-extra">Aplicar</button>
-    <button type="button" id="clear-extra-percent" class="clear-extra" title="Quitar recargo">×</button>
-    <span id="extra-current-label" class="extra-current">Sin recargo</span>
+    <div class="price-adjust-box">
+      <div class="price-adjust-title">Recargo:</div>
+
+      <div class="price-adjust-row">
+        <button type="button" data-extra="5">+5%</button>
+        <button type="button" data-extra="10">+10%</button>
+        <input id="manual-extra-percent" type="number" min="0" step="0.1" placeholder="Manual %">
+        <button type="button" id="clear-extra-percent" class="clear-extra" title="Quitar recargo">×</button>
+        <span id="extra-current-label" class="extra-current">Sin recargo</span>
+      </div>
+    </div>
+
+    <div class="price-adjust-box">
+      <div class="price-adjust-title">Descuento:</div>
+
+      <div class="price-adjust-row">
+        <button type="button" data-discount="5">-5%</button>
+        <button type="button" data-discount="3">-3%</button>
+        <input id="manual-discount-percent" type="number" min="0" step="0.1" placeholder="Manual %">
+        <button type="button" id="clear-discount-percent" class="clear-discount" title="Quitar descuento">×</button>
+        <span id="discount-current-label" class="extra-current">Sin descuento</span>
+      </div>
+    </div>
   `
 
   table.parentNode.insertBefore(controls, table)
+
+  const manualExtraInput = controls.querySelector('#manual-extra-percent')
+  const clearExtraBtn = controls.querySelector('#clear-extra-percent')
+
+  const manualDiscountInput = controls.querySelector('#manual-discount-percent')
+  const clearDiscountBtn = controls.querySelector('#clear-discount-percent')
+
+  function refreshPrices () {
+    updatePriceExtraControlsUI()
+    aplicarFiltros()
+    renderPinnedBar()
+  }
 
   controls.querySelectorAll('button[data-extra]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -615,42 +709,67 @@ function ensurePriceExtraControls () {
       if (!Number.isFinite(value) || value < 0) return
 
       priceExtraPercent = value
-      updatePriceExtraControlsUI()
-      aplicarFiltros()
-      renderPinnedBar()
+      manualExtraInput.value = ''
+      refreshPrices()
     })
   })
 
-  const manualInput = controls.querySelector('#manual-extra-percent')
-  const applyManual = controls.querySelector('#apply-manual-extra')
-  const clearBtn = controls.querySelector('#clear-extra-percent')
+  controls.querySelectorAll('button[data-discount]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = Number(btn.dataset.discount)
 
-  applyManual.addEventListener('click', () => {
-    const value = Number(String(manualInput.value || '').replace(',', '.'))
+      if (!Number.isFinite(value) || value < 0) return
 
-    if (!Number.isFinite(value) || value < 0) {
-      showCopied('Recargo inválido')
+      priceDiscountPercent = value
+      manualDiscountInput.value = ''
+      refreshPrices()
+    })
+  })
+
+  manualExtraInput.addEventListener('input', () => {
+    const raw = String(manualExtraInput.value || '').replace(',', '.')
+
+    if (raw.trim() === '') {
+      priceExtraPercent = 0
+      refreshPrices()
       return
     }
 
+    const value = Number(raw)
+
+    if (!Number.isFinite(value) || value < 0) return
+
     priceExtraPercent = value
-    updatePriceExtraControlsUI()
-    aplicarFiltros()
-    renderPinnedBar()
+    refreshPrices()
   })
 
-  manualInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      applyManual.click()
-    }
-  })
-
-  clearBtn.addEventListener('click', () => {
+  clearExtraBtn.addEventListener('click', () => {
     priceExtraPercent = 0
-    manualInput.value = ''
-    updatePriceExtraControlsUI()
-    aplicarFiltros()
-    renderPinnedBar()
+    manualExtraInput.value = ''
+    refreshPrices()
+  })
+
+  manualDiscountInput.addEventListener('input', () => {
+    const raw = String(manualDiscountInput.value || '').replace(',', '.')
+
+    if (raw.trim() === '') {
+      priceDiscountPercent = 0
+      refreshPrices()
+      return
+    }
+
+    const value = Number(raw)
+
+    if (!Number.isFinite(value) || value < 0 || value >= 100) return
+
+    priceDiscountPercent = value
+    refreshPrices()
+  })
+
+  clearDiscountBtn.addEventListener('click', () => {
+    priceDiscountPercent = 0
+    manualDiscountInput.value = ''
+    refreshPrices()
   })
 
   updatePriceExtraControlsUI()
@@ -665,13 +784,26 @@ function updatePriceExtraControlsUI () {
     btn.classList.toggle('active', Number(priceExtraPercent) === value)
   })
 
-  const label = controls.querySelector('#extra-current-label')
+  controls.querySelectorAll('button[data-discount]').forEach(btn => {
+    const value = Number(btn.dataset.discount)
+    btn.classList.toggle('active', Number(priceDiscountPercent) === value)
+  })
 
-  if (label) {
-    label.textContent =
+  const extraLabel = controls.querySelector('#extra-current-label')
+  const discountLabel = controls.querySelector('#discount-current-label')
+
+  if (extraLabel) {
+    extraLabel.textContent =
       priceExtraPercent > 0
         ? `Recargo aplicado: +${priceExtraPercent}%`
         : 'Sin recargo'
+  }
+
+  if (discountLabel) {
+    discountLabel.textContent =
+      priceDiscountPercent > 0
+        ? `Descuento aplicado: -${priceDiscountPercent}%`
+        : 'Sin descuento'
   }
 }
 
@@ -684,7 +816,7 @@ function buildCopyTextForItem (item = {}) {
     item.precioArsOverride != null ? item.precioArsOverride : item.precioArs
 
   if (preferArs != null && !Number.isNaN(Number(preferArs))) {
-    price = fmtARS(aplicarRecargoPrecio(preferArs))
+    price = fmtARS(aplicarAjustePrecio(preferArs))
   } else if (item.precioUsd != null && !Number.isNaN(Number(item.precioUsd))) {
     price = fmtUSD(item.precioUsd)
   }
@@ -805,7 +937,7 @@ function renderPinnedBar () {
     .map(it => {
       const soloPesos = isSoloPesosItem(it)
       const ars =
-        it.precioArs != null ? fmtARS(aplicarRecargoPrecio(it.precioArs)) : ''
+        it.precioArs != null ? fmtARS(aplicarAjustePrecio(it.precioArs)) : ''
 
       const usd =
         !soloPesos && it.precioUsd != null
@@ -1329,7 +1461,7 @@ function renderTable (data) {
     }
 
     if (precioArs != null) {
-      precioArs = aplicarRecargoPrecio(precioArs)
+      precioArs = aplicarAjustePrecio(precioArs)
     }
 
     const soloPesos = isSoloPesosItem(item)
