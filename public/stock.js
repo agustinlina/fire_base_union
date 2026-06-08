@@ -1,9 +1,5 @@
 // stock.js
 
-// ====== Dólar tomado únicamente desde Excel ======
-// Se lee desde ofertas.xlsx:
-// A1: dolar
-// A2: valor del dólar
 let DOLAR_TOTAL = 0
 
 function withCacheBuster (url) {
@@ -30,7 +26,6 @@ async function fetchJson (url) {
 }
 
 // ====== Stock desde CSV ======
-// El archivo debe estar en public/stock.csv
 const STOCK_CSV_URLS = [
   './stock.csv',
   './Stock.csv',
@@ -40,14 +35,18 @@ const STOCK_CSV_URLS = [
   '/STOCK.csv'
 ]
 
-// ====== Precios base en USD ======
-const PRICES_URL =
-  'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
+// ====== Precios base desde Excel ======
+const PRICES_EXCEL_URLS = [
+  './prices.xlsx',
+  './Prices.xlsx',
+  './PRICES.xlsx',
+  '/prices.xlsx',
+  '/Prices.xlsx',
+  '/PRICES.xlsx'
+]
 
-// ====== Fallback local solo para precios ======
-const LOCAL_ENDPOINTS = {
-  prices: './local_prices.json'
-}
+// ====== Ofertas desde Excel ======
+const OFERTAS_EXCEL_URL = './ofertas.xlsx'
 
 // ====== Referencias DOM ======
 const tableBody = document.querySelector('#stock-table tbody')
@@ -61,7 +60,7 @@ const filtroTodos = document.getElementById('filtro-todos')
 const stockSelect = document.getElementById('stock-select')
 const pinnedBar = document.getElementById('pinned-bar')
 
-// ====== Override de cantidades opcional ======
+// ====== Override cantidades opcional ======
 const CODIGOS_OVERRIDE = []
 let CANTIDAD_OVERRIDE = 1
 
@@ -80,10 +79,7 @@ function aplicarOverrideCantidad (data) {
       .toUpperCase()
 
     if (setCodigos.has(codigoNormalizado)) {
-      return {
-        ...item,
-        stock: CANTIDAD_OVERRIDE
-      }
+      return { ...item, stock: CANTIDAD_OVERRIDE }
     }
 
     return item
@@ -94,8 +90,6 @@ const filtroBtns = [filtroCamion, filtroAuto, filtroTodos]
 
 let allData = []
 let stockActual = 'cordoba'
-
-// ====== Estado de cotización desde Excel ======
 let usdRate = null
 
 const isManualDollar = () =>
@@ -120,6 +114,7 @@ function clean (str) {
 
 function splitCandidates (raw) {
   if (!raw) return []
+
   return String(raw)
     .split('/')
     .map(s => clean(s))
@@ -172,13 +167,8 @@ function codeKeysOne (raw) {
 
   const noSepRaw = clean(raw).replace(/[\s\-_.]/g, '')
 
-  if (noSepRaw.endsWith('COPIA')) {
-    addVariants(noSepRaw.slice(0, -5))
-  }
-
-  if (noSepRaw.startsWith('LANDE')) {
-    addVariants(noSepRaw.slice(5))
-  }
+  if (noSepRaw.endsWith('COPIA')) addVariants(noSepRaw.slice(0, -5))
+  if (noSepRaw.startsWith('LANDE')) addVariants(noSepRaw.slice(5))
 
   return Array.from(keys)
 }
@@ -200,7 +190,6 @@ function codeKeys (raw) {
   return out
 }
 
-// ====== Mostrar solo pesos en productos promocionales ======
 function isSoloPesosItem (item) {
   return Boolean(item?.enPromocion)
 }
@@ -237,23 +226,7 @@ function esAutoImportado (rubro) {
   return n.startsWith('royal') || n.startsWith('trans')
 }
 
-// ====== Ofertas y dólar desde Excel ======
-// Archivo esperado: ofertas.xlsx
-//
-// A1: dolar
-// A2: valor del dólar
-//
-// A3: codigo
-// B3: descripcion
-// C3: precio
-//
-// Desde fila 4:
-// Columna A: codigo
-// Columna B: descripcion interna, solo referencia
-// Columna C: precio promocional en pesos
-
-const OFERTAS_EXCEL_URL = './ofertas.xlsx'
-
+// ====== Números ======
 function parseNumeroExcel (value) {
   if (value === null || value === undefined || value === '') return null
 
@@ -261,7 +234,13 @@ function parseNumeroExcel (value) {
     return value
   }
 
-  const texto = String(value).trim().replace(/\$/g, '').replace(/\s/g, '')
+  let texto = String(value)
+    .trim()
+    .toUpperCase()
+    .replace(/\$/g, '')
+    .replace(/USD/g, '')
+    .replace(/US\$/g, '')
+    .replace(/\s/g, '')
 
   if (!texto) return null
 
@@ -280,6 +259,7 @@ function parseNumeroExcel (value) {
   return Number.isFinite(numero) ? numero : null
 }
 
+// ====== Ofertas y dólar desde Excel ======
 async function loadOfertasConfig () {
   try {
     if (typeof XLSX === 'undefined') {
@@ -303,7 +283,6 @@ async function loadOfertasConfig () {
 
     const buffer = await res.arrayBuffer()
     const workbook = XLSX.read(buffer, { type: 'array' })
-
     const firstSheetName = workbook.SheetNames[0]
     const sheet = workbook.Sheets[firstSheetName]
 
@@ -324,8 +303,7 @@ async function loadOfertasConfig () {
 
       const refs = usdLineRef || ensureUsdInline()
       refs.precio.textContent = '—'
-      refs.label.textContent = 'Excel'
-      refs.updated.textContent = 'Sin valor en ofertas.xlsx'
+      refs.label.textContent = 'Absoluto'
     }
 
     const filasOfertas = rows.slice(3)
@@ -364,8 +342,7 @@ async function loadOfertasConfig () {
 
     const refs = usdLineRef || ensureUsdInline()
     refs.precio.textContent = '—'
-    refs.label.textContent = 'Excel'
-    refs.updated.textContent = 'Error al leer ofertas.xlsx'
+    refs.label.textContent = 'Absoluto'
 
     return []
   }
@@ -403,6 +380,117 @@ function buildOfertasMap (ofertasRaw) {
   })
 
   return map
+}
+
+// ====== Precios desde prices.xlsx ======
+async function fetchPricesWorkbookBuffer () {
+  let lastError = null
+
+  for (const url of PRICES_EXCEL_URLS) {
+    try {
+      console.log('[prices.xlsx] Intentando cargar:', url)
+
+      const res = await fetch(withCacheBuster(url), {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+          Pragma: 'no-cache',
+          Expires: '0'
+        }
+      })
+
+      if (res.ok) {
+        console.log('[prices.xlsx] Cargado correctamente:', url)
+        return await res.arrayBuffer()
+      }
+
+      lastError = new Error(`${url} respondió HTTP ${res.status}`)
+      console.warn('[prices.xlsx]', lastError.message)
+    } catch (e) {
+      lastError = e
+      console.warn('[prices.xlsx] Error cargando:', url, e)
+    }
+  }
+
+  throw lastError || new Error('No se pudo cargar prices.xlsx')
+}
+
+function normalizarHeaderExcel (value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+}
+
+function findPricesHeaderIndex (rows) {
+  return rows.findIndex(row => {
+    const colA = normalizarHeaderExcel(row?.[0])
+    const colB = normalizarHeaderExcel(row?.[1])
+    const colC = normalizarHeaderExcel(row?.[2])
+
+    const tieneCodigo =
+      colA === 'codigo' ||
+      colA === 'código' ||
+      colA.includes('codigo') ||
+      colA.includes('cod')
+
+    const tienePrecio =
+      colB.includes('precio') ||
+      colC.includes('precio') ||
+      colB.includes('usd') ||
+      colC.includes('usd')
+
+    return tieneCodigo && tienePrecio
+  })
+}
+
+async function loadPricesFromExcel () {
+  try {
+    if (typeof XLSX === 'undefined') {
+      console.warn('No está cargada la librería XLSX.')
+      return []
+    }
+
+    const buffer = await fetchPricesWorkbookBuffer()
+    const workbook = XLSX.read(buffer, { type: 'array' })
+
+    const firstSheetName = workbook.SheetNames[0]
+    const sheet = workbook.Sheets[firstSheetName]
+
+    const rows = XLSX.utils.sheet_to_json(sheet, {
+      header: 1,
+      defval: ''
+    })
+
+    return rows
+      .map(row => {
+        const codigo = String(row[0] || '').trim()
+        const precio = parseNumeroExcel(row[1])
+
+        return {
+          codigo,
+          precio
+        }
+      })
+      .filter(item => {
+        const codigoNormalizado = normalizarHeaderExcel(item.codigo)
+
+        const codigoValido =
+          item.codigo &&
+          codigoNormalizado !== 'codigo' &&
+          codigoNormalizado !== 'código' &&
+          codigoNormalizado !== 'cod'
+
+        const precioValido =
+          Number.isFinite(Number(item.precio)) && Number(item.precio) > 0
+
+        return codigoValido && precioValido
+      })
+  } catch (e) {
+    console.warn('No se pudo cargar prices.xlsx:', e)
+    return []
+  }
 }
 
 // ====== Formateos ======
@@ -446,20 +534,7 @@ function shorten (t, max = 36) {
   return s.length > max ? s.slice(0, max - 1) + '…' : s
 }
 
-const fmtISOToLocal = iso => {
-  if (!iso) return '—'
-
-  const d = new Date(iso)
-
-  if (isNaN(d)) return '—'
-
-  return d.toLocaleString('es-AR', {
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  })
-}
-
-// ====== Texto de copiado ======
+// ====== Texto copiado ======
 function buildCopyTextForItem (item = {}) {
   const desc = (item.descripcion || '').trim()
   let price = ''
@@ -492,7 +567,7 @@ function buildPinnedListText () {
     .join('\n')
 }
 
-// ====== Toast copiar ======
+// ====== Toast ======
 let __copyToastTimer = null
 
 function showCopied (text = 'Copiado') {
@@ -520,7 +595,6 @@ async function writeToClipboard (payload) {
       ta.style.opacity = '0'
 
       document.body.appendChild(ta)
-
       ta.select()
       document.execCommand('copy')
       document.body.removeChild(ta)
@@ -533,7 +607,7 @@ async function writeToClipboard (payload) {
   }
 }
 
-// ====== Placeholder tabla ======
+// ====== Placeholder ======
 function renderPlaceholder (message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
@@ -541,7 +615,7 @@ function renderPlaceholder (message = 'Escribí para buscar') {
     </tr>`
 }
 
-// ====== Estilos label promoción ======
+// ====== Label promo ======
 function ensurePromoLabelStyles () {
   if (document.getElementById('promo-label-styles')) return
 
@@ -822,45 +896,6 @@ function hideAnchorMenu () {
   anchorMenuOverlay.style.display = 'none'
 }
 
-// ====== Fetch con fallback local ======
-function isNonEmptyArray (j) {
-  return Array.isArray(j) && j.length > 0
-}
-
-async function fetchPreferRemoteThenLocal ({
-  remoteUrl,
-  localUrl,
-  label = '',
-  expectArray = true
-}) {
-  try {
-    const json = await fetchJson(remoteUrl)
-
-    if (!expectArray) return json
-    if (isNonEmptyArray(json)) return json
-
-    console.warn(`[fallback] ${label}: remoto vacío, uso local`)
-  } catch (e) {
-    console.warn(`[fallback] ${label}: remoto falló, uso local`, e)
-  }
-
-  if (!localUrl) {
-    return expectArray ? [] : null
-  }
-
-  try {
-    const jsonLocal = await fetchJson(localUrl)
-
-    if (!expectArray) return jsonLocal
-    if (Array.isArray(jsonLocal)) return jsonLocal
-
-    return []
-  } catch (e) {
-    console.warn(`[fallback] ${label}: local falló`, e)
-    return expectArray ? [] : null
-  }
-}
-
 // ====== CSV helpers ======
 function limpiarTextoCsv (text) {
   return String(text || '')
@@ -871,12 +906,10 @@ function limpiarTextoCsv (text) {
 function limpiarValorCsv (value) {
   let texto = String(value || '').trim()
 
-  // Limpia valores exportados por Excel como ="F77"
   if (texto.startsWith('="') && texto.endsWith('"')) {
     texto = texto.slice(2, -1)
   }
 
-  // Limpia comillas externas
   if (texto.startsWith('"') && texto.endsWith('"')) {
     texto = texto.slice(1, -1)
   }
@@ -985,7 +1018,6 @@ async function fetchStockCsvText () {
 
         let text = new TextDecoder('utf-8').decode(buffer)
 
-        // Si aparece el carácter �, probablemente el CSV está en ANSI / Windows-1252
         if (text.includes('�')) {
           text = new TextDecoder('windows-1252').decode(buffer)
         }
@@ -1039,7 +1071,7 @@ function findHeaderIndex (rows) {
   })
 }
 
-async function fetchStockFromCsv(stock) {
+async function fetchStockFromCsv (stock) {
   const csvText = await fetchStockCsvText()
   const rows = parseCsv(csvText)
 
@@ -1057,22 +1089,12 @@ async function fetchStockFromCsv(stock) {
     )
   }
 
-  console.log('[stock.csv] Encabezado encontrado en fila:', headerIndex + 1)
-
   const productRows = rows
     .slice(headerIndex + 1)
     .filter(row => !isEmptyCsvRow(row))
 
   const data = productRows
     .map(row => {
-      // Columnas según tu CSV:
-      // A = Código        índice 0
-      // B = Artículo      índice 1
-      // D = Rubro         índice 3
-      // K = TRUCK CBA     índice 10
-      // L = OLAVARRIA     índice 11
-      // M = POLO          índice 12
-
       const codigo = limpiarValorCsv(row[0])
       const descripcion = limpiarValorCsv(row[1])
       const rubro = limpiarValorCsv(row[3])
@@ -1109,21 +1131,18 @@ async function fetchStockFromCsv(stock) {
         codigoNormalizado !== 'código'
 
       const descripcionValida = Boolean(item.descripcion)
+      const tieneStock = Number(item.stock) > 0
 
-      return codigoValido && descripcionValida
-    })
-    .filter(item => {
-      // No mostrar productos sin stock en el depósito seleccionado.
-      // Depósito 1: TRUCK CBA + POLO.
-      // Depósito 2: OLAVARRIA.
-      return Number(item.stock) > 0
+      return codigoValido && descripcionValida && tieneStock
     })
 
   console.log('[stock.csv] Productos procesados:', data.length)
   console.log('[stock.csv] Primeros productos:', data.slice(0, 5))
 
   if (!data.length) {
-    throw new Error('stock.csv fue leído, pero no hay productos con stock para este depósito')
+    throw new Error(
+      'stock.csv fue leído, pero no hay productos con stock para este depósito'
+    )
   }
 
   return data
@@ -1355,12 +1374,7 @@ async function cargarDatos (stock) {
 
   try {
     const [dataPrices, ofertas] = await Promise.all([
-      fetchPreferRemoteThenLocal({
-        remoteUrl: PRICES_URL,
-        localUrl: LOCAL_ENDPOINTS.prices,
-        label: 'PRICES',
-        expectArray: true
-      }),
+      loadPricesFromExcel(),
       loadOfertasConfig()
     ])
 
@@ -1388,7 +1402,6 @@ async function cargarDatos (stock) {
       let precioArsOverride = null
       let enPromocion = false
 
-      // Precio base desde API de precios en USD
       for (const k of keys) {
         if (priceMap.has(k)) {
           precioUsd = priceMap.get(k)
@@ -1396,7 +1409,6 @@ async function cargarDatos (stock) {
         }
       }
 
-      // Oferta desde Excel pisa el precio normal
       for (const k of keys) {
         if (ofertasMap.has(k)) {
           const of = ofertasMap.get(k)
@@ -1427,21 +1439,21 @@ async function cargarDatos (stock) {
     aplicarFiltros()
     renderPinnedBar()
   } catch (err) {
-    console.error('Error al cargar datos desde stock.csv:', err)
+    console.error('Error al cargar datos:', err)
 
     if (loading) loading.style.display = 'none'
 
-    const mensaje = err?.message || 'Error desconocido al cargar stock.csv'
+    const mensaje = err?.message || 'Error desconocido al cargar datos'
 
     if (error) {
-      error.textContent = `Error al cargar stock.csv: ${mensaje}`
+      error.textContent = `Error al cargar datos: ${mensaje}`
     }
 
-    renderPlaceholder(`No pudimos cargar stock.csv: ${mensaje}`)
+    renderPlaceholder(`No pudimos cargar los datos: ${mensaje}`)
   }
 }
 
-// ====== UI Cotización ======
+// ====== UI dólar ======
 let usdLineRef = null
 
 function ensureUsdInline () {
@@ -1470,11 +1482,6 @@ function ensureUsdInline () {
       .usd-inline .strong {
         font-weight:700;
       }
-
-      .usd-inline .sep {
-        opacity:.5;
-        padding:0 6px;
-      }
     `
 
     document.head.appendChild(style)
@@ -1486,17 +1493,13 @@ function ensureUsdInline () {
   line.innerHTML = `
     <span class="muted">Dólar:</span>
     <span id="usd-inline-precio" class="strong">—</span>
-    <span class="muted">(<span id="usd-inline-label">Excel</span>)</span>
-    <span class="sep">—</span>
-    <span class="muted">Actualizado:</span>
-    <span id="usd-inline-updated">—</span>
+    <span class="muted">(<span id="usd-inline-label">Absoluto</span>)</span>
   `
 
   container.prepend(line)
 
   usdLineRef = {
     precio: line.querySelector('#usd-inline-precio'),
-    updated: line.querySelector('#usd-inline-updated'),
     label: line.querySelector('#usd-inline-label')
   }
 
@@ -1508,9 +1511,7 @@ function updateUsdInlineUIFromExcel () {
 
   refs.precio.textContent = DOLAR_TOTAL > 0 ? fmtARS(Number(DOLAR_TOTAL)) : '—'
 
-  refs.label.textContent = 'Excel'
-
-  refs.updated.textContent = fmtISOToLocal(new Date().toISOString())
+  refs.label.textContent = 'Absoluto'
 }
 
 function fetchUsdRate () {
@@ -1523,8 +1524,7 @@ function fetchUsdRate () {
   const refs = usdLineRef || ensureUsdInline()
 
   refs.precio.textContent = '—'
-  refs.label.textContent = 'Excel'
-  refs.updated.textContent = 'Sin valor en ofertas.xlsx'
+  refs.label.textContent = 'Absoluto'
 }
 
 // ====== Listeners ======
@@ -1591,7 +1591,6 @@ window.addEventListener('DOMContentLoaded', () => {
   ensureUsdInline()
   ensurePromoLabelStyles()
 
-  // El valor real del dólar se carga desde ofertas.xlsx dentro de cargarDatos().
   fetchUsdRate()
 
   cargarDatos(stockActual)
