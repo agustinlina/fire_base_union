@@ -1619,11 +1619,27 @@ function setActiveBtn (btn) {
   if (btn) btn.classList.add('active')
 }
 
-function aplicarFiltros () {
-  const valor = buscador.value.trim().toLowerCase()
+function normalizarBusqueda(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '')
+    .replace(/-/g, '')
+    .replace(/\./g, '')
+    .replace(/\\/g, '/')
+    .trim()
+}
 
-  if (!valor) {
-    renderPlaceholder('Utiliza la barra de búsqueda para ver resultados')
+function aplicarFiltros() {
+  const valorOriginal = buscador.value.trim()
+  const valor = valorOriginal.toLowerCase()
+  const valorNormalizado = normalizarBusqueda(valorOriginal)
+
+  if (!valorOriginal) {
+    renderPlaceholder(
+      'Utiliza la barra de búsqueda para ver resultados'
+    )
     return
   }
 
@@ -1635,11 +1651,21 @@ function aplicarFiltros () {
     datos = datos.filter(it => esAutoImportado(it.rubro))
   }
 
-  datos = datos.filter(
-    it =>
-      (it.codigo && String(it.codigo).toLowerCase().includes(valor)) ||
-      (it.descripcion && it.descripcion.toLowerCase().includes(valor))
-  )
+  datos = datos.filter(it => {
+    const codigo = String(it.codigo || '').toLowerCase()
+    const descripcion = String(it.descripcion || '').toLowerCase()
+    const rubro = String(it.rubro || '').toLowerCase()
+
+    const textoCompleto = `${codigo} ${descripcion} ${rubro}`
+    const textoNormalizado = normalizarBusqueda(textoCompleto)
+
+    return (
+      codigo.includes(valor) ||
+      descripcion.includes(valor) ||
+      rubro.includes(valor) ||
+      textoNormalizado.includes(valorNormalizado)
+    )
+  })
 
   renderTable(datos)
 }
