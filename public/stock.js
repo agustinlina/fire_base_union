@@ -29,27 +29,25 @@ async function fetchJson (url) {
   return await res.json()
 }
 
-const ENDPOINTS = {
-  olavarria:
-    'https://crossorigin.me/https://api-stock-live.vercel.app/api/stock_olav',
-  cordoba:
-    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_cba',
-  polo: 'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_polo',
-  camaras:
-    'https://corsproxy.io/?https://api-stock-live.vercel.app/api/stock_camaras'
-}
+// ====== Stock desde CSV ======
+// El archivo debe estar en public/stock.csv
+const STOCK_CSV_URLS = [
+  './stock.csv',
+  './Stock.csv',
+  './STOCK.csv',
+  '/stock.csv',
+  '/Stock.csv',
+  '/STOCK.csv'
+]
 
-// ====== Fallbacks locales ======
-const LOCAL_ENDPOINTS = {
-  olavarria: './local_olav.json',
-  cordoba: './local_cba.json',
-  polo: './local_polo.json',
-  prices: './local_prices.json'
-}
-
-// Endpoint de precios base en USD
+// ====== Precios base en USD ======
 const PRICES_URL =
   'https://corsproxy.io/?https://api-prices-nu.vercel.app/api/prices'
+
+// ====== Fallback local solo para precios ======
+const LOCAL_ENDPOINTS = {
+  prices: './local_prices.json'
+}
 
 // ====== Referencias DOM ======
 const tableBody = document.querySelector('#stock-table tbody')
@@ -242,7 +240,6 @@ function esAutoImportado (rubro) {
 // ====== Ofertas y dólar desde Excel ======
 // Archivo esperado: ofertas.xlsx
 //
-// Estructura:
 // A1: dolar
 // A2: valor del dólar
 //
@@ -374,15 +371,6 @@ async function loadOfertasConfig () {
   }
 }
 
-/**
- * Soporta:
- * - ['3147', 100000, 'ars']
- * - { codigo: '3147', precio: 100000, moneda: 'ars' }
- * - { codigo: '3147', precio: 250, moneda: 'usd' }
- *
- * Devuelve Map<codigoNormalizado, { precio, tipo }>
- * tipo = 'ars' | 'usd'
- */
 function buildOfertasMap (ofertasRaw) {
   const map = new Map()
   const arr = Array.isArray(ofertasRaw) ? ofertasRaw : []
@@ -599,7 +587,7 @@ function renderPinnedBar () {
 
   pinnedBar.innerHTML = Array.from(pinned.values())
     .map(it => {
-      const soloPesos = isSoloPesosByCodigo(it.codigo || it.__key)
+      const soloPesos = isSoloPesosItem(it)
       const ars = it.precioArs != null ? fmtARS(it.precioArs) : ''
 
       const usd =
@@ -663,7 +651,12 @@ function togglePin (item) {
 
   if (!key) return
 
-  const toSave = { ...item, __key: key }
+  const toSave = {
+    ...item,
+    __key: key,
+    enPromocion: Boolean(item?.enPromocion)
+  }
+
   const rate = effectiveUsdRate()
 
   if (rate && item?.precioUsd != null && item.precioArs == null) {
@@ -868,6 +861,274 @@ async function fetchPreferRemoteThenLocal ({
   }
 }
 
+// ====== CSV helpers ======
+function limpiarTextoCsv (text) {
+  return String(text || '')
+    .replace(/^\uFEFF/, '')
+    .replace(/\0/g, '')
+}
+
+function limpiarValorCsv (value) {
+  let texto = String(value || '').trim()
+
+  // Limpia valores exportados por Excel como ="F77"
+  if (texto.startsWith('="') && texto.endsWith('"')) {
+    texto = texto.slice(2, -1)
+  }
+
+  // Limpia comillas externas
+  if (texto.startsWith('"') && texto.endsWith('"')) {
+    texto = texto.slice(1, -1)
+  }
+
+  return texto.trim()
+}
+
+function detectCsvDelimiter (text) {
+  const cleanText = limpiarTextoCsv(text)
+
+  const firstLine =
+    cleanText.split(/\r?\n/).find(line => line.trim() !== '') || ''
+
+  const semicolonCount = (firstLine.match(/;/g) || []).length
+  const tabCount = (firstLine.match(/\t/g) || []).length
+  const commaCount = (firstLine.match(/,/g) || []).length
+
+  if (semicolonCount >= commaCount && semicolonCount >= tabCount) return ';'
+  if (tabCount >= commaCount && tabCount >= semicolonCount) return '\t'
+
+  return ','
+}
+
+function parseCsvLine (line, delimiter) {
+  const result = []
+  let current = ''
+  let insideQuotes = false
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i]
+    const next = line[i + 1]
+
+    if (char === '"' && insideQuotes && next === '"') {
+      current += '"'
+      i++
+      continue
+    }
+
+    if (char === '"') {
+      insideQuotes = !insideQuotes
+      current += char
+      continue
+    }
+
+    if (char === delimiter && !insideQuotes) {
+      result.push(limpiarValorCsv(current))
+      current = ''
+      continue
+    }
+
+    current += char
+  }
+
+  result.push(limpiarValorCsv(current))
+
+  return result
+}
+
+function parseCsv (text) {
+  const cleanText = limpiarTextoCsv(text)
+  const delimiter = detectCsvDelimiter(cleanText)
+
+  console.log(
+    '[stock.csv] Delimitador detectado:',
+    delimiter === '\t' ? 'TAB' : delimiter
+  )
+
+  return cleanText.split(/\r?\n/).map(line => parseCsvLine(line, delimiter))
+}
+
+function parseStockCsvNumber (value) {
+  if (value === null || value === undefined || value === '') return 0
+
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+
+  const texto = limpiarValorCsv(value)
+    .replace(/\s/g, '')
+    .replace(/\./g, '')
+    .replace(',', '.')
+
+  const numero = Number(texto)
+
+  return Number.isFinite(numero) ? numero : 0
+}
+
+async function fetchStockCsvText () {
+  let lastError = null
+
+  for (const url of STOCK_CSV_URLS) {
+    try {
+      console.log('[stock.csv] Intentando cargar:', url)
+
+      const res = await fetch(withCacheBuster(url), {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+          Pragma: 'no-cache',
+          Expires: '0'
+        }
+      })
+
+      if (res.ok) {
+        const buffer = await res.arrayBuffer()
+
+        let text = new TextDecoder('utf-8').decode(buffer)
+
+        // Si aparece el carácter �, probablemente el CSV está en ANSI / Windows-1252
+        if (text.includes('�')) {
+          text = new TextDecoder('windows-1252').decode(buffer)
+        }
+
+        console.log('[stock.csv] Cargado correctamente:', url)
+        console.log('[stock.csv] Primeros caracteres:', text.slice(0, 200))
+
+        return text
+      }
+
+      lastError = new Error(`${url} respondió HTTP ${res.status}`)
+      console.warn('[stock.csv]', lastError.message)
+    } catch (e) {
+      lastError = e
+      console.warn('[stock.csv] Error cargando:', url, e)
+    }
+  }
+
+  throw lastError || new Error('No se pudo cargar stock.csv')
+}
+
+function isEmptyCsvRow (row) {
+  return (
+    !Array.isArray(row) || row.every(cell => String(cell || '').trim() === '')
+  )
+}
+
+function normalizarHeader (value) {
+  return limpiarValorCsv(value)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/�/g, '')
+    .trim()
+}
+
+function findHeaderIndex (rows) {
+  return rows.findIndex(row => {
+    const colA = normalizarHeader(row?.[0])
+    const colB = normalizarHeader(row?.[1])
+
+    const esCodigo =
+      colA === 'codigo' || colA.includes('codigo') || colA.includes('cdigo')
+
+    const esArticulo =
+      colB === 'articulo' ||
+      colB.includes('articulo') ||
+      colB.includes('artculo')
+
+    return esCodigo && esArticulo
+  })
+}
+
+async function fetchStockFromCsv(stock) {
+  const csvText = await fetchStockCsvText()
+  const rows = parseCsv(csvText)
+
+  console.log('[stock.csv] Total filas leídas:', rows.length)
+  console.log('[stock.csv] Primeras filas:', rows.slice(0, 5))
+
+  const headerIndex = findHeaderIndex(rows)
+
+  if (headerIndex === -1) {
+    console.error('[stock.csv] No se encontró encabezado Código / Artículo')
+    console.error('[stock.csv] Filas detectadas:', rows.slice(0, 10))
+
+    throw new Error(
+      'No se encontró el encabezado Código / Artículo en stock.csv'
+    )
+  }
+
+  console.log('[stock.csv] Encabezado encontrado en fila:', headerIndex + 1)
+
+  const productRows = rows
+    .slice(headerIndex + 1)
+    .filter(row => !isEmptyCsvRow(row))
+
+  const data = productRows
+    .map(row => {
+      // Columnas según tu CSV:
+      // A = Código        índice 0
+      // B = Artículo      índice 1
+      // D = Rubro         índice 3
+      // K = TRUCK CBA     índice 10
+      // L = OLAVARRIA     índice 11
+      // M = POLO          índice 12
+
+      const codigo = limpiarValorCsv(row[0])
+      const descripcion = limpiarValorCsv(row[1])
+      const rubro = limpiarValorCsv(row[3])
+
+      const truckCba = parseStockCsvNumber(row[10])
+      const olavarria = parseStockCsvNumber(row[11])
+      const polo = parseStockCsvNumber(row[12])
+
+      let stockFinal = 0
+
+      if (stock === 'cordoba') {
+        stockFinal = truckCba + polo
+      } else if (stock === 'olavarria') {
+        stockFinal = olavarria
+      }
+
+      return {
+        codigo,
+        descripcion,
+        rubro,
+        stock: stockFinal,
+        stockTruckCba: truckCba,
+        stockOlavarria: olavarria,
+        stockPolo: polo
+      }
+    })
+    .filter(item => {
+      const codigoNormalizado = normalizarHeader(item.codigo)
+
+      const codigoValido =
+        item.codigo &&
+        codigoNormalizado !== 'codigo' &&
+        codigoNormalizado !== 'cod' &&
+        codigoNormalizado !== 'código'
+
+      const descripcionValida = Boolean(item.descripcion)
+
+      return codigoValido && descripcionValida
+    })
+    .filter(item => {
+      // No mostrar productos sin stock en el depósito seleccionado.
+      // Depósito 1: TRUCK CBA + POLO.
+      // Depósito 2: OLAVARRIA.
+      return Number(item.stock) > 0
+    })
+
+  console.log('[stock.csv] Productos procesados:', data.length)
+  console.log('[stock.csv] Primeros productos:', data.slice(0, 5))
+
+  if (!data.length) {
+    throw new Error('stock.csv fue leído, pero no hay productos con stock para este depósito')
+  }
+
+  return data
+}
+
 // ====== Render tabla ======
 function renderTable (data) {
   tableBody.innerHTML = ''
@@ -947,18 +1208,18 @@ function renderTable (data) {
       : ''
 
     tr.innerHTML = `
-  <td class="descycode">
-    <span>${item.descripcion || ''}</span>
-    <span style="height:16px"></span>
-    <span style="font-size:12px">
-      Código:<code> ${item.codigo}</code>
-      ${promoLabelHTML}
-    </span>
-  </td>
-  <td>${item.rubro || ''}</td>
-  <td>${stockDisplay}</td>
-  <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${anchorBtnHTML}</td>
-`
+      <td class="descycode">
+        <span>${item.descripcion || ''}</span>
+        <span style="height:16px"></span>
+        <span style="font-size:12px">
+          Código:<code> ${item.codigo}</code>
+          ${promoLabelHTML}
+        </span>
+      </td>
+      <td>${item.rubro || ''}</td>
+      <td>${stockDisplay}</td>
+      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${anchorBtnHTML}</td>
+    `
 
     tableBody.appendChild(tr)
 
@@ -1083,39 +1344,7 @@ function aplicarFiltros () {
   renderTable(datos)
 }
 
-// ====== Carga y merge ======
-function mergeStocksSum (arrA, arrB) {
-  const map = new Map()
-
-  function upsert (it) {
-    const key = canonicalKey(it?.codigo)
-
-    if (!key) return
-
-    const curr = map.get(key)
-    const stockNum = parseStock(it?.stock)
-
-    if (!curr) {
-      map.set(key, { ...it, stock: stockNum })
-    } else {
-      curr.stock = parseStock(curr.stock) + stockNum
-
-      if (!curr.descripcion && it.descripcion) {
-        curr.descripcion = it.descripcion
-      }
-
-      if (!curr.rubro && it.rubro) {
-        curr.rubro = it.rubro
-      }
-    }
-  }
-
-  ;(Array.isArray(arrA) ? arrA : []).forEach(upsert)
-  ;(Array.isArray(arrB) ? arrB : []).forEach(upsert)
-
-  return Array.from(map.values())
-}
-
+// ====== Carga principal ======
 async function cargarDatos (stock) {
   loading && (loading.style.display = '')
 
@@ -1137,40 +1366,7 @@ async function cargarDatos (stock) {
 
     const ofertasMap = buildOfertasMap(ofertas)
 
-    let dataStock
-
-    if (stock === 'cordoba') {
-      const [dataCba, dataPolo, dataCamaras] = await Promise.all([
-        fetchPreferRemoteThenLocal({
-          remoteUrl: ENDPOINTS.cordoba,
-          localUrl: LOCAL_ENDPOINTS.cordoba,
-          label: 'STOCK CBA',
-          expectArray: true
-        }),
-        fetchPreferRemoteThenLocal({
-          remoteUrl: ENDPOINTS.polo,
-          localUrl: LOCAL_ENDPOINTS.polo,
-          label: 'STOCK POLO',
-          expectArray: true
-        }),
-        fetchPreferRemoteThenLocal({
-          remoteUrl: ENDPOINTS.camaras,
-          localUrl: null,
-          label: 'STOCK CAMARAS',
-          expectArray: true
-        })
-      ])
-
-      const cbaMasPolo = mergeStocksSum(dataCba, dataPolo)
-      dataStock = mergeStocksSum(cbaMasPolo, dataCamaras)
-    } else {
-      dataStock = await fetchPreferRemoteThenLocal({
-        remoteUrl: ENDPOINTS[stock],
-        localUrl: LOCAL_ENDPOINTS[stock],
-        label: 'STOCK OLAV',
-        expectArray: true
-      })
-    }
+    let dataStock = await fetchStockFromCsv(stock)
 
     dataStock = aplicarOverrideCantidad(dataStock)
 
@@ -1231,12 +1427,17 @@ async function cargarDatos (stock) {
     aplicarFiltros()
     renderPinnedBar()
   } catch (err) {
-    console.error('Error al cargar datos:', err)
+    console.error('Error al cargar datos desde stock.csv:', err)
 
     if (loading) loading.style.display = 'none'
-    if (error) error.textContent = 'Error al cargar datos'
 
-    renderPlaceholder('No pudimos cargar los datos.')
+    const mensaje = err?.message || 'Error desconocido al cargar stock.csv'
+
+    if (error) {
+      error.textContent = `Error al cargar stock.csv: ${mensaje}`
+    }
+
+    renderPlaceholder(`No pudimos cargar stock.csv: ${mensaje}`)
   }
 }
 
