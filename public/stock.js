@@ -2,7 +2,7 @@
 
 let DOLAR_TOTAL = 0
 
-function withCacheBuster (url) {
+function withCacheBuster(url) {
   const u = new URL(url, window.location.href)
   u.searchParams.set('_ts', Date.now().toString())
   return u.toString()
@@ -44,12 +44,10 @@ const pinnedBar = document.getElementById('pinned-bar')
 const CODIGOS_OVERRIDE = []
 let CANTIDAD_OVERRIDE = 1
 
-function aplicarOverrideCantidad (data) {
+function aplicarOverrideCantidad(data) {
   const setCodigos = new Set(
     CODIGOS_OVERRIDE.map(c =>
-      String(c || '')
-        .trim()
-        .toUpperCase()
+      String(c || '').trim().toUpperCase()
     )
   )
 
@@ -85,7 +83,7 @@ const isManualDollar = () =>
 const effectiveUsdRate = () => Number(DOLAR_TOTAL) || null
 
 // ====== Helpers generales ======
-function normalizar (str) {
+function normalizar(str) {
   return (str || '')
     .toLowerCase()
     .normalize('NFD')
@@ -93,13 +91,13 @@ function normalizar (str) {
     .replace(/\s+/g, '')
 }
 
-function clean (str) {
+function clean(str) {
   return String(str || '')
     .trim()
     .toUpperCase()
 }
 
-function splitCandidates (raw) {
+function splitCandidates(raw) {
   if (!raw) return []
 
   return String(raw)
@@ -108,15 +106,15 @@ function splitCandidates (raw) {
     .filter(Boolean)
 }
 
-function primaryCode (raw) {
+function primaryCode(raw) {
   const parts = splitCandidates(raw)
   return parts[0] || ''
 }
 
-function codeKeysOne (raw) {
+function codeKeysOne(raw) {
   const keys = new Set()
 
-  function addVariants (base) {
+  function addVariants(base) {
     const c = clean(base)
     if (!c) return
 
@@ -165,7 +163,7 @@ function codeKeysOne (raw) {
   return Array.from(keys)
 }
 
-function codeKeys (raw) {
+function codeKeys(raw) {
   const parts = splitCandidates(raw)
   const out = []
   const seen = new Set()
@@ -182,27 +180,27 @@ function codeKeys (raw) {
   return out
 }
 
-function isSoloPesosItem (item) {
+function isSoloPesosItem(item) {
   return Boolean(item?.enPromocion)
 }
 
-function canonicalKey (raw) {
+function canonicalKey(raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
   return variants[0] || clean(p) || ''
 }
 
-function cssEscape (s) {
+function cssEscape(s) {
   if (window.CSS && CSS.escape) return CSS.escape(s)
   return String(s).replace(/[^a-zA-Z0-9_\-]/g, ch => '\\' + ch)
 }
 
-function esCamionImportado (rubro) {
+function esCamionImportado(rubro) {
   const n = normalizar(rubro)
   return n === 'direccion' || n === 'traccion'
 }
 
-function esAutoImportado (rubro) {
+function esAutoImportado(rubro) {
   const n = normalizar(rubro)
 
   const exactos = [
@@ -221,7 +219,7 @@ function esAutoImportado (rubro) {
 // ====== Ofertas y dólar desde Excel ======
 const OFERTAS_EXCEL_URL = './ofertas.xlsx'
 
-function parseNumeroExcel (value) {
+function parseNumeroExcel(value) {
   if (value === null || value === undefined || value === '') return null
 
   if (typeof value === 'number' && Number.isFinite(value)) {
@@ -253,7 +251,7 @@ function parseNumeroExcel (value) {
   return Number.isFinite(numero) ? numero : null
 }
 
-async function loadOfertasConfig () {
+async function loadOfertasConfig() {
   try {
     if (typeof XLSX === 'undefined') {
       console.warn('No está cargada la librería XLSX.')
@@ -342,7 +340,7 @@ async function loadOfertasConfig () {
   }
 }
 
-function buildOfertasMap (ofertasRaw) {
+function buildOfertasMap(ofertasRaw) {
   const map = new Map()
   const arr = Array.isArray(ofertasRaw) ? ofertasRaw : []
 
@@ -364,7 +362,10 @@ function buildOfertasMap (ofertasRaw) {
     const numPrecio = Number(precio)
     if (!Number.isFinite(numPrecio) || numPrecio <= 0) return
 
-    const tipo = String(moneda || 'ars').toLowerCase() === 'usd' ? 'usd' : 'ars'
+    const tipo =
+      String(moneda || 'ars').toLowerCase() === 'usd'
+        ? 'usd'
+        : 'ars'
 
     codeKeysOne(codigo).forEach(k => {
       if (!map.has(k)) {
@@ -377,7 +378,7 @@ function buildOfertasMap (ofertasRaw) {
 }
 
 // ====== Precios desde prices.xlsx ======
-async function fetchPricesWorkbookBuffer () {
+async function fetchPricesWorkbookBuffer() {
   let lastError = null
 
   for (const url of PRICES_EXCEL_URLS) {
@@ -409,7 +410,7 @@ async function fetchPricesWorkbookBuffer () {
   throw lastError || new Error('No se pudo cargar prices.xlsx')
 }
 
-function normalizarHeaderExcel (value) {
+function normalizarHeaderExcel(value) {
   return String(value || '')
     .toLowerCase()
     .normalize('NFD')
@@ -417,7 +418,7 @@ function normalizarHeaderExcel (value) {
     .trim()
 }
 
-async function loadPricesFromExcel () {
+async function loadPricesFromExcel() {
   try {
     if (typeof XLSX === 'undefined') {
       console.warn('No está cargada la librería XLSX.')
@@ -455,7 +456,8 @@ async function loadPricesFromExcel () {
           codigoNormalizado !== 'cod'
 
         const precioValido =
-          Number.isFinite(Number(item.precio)) && Number(item.precio) > 0
+          Number.isFinite(Number(item.precio)) &&
+          Number(item.precio) > 0
 
         return codigoValido && precioValido
       })
@@ -466,15 +468,18 @@ async function loadPricesFromExcel () {
 }
 
 // ====== Formateos ======
-function fmtARS (n) {
+function fmtARS(n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
 
-  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+  return (
+    '$ ' +
+    Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+  )
 }
 
-function fmtUSD (n) {
+function fmtUSD(n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
@@ -488,7 +493,7 @@ function fmtUSD (n) {
   )
 }
 
-function parseStock (s) {
+function parseStock(s) {
   if (s === null || s === undefined) return 0
   if (typeof s === 'number' && Number.isFinite(s)) return s
 
@@ -501,13 +506,13 @@ function parseStock (s) {
   return Number.isFinite(n) ? n : 0
 }
 
-function shorten (t, max = 36) {
+function shorten(t, max = 36) {
   const s = String(t || '').trim()
   return s.length > max ? s.slice(0, max - 1) + '…' : s
 }
 
 // ====== Ajustes de precios ======
-function aplicarAjustePrecio (precio) {
+function aplicarAjustePrecio(precio) {
   const n = Number(precio)
 
   if (!Number.isFinite(n)) return precio
@@ -528,7 +533,7 @@ function aplicarAjustePrecio (precio) {
   return Math.round(precioFinal)
 }
 
-function ensurePriceExtraControls () {
+function ensurePriceExtraControls() {
   if (document.getElementById('price-extra-controls')) return
 
   const table = document.getElementById('stock-table')
@@ -547,6 +552,7 @@ function ensurePriceExtraControls () {
         padding: 10px;
         border-radius: 12px;
         background: var(--background);
+        border: 1px solid var(--secondary);
         box-shadow: 0 6px 18px rgba(0,0,0,.18);
       }
 
@@ -557,11 +563,12 @@ function ensurePriceExtraControls () {
         gap: 8px;
         padding: 10px;
         border-radius: 10px;
-        border: 1px solid var(--secondary);
         background: #16245a;
+        border: 1px solid var(--secondary);
       }
 
       .price-adjust-box + .price-adjust-box {
+        border-top: 2px solid var(--accent_selected);
         padding-top: 12px;
       }
 
@@ -601,7 +608,7 @@ function ensurePriceExtraControls () {
       .price-extra-controls button.active {
         background: var(--accent);
         border-color: var(--accent);
-        color:  var(--background)!important;;
+        color: #fff;
         font-weight: 700;
       }
 
@@ -692,11 +699,10 @@ function ensurePriceExtraControls () {
 
   const manualExtraInput = controls.querySelector('#manual-extra-percent')
   const clearExtraBtn = controls.querySelector('#clear-extra-percent')
-
   const manualDiscountInput = controls.querySelector('#manual-discount-percent')
   const clearDiscountBtn = controls.querySelector('#clear-discount-percent')
 
-  function refreshPrices () {
+  function refreshPrices() {
     updatePriceExtraControlsUI()
     aplicarFiltros()
     renderPinnedBar()
@@ -775,7 +781,7 @@ function ensurePriceExtraControls () {
   updatePriceExtraControlsUI()
 }
 
-function updatePriceExtraControlsUI () {
+function updatePriceExtraControlsUI() {
   const controls = document.getElementById('price-extra-controls')
   if (!controls) return
 
@@ -808,16 +814,34 @@ function updatePriceExtraControlsUI () {
 }
 
 // ====== Texto de copiado ======
-function buildCopyTextForItem (item = {}) {
+function buildCopyTextForItem(item = {}) {
   const desc = (item.descripcion || '').trim()
   let price = ''
 
-  const preferArs =
-    item.precioArsOverride != null ? item.precioArsOverride : item.precioArs
+  let precioParaCopiar = null
 
-  if (preferArs != null && !Number.isNaN(Number(preferArs))) {
-    price = fmtARS(aplicarAjustePrecio(preferArs))
-  } else if (item.precioUsd != null && !Number.isNaN(Number(item.precioUsd))) {
+  if (
+    item.precioArsFinal != null &&
+    !Number.isNaN(Number(item.precioArsFinal))
+  ) {
+    precioParaCopiar = Number(item.precioArsFinal)
+  } else {
+    const precioBase =
+      item.precioArsOverride != null
+        ? item.precioArsOverride
+        : item.precioArs
+
+    if (precioBase != null && !Number.isNaN(Number(precioBase))) {
+      precioParaCopiar = aplicarAjustePrecio(precioBase)
+    }
+  }
+
+  if (precioParaCopiar != null) {
+    price = fmtARS(precioParaCopiar)
+  } else if (
+    item.precioUsd != null &&
+    !Number.isNaN(Number(item.precioUsd))
+  ) {
     price = fmtUSD(item.precioUsd)
   }
 
@@ -831,7 +855,7 @@ function buildCopyTextForItem (item = {}) {
   return parts.join(' ').trim()
 }
 
-function buildPinnedListText () {
+function buildPinnedListText() {
   if (!pinned.size) return ''
 
   return Array.from(pinned.values())
@@ -843,7 +867,7 @@ function buildPinnedListText () {
 // ====== Toast copiar ======
 let __copyToastTimer = null
 
-function showCopied (text = 'Copiado') {
+function showCopied(text = 'Copiado') {
   const toast = document.getElementById('copy-toast')
 
   if (!toast) return
@@ -853,10 +877,13 @@ function showCopied (text = 'Copiado') {
 
   clearTimeout(__copyToastTimer)
 
-  __copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1200)
+  __copyToastTimer = setTimeout(
+    () => toast.classList.remove('show'),
+    1200
+  )
 }
 
-async function writeToClipboard (payload) {
+async function writeToClipboard(payload) {
   try {
     await navigator.clipboard.writeText(payload)
     showCopied('Copiado')
@@ -882,7 +909,7 @@ async function writeToClipboard (payload) {
 }
 
 // ====== Placeholder tabla ======
-function renderPlaceholder (message = 'Escribí para buscar') {
+function renderPlaceholder(message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
       <td colspan="5" style="text-align:center; opacity:.7; padding:16px;">${message}</td>
@@ -890,7 +917,7 @@ function renderPlaceholder (message = 'Escribí para buscar') {
 }
 
 // ====== Estilos label promoción ======
-function ensurePromoLabelStyles () {
+function ensurePromoLabelStyles() {
   if (document.getElementById('promo-label-styles')) return
 
   const style = document.createElement('style')
@@ -922,7 +949,7 @@ function ensurePromoLabelStyles () {
 // ====== Anclados ======
 const pinned = new Map()
 
-function renderPinnedBar () {
+function renderPinnedBar() {
   if (!pinnedBar) return
 
   if (pinned.size === 0) {
@@ -936,8 +963,13 @@ function renderPinnedBar () {
   pinnedBar.innerHTML = Array.from(pinned.values())
     .map(it => {
       const soloPesos = isSoloPesosItem(it)
+
       const ars =
-        it.precioArs != null ? fmtARS(aplicarAjustePrecio(it.precioArs)) : ''
+        it.precioArsFinal != null
+          ? fmtARS(it.precioArsFinal)
+          : it.precioArs != null
+            ? fmtARS(aplicarAjustePrecio(it.precioArs))
+            : ''
 
       const usd =
         !soloPesos && it.precioUsd != null
@@ -952,8 +984,8 @@ function renderPinnedBar () {
           ars
             ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
             : usd
-            ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
-            : ''
+              ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
+              : ''
         }
         <button class="remove" title="Quitar" style="color:red;">×</button>
       </div>`
@@ -972,7 +1004,9 @@ function renderPinnedBar () {
       renderPinnedBar()
 
       document
-        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
+        .querySelectorAll(
+          `.anchor-btn[data-key="${cssEscape(key)}"]`
+        )
         .forEach(b => {
           b.classList.remove('active')
           b.setAttribute('aria-pressed', 'false')
@@ -995,7 +1029,7 @@ function renderPinnedBar () {
   })
 }
 
-function togglePin (item) {
+function togglePin(item) {
   const key = canonicalKey(item?.codigo)
 
   if (!key) return
@@ -1008,8 +1042,9 @@ function togglePin (item) {
 
   const rate = effectiveUsdRate()
 
-  if (rate && item?.precioUsd != null && item.precioArs == null) {
+  if (rate && item?.precioUsd != null && item.precioArs == null && item.precioArsFinal == null) {
     toSave.precioArs = Math.round(Number(item.precioUsd) * rate)
+    toSave.precioArsFinal = aplicarAjustePrecio(toSave.precioArs)
   }
 
   if (pinned.has(key)) {
@@ -1034,7 +1069,7 @@ function togglePin (item) {
 let anchorMenuOverlay = null
 let anchorMenuPanel = null
 
-function ensureAnchorMenu () {
+function ensureAnchorMenu() {
   if (anchorMenuOverlay && anchorMenuPanel) {
     return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
   }
@@ -1097,7 +1132,7 @@ function ensureAnchorMenu () {
   return { overlay, panel }
 }
 
-function showAnchorMenu (btn, { item, copyText }) {
+function showAnchorMenu(btn, { item, copyText }) {
   const { overlay, panel } = ensureAnchorMenu()
   const key = canonicalKey(item.codigo)
 
@@ -1125,8 +1160,10 @@ function showAnchorMenu (btn, { item, copyText }) {
 
     panel.style.position = 'fixed'
     panel.style.left =
-      Math.min(window.innerWidth - panel.offsetWidth - 8, Math.max(8, r.left)) +
-      'px'
+      Math.min(
+        window.innerWidth - panel.offsetWidth - 8,
+        Math.max(8, r.left)
+      ) + 'px'
 
     panel.style.top = r.bottom + margin + 'px'
     panel.style.transform = 'none'
@@ -1159,26 +1196,28 @@ function showAnchorMenu (btn, { item, copyText }) {
 
     if (action === 'pin') {
       const it =
-        (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) || item
+        (tableBody._lastRowMap &&
+          tableBody._lastRowMap.get(key)) ||
+        item
 
       togglePin(it)
     }
   }
 }
 
-function hideAnchorMenu () {
+function hideAnchorMenu() {
   if (!anchorMenuOverlay) return
   anchorMenuOverlay.style.display = 'none'
 }
 
 // ====== CSV helpers ======
-function limpiarTextoCsv (text) {
+function limpiarTextoCsv(text) {
   return String(text || '')
     .replace(/^\uFEFF/, '')
     .replace(/\0/g, '')
 }
 
-function limpiarValorCsv (value) {
+function limpiarValorCsv(value) {
   let texto = String(value || '').trim()
 
   if (texto.startsWith('="') && texto.endsWith('"')) {
@@ -1192,11 +1231,13 @@ function limpiarValorCsv (value) {
   return texto.trim()
 }
 
-function detectCsvDelimiter (text) {
+function detectCsvDelimiter(text) {
   const cleanText = limpiarTextoCsv(text)
 
   const firstLine =
-    cleanText.split(/\r?\n/).find(line => line.trim() !== '') || ''
+    cleanText
+      .split(/\r?\n/)
+      .find(line => line.trim() !== '') || ''
 
   const semicolonCount = (firstLine.match(/;/g) || []).length
   const tabCount = (firstLine.match(/\t/g) || []).length
@@ -1208,7 +1249,7 @@ function detectCsvDelimiter (text) {
   return ','
 }
 
-function parseCsvLine (line, delimiter) {
+function parseCsvLine(line, delimiter) {
   const result = []
   let current = ''
   let insideQuotes = false
@@ -1243,7 +1284,7 @@ function parseCsvLine (line, delimiter) {
   return result
 }
 
-function parseCsv (text) {
+function parseCsv(text) {
   const cleanText = limpiarTextoCsv(text)
   const delimiter = detectCsvDelimiter(cleanText)
 
@@ -1252,10 +1293,12 @@ function parseCsv (text) {
     delimiter === '\t' ? 'TAB' : delimiter
   )
 
-  return cleanText.split(/\r?\n/).map(line => parseCsvLine(line, delimiter))
+  return cleanText
+    .split(/\r?\n/)
+    .map(line => parseCsvLine(line, delimiter))
 }
 
-function parseStockCsvNumber (value) {
+function parseStockCsvNumber(value) {
   if (value === null || value === undefined || value === '') return 0
 
   if (typeof value === 'number' && Number.isFinite(value)) {
@@ -1272,7 +1315,7 @@ function parseStockCsvNumber (value) {
   return Number.isFinite(numero) ? numero : 0
 }
 
-async function fetchStockCsvText () {
+async function fetchStockCsvText() {
   let lastError = null
 
   for (const url of STOCK_CSV_URLS) {
@@ -1314,13 +1357,11 @@ async function fetchStockCsvText () {
   throw lastError || new Error('No se pudo cargar stock.csv')
 }
 
-function isEmptyCsvRow (row) {
-  return (
-    !Array.isArray(row) || row.every(cell => String(cell || '').trim() === '')
-  )
+function isEmptyCsvRow(row) {
+  return !Array.isArray(row) || row.every(cell => String(cell || '').trim() === '')
 }
 
-function normalizarHeader (value) {
+function normalizarHeader(value) {
   return limpiarValorCsv(value)
     .toLowerCase()
     .normalize('NFD')
@@ -1329,13 +1370,15 @@ function normalizarHeader (value) {
     .trim()
 }
 
-function findHeaderIndex (rows) {
+function findHeaderIndex(rows) {
   return rows.findIndex(row => {
     const colA = normalizarHeader(row?.[0])
     const colB = normalizarHeader(row?.[1])
 
     const esCodigo =
-      colA === 'codigo' || colA.includes('codigo') || colA.includes('cdigo')
+      colA === 'codigo' ||
+      colA.includes('codigo') ||
+      colA.includes('cdigo')
 
     const esArticulo =
       colB === 'articulo' ||
@@ -1346,7 +1389,7 @@ function findHeaderIndex (rows) {
   })
 }
 
-async function fetchStockFromCsv (stock) {
+async function fetchStockFromCsv(stock) {
   const csvText = await fetchStockCsvText()
   const rows = parseCsv(csvText)
 
@@ -1417,16 +1460,14 @@ async function fetchStockFromCsv (stock) {
   console.log('[stock.csv] Primeros productos:', data.slice(0, 5))
 
   if (!data.length) {
-    throw new Error(
-      'stock.csv fue leído, pero no hay productos con stock para este depósito'
-    )
+    throw new Error('stock.csv fue leído, pero no hay productos con stock para este depósito')
   }
 
   return data
 }
 
 // ====== Render tabla ======
-function renderTable (data) {
+function renderTable(data) {
   tableBody.innerHTML = ''
 
   if (!data || data.length === 0) {
@@ -1447,40 +1488,38 @@ function renderTable (data) {
 
     const key = canonicalKey(item.codigo)
 
-    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
+    const precioUsd =
+      item.precioUsd != null ? Number(item.precioUsd) : null
 
-    let precioArs = null
+    let precioArsBase = null
+    let precioArsFinal = null
 
     if (
       item.precioArsOverride != null &&
       !Number.isNaN(Number(item.precioArsOverride))
     ) {
-      precioArs = Number(item.precioArsOverride)
+      precioArsBase = Number(item.precioArsOverride)
     } else if (rate && precioUsd != null) {
-      precioArs = Math.round(precioUsd * rate)
+      precioArsBase = Math.round(precioUsd * rate)
     }
 
-    if (precioArs != null) {
-      precioArs = aplicarAjustePrecio(precioArs)
+    if (precioArsBase != null) {
+      precioArsFinal = aplicarAjustePrecio(precioArsBase)
     }
 
     const soloPesos = isSoloPesosItem(item)
 
     const priceHtml =
-      precioUsd != null || precioArs != null
+      precioUsd != null || precioArsFinal != null
         ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
            ${
-             precioArs != null
-               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
-                   precioArs
-                 )}</span>`
+             precioArsFinal != null
+               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArsFinal)}</span>`
                : ''
            }
            ${
              !soloPesos && precioUsd != null
-               ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(
-                   precioUsd
-                 )}</span>`
+               ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>`
                : ''
            }
          </div>`
@@ -1490,7 +1529,8 @@ function renderTable (data) {
       codigo: item.codigo,
       descripcion: item.descripcion,
       precioUsd,
-      precioArs,
+      precioArs: precioArsBase,
+      precioArsFinal,
       precioArsOverride: item.precioArsOverride
     })
 
@@ -1523,7 +1563,12 @@ function renderTable (data) {
 
     tableBody.appendChild(tr)
 
-    rowItemByKey.set(key, { ...item, precioUsd, precioArs })
+    rowItemByKey.set(key, {
+      ...item,
+      precioUsd,
+      precioArs: precioArsBase,
+      precioArsFinal
+    })
   })
 
   if (!tableBody.__delegated) {
@@ -1539,12 +1584,16 @@ function renderTable (data) {
         const row = anchorBtn.closest('tr')
         const copyText = row?.dataset?.copy || ''
 
-        const it = (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) || {
-          codigo: k,
-          descripcion: row?.querySelector('td')?.innerText || '',
-          precioUsd: null,
-          precioArs: null
-        }
+        const it =
+          (tableBody._lastRowMap &&
+            tableBody._lastRowMap.get(k)) || {
+            codigo: k,
+            descripcion:
+              row?.querySelector('td')?.innerText || '',
+            precioUsd: null,
+            precioArs: null,
+            precioArsFinal: null
+          }
 
         showAnchorMenu(anchorBtn, { item: it, copyText })
         return
@@ -1584,13 +1633,16 @@ function renderTable (data) {
         if (btn) {
           const k = tr.dataset.key
 
-          const it = (tableBody._lastRowMap &&
-            tableBody._lastRowMap.get(k)) || {
-            codigo: k,
-            descripcion: tr.querySelector('td')?.innerText || '',
-            precioUsd: null,
-            precioArs: null
-          }
+          const it =
+            (tableBody._lastRowMap &&
+              tableBody._lastRowMap.get(k)) || {
+              codigo: k,
+              descripcion:
+                tr.querySelector('td')?.innerText || '',
+              precioUsd: null,
+              precioArs: null,
+              precioArsFinal: null
+            }
 
           showAnchorMenu(btn, {
             item: it,
@@ -1601,7 +1653,10 @@ function renderTable (data) {
     })
 
     window.addEventListener('resize', () => {
-      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') {
+      if (
+        !anchorMenuOverlay ||
+        anchorMenuOverlay.style.display === 'none'
+      ) {
         return
       }
 
@@ -1612,13 +1667,7 @@ function renderTable (data) {
   tableBody._lastRowMap = rowItemByKey
 }
 
-// ====== Filtros ======
-function setActiveBtn (btn) {
-  filtroBtns.forEach(b => b && b.classList.remove('active'))
-
-  if (btn) btn.classList.add('active')
-}
-
+// ====== Búsqueda ======
 function normalizarBusqueda(value) {
   return String(value || '')
     .toLowerCase()
@@ -1629,6 +1678,13 @@ function normalizarBusqueda(value) {
     .replace(/\./g, '')
     .replace(/\\/g, '/')
     .trim()
+}
+
+// ====== Filtros ======
+function setActiveBtn(btn) {
+  filtroBtns.forEach(b => b && b.classList.remove('active'))
+
+  if (btn) btn.classList.add('active')
 }
 
 function aplicarFiltros() {
@@ -1671,7 +1727,7 @@ function aplicarFiltros() {
 }
 
 // ====== Carga principal ======
-async function cargarDatos (stock) {
+async function cargarDatos(stock) {
   loading && (loading.style.display = '')
 
   if (error) error.textContent = ''
@@ -1703,43 +1759,45 @@ async function cargarDatos (stock) {
       })
     })
 
-    allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
-      const keys = codeKeys(item?.codigo)
-      let precioUsd = null
-      let precioArsOverride = null
-      let enPromocion = false
+    allData = (Array.isArray(dataStock) ? dataStock : []).map(
+      item => {
+        const keys = codeKeys(item?.codigo)
+        let precioUsd = null
+        let precioArsOverride = null
+        let enPromocion = false
 
-      for (const k of keys) {
-        if (priceMap.has(k)) {
-          precioUsd = priceMap.get(k)
-          break
-        }
-      }
-
-      for (const k of keys) {
-        if (ofertasMap.has(k)) {
-          const of = ofertasMap.get(k)
-
-          enPromocion = true
-
-          if (of.tipo === 'usd') {
-            precioUsd = of.precio
-            precioArsOverride = null
-          } else {
-            precioArsOverride = of.precio
+        for (const k of keys) {
+          if (priceMap.has(k)) {
+            precioUsd = priceMap.get(k)
+            break
           }
+        }
 
-          break
+        for (const k of keys) {
+          if (ofertasMap.has(k)) {
+            const of = ofertasMap.get(k)
+
+            enPromocion = true
+
+            if (of.tipo === 'usd') {
+              precioUsd = of.precio
+              precioArsOverride = null
+            } else {
+              precioArsOverride = of.precio
+            }
+
+            break
+          }
+        }
+
+        return {
+          ...item,
+          precioUsd,
+          precioArsOverride,
+          enPromocion
         }
       }
-
-      return {
-        ...item,
-        precioUsd,
-        precioArsOverride,
-        enPromocion
-      }
-    })
+    )
 
     if (loading) loading.style.display = 'none'
 
@@ -1750,7 +1808,8 @@ async function cargarDatos (stock) {
 
     if (loading) loading.style.display = 'none'
 
-    const mensaje = err?.message || 'Error desconocido al cargar stock'
+    const mensaje =
+      err?.message || 'Error desconocido al cargar stock'
 
     if (error) {
       error.textContent = `Error al cargar stock: ${mensaje}`
@@ -1763,7 +1822,7 @@ async function cargarDatos (stock) {
 // ====== UI Cotización ======
 let usdLineRef = null
 
-function ensureUsdInline () {
+function ensureUsdInline() {
   if (usdLineRef) return usdLineRef
 
   const container = document.querySelector('main') || document.body
@@ -1813,15 +1872,16 @@ function ensureUsdInline () {
   return usdLineRef
 }
 
-function updateUsdInlineUIFromExcel () {
+function updateUsdInlineUIFromExcel() {
   const refs = ensureUsdInline()
 
-  refs.precio.textContent = DOLAR_TOTAL > 0 ? fmtARS(Number(DOLAR_TOTAL)) : '—'
+  refs.precio.textContent =
+    DOLAR_TOTAL > 0 ? fmtARS(Number(DOLAR_TOTAL)) : '—'
 
   refs.label.textContent = 'Absoluto'
 }
 
-function fetchUsdRate () {
+function fetchUsdRate() {
   if (isManualDollar()) {
     usdRate = Number(DOLAR_TOTAL)
     updateUsdInlineUIFromExcel()
@@ -1835,7 +1895,7 @@ function fetchUsdRate () {
 }
 
 // ====== Listeners ======
-function updateClearBtn () {
+function updateClearBtn() {
   if (!clearBuscador) return
 
   const has = (buscador?.value || '').length > 0
@@ -1892,7 +1952,9 @@ stockSelect &&
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
 
-  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
+  renderPlaceholder(
+    'Utiliza la barra de busqueda para en encontrar cubiertas'
+  )
 
   renderPinnedBar()
   ensureUsdInline()
