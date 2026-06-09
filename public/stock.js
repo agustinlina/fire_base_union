@@ -2,7 +2,7 @@
 
 let DOLAR_TOTAL = 0
 
-function withCacheBuster(url) {
+function withCacheBuster (url) {
   const u = new URL(url, window.location.href)
   u.searchParams.set('_ts', Date.now().toString())
   return u.toString()
@@ -44,10 +44,12 @@ const pinnedBar = document.getElementById('pinned-bar')
 const CODIGOS_OVERRIDE = []
 let CANTIDAD_OVERRIDE = 1
 
-function aplicarOverrideCantidad(data) {
+function aplicarOverrideCantidad (data) {
   const setCodigos = new Set(
     CODIGOS_OVERRIDE.map(c =>
-      String(c || '').trim().toUpperCase()
+      String(c || '')
+        .trim()
+        .toUpperCase()
     )
   )
 
@@ -83,7 +85,7 @@ const isManualDollar = () =>
 const effectiveUsdRate = () => Number(DOLAR_TOTAL) || null
 
 // ====== Helpers generales ======
-function normalizar(str) {
+function normalizar (str) {
   return (str || '')
     .toLowerCase()
     .normalize('NFD')
@@ -91,13 +93,13 @@ function normalizar(str) {
     .replace(/\s+/g, '')
 }
 
-function clean(str) {
+function clean (str) {
   return String(str || '')
     .trim()
     .toUpperCase()
 }
 
-function splitCandidates(raw) {
+function splitCandidates (raw) {
   if (!raw) return []
 
   return String(raw)
@@ -106,15 +108,15 @@ function splitCandidates(raw) {
     .filter(Boolean)
 }
 
-function primaryCode(raw) {
+function primaryCode (raw) {
   const parts = splitCandidates(raw)
   return parts[0] || ''
 }
 
-function codeKeysOne(raw) {
+function codeKeysOne (raw) {
   const keys = new Set()
 
-  function addVariants(base) {
+  function addVariants (base) {
     const c = clean(base)
     if (!c) return
 
@@ -163,7 +165,7 @@ function codeKeysOne(raw) {
   return Array.from(keys)
 }
 
-function codeKeys(raw) {
+function codeKeys (raw) {
   const parts = splitCandidates(raw)
   const out = []
   const seen = new Set()
@@ -180,27 +182,27 @@ function codeKeys(raw) {
   return out
 }
 
-function isSoloPesosItem(item) {
+function isSoloPesosItem (item) {
   return Boolean(item?.enPromocion)
 }
 
-function canonicalKey(raw) {
+function canonicalKey (raw) {
   const p = primaryCode(raw)
   const variants = codeKeysOne(p)
   return variants[0] || clean(p) || ''
 }
 
-function cssEscape(s) {
+function cssEscape (s) {
   if (window.CSS && CSS.escape) return CSS.escape(s)
   return String(s).replace(/[^a-zA-Z0-9_\-]/g, ch => '\\' + ch)
 }
 
-function esCamionImportado(rubro) {
+function esCamionImportado (rubro) {
   const n = normalizar(rubro)
   return n === 'direccion' || n === 'traccion'
 }
 
-function esAutoImportado(rubro) {
+function esAutoImportado (rubro) {
   const n = normalizar(rubro)
 
   const exactos = [
@@ -219,7 +221,7 @@ function esAutoImportado(rubro) {
 // ====== Ofertas y dólar desde Excel ======
 const OFERTAS_EXCEL_URL = './ofertas.xlsx'
 
-function parseNumeroExcel(value) {
+function parseNumeroExcel (value) {
   if (value === null || value === undefined || value === '') return null
 
   if (typeof value === 'number' && Number.isFinite(value)) {
@@ -251,7 +253,7 @@ function parseNumeroExcel(value) {
   return Number.isFinite(numero) ? numero : null
 }
 
-async function loadOfertasConfig() {
+async function loadOfertasConfig () {
   try {
     if (typeof XLSX === 'undefined') {
       console.warn('No está cargada la librería XLSX.')
@@ -340,7 +342,7 @@ async function loadOfertasConfig() {
   }
 }
 
-function buildOfertasMap(ofertasRaw) {
+function buildOfertasMap (ofertasRaw) {
   const map = new Map()
   const arr = Array.isArray(ofertasRaw) ? ofertasRaw : []
 
@@ -362,10 +364,7 @@ function buildOfertasMap(ofertasRaw) {
     const numPrecio = Number(precio)
     if (!Number.isFinite(numPrecio) || numPrecio <= 0) return
 
-    const tipo =
-      String(moneda || 'ars').toLowerCase() === 'usd'
-        ? 'usd'
-        : 'ars'
+    const tipo = String(moneda || 'ars').toLowerCase() === 'usd' ? 'usd' : 'ars'
 
     codeKeysOne(codigo).forEach(k => {
       if (!map.has(k)) {
@@ -378,7 +377,7 @@ function buildOfertasMap(ofertasRaw) {
 }
 
 // ====== Precios desde prices.xlsx ======
-async function fetchPricesWorkbookBuffer() {
+async function fetchPricesWorkbookBuffer () {
   let lastError = null
 
   for (const url of PRICES_EXCEL_URLS) {
@@ -410,7 +409,7 @@ async function fetchPricesWorkbookBuffer() {
   throw lastError || new Error('No se pudo cargar prices.xlsx')
 }
 
-function normalizarHeaderExcel(value) {
+function normalizarHeaderExcel (value) {
   return String(value || '')
     .toLowerCase()
     .normalize('NFD')
@@ -418,7 +417,7 @@ function normalizarHeaderExcel(value) {
     .trim()
 }
 
-async function loadPricesFromExcel() {
+async function loadPricesFromExcel () {
   try {
     if (typeof XLSX === 'undefined') {
       console.warn('No está cargada la librería XLSX.')
@@ -456,8 +455,7 @@ async function loadPricesFromExcel() {
           codigoNormalizado !== 'cod'
 
         const precioValido =
-          Number.isFinite(Number(item.precio)) &&
-          Number(item.precio) > 0
+          Number.isFinite(Number(item.precio)) && Number(item.precio) > 0
 
         return codigoValido && precioValido
       })
@@ -468,18 +466,15 @@ async function loadPricesFromExcel() {
 }
 
 // ====== Formateos ======
-function fmtARS(n) {
+function fmtARS (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
 
-  return (
-    '$ ' +
-    Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
-  )
+  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 })
 }
 
-function fmtUSD(n) {
+function fmtUSD (n) {
   if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) {
     return ''
   }
@@ -493,7 +488,7 @@ function fmtUSD(n) {
   )
 }
 
-function parseStock(s) {
+function parseStock (s) {
   if (s === null || s === undefined) return 0
   if (typeof s === 'number' && Number.isFinite(s)) return s
 
@@ -506,13 +501,13 @@ function parseStock(s) {
   return Number.isFinite(n) ? n : 0
 }
 
-function shorten(t, max = 36) {
+function shorten (t, max = 36) {
   const s = String(t || '').trim()
   return s.length > max ? s.slice(0, max - 1) + '…' : s
 }
 
 // ====== Ajustes de precios ======
-function aplicarAjustePrecio(precio) {
+function aplicarAjustePrecio (precio) {
   const n = Number(precio)
 
   if (!Number.isFinite(n)) return precio
@@ -533,7 +528,7 @@ function aplicarAjustePrecio(precio) {
   return Math.round(precioFinal)
 }
 
-function ensurePriceExtraControls() {
+function ensurePriceExtraControls () {
   if (document.getElementById('price-extra-controls')) return
 
   const table = document.getElementById('stock-table')
@@ -606,7 +601,7 @@ function ensurePriceExtraControls() {
       .price-extra-controls button.active {
         background: var(--accent);
         border-color: var(--accent);
-        color:  var(--background)!important;;
+        color: var(--background) !important;
         font-weight: 700;
       }
 
@@ -700,7 +695,7 @@ function ensurePriceExtraControls() {
   const manualDiscountInput = controls.querySelector('#manual-discount-percent')
   const clearDiscountBtn = controls.querySelector('#clear-discount-percent')
 
-  function refreshPrices() {
+  function refreshPrices () {
     updatePriceExtraControlsUI()
     aplicarFiltros()
     renderPinnedBar()
@@ -779,7 +774,7 @@ function ensurePriceExtraControls() {
   updatePriceExtraControlsUI()
 }
 
-function updatePriceExtraControlsUI() {
+function updatePriceExtraControlsUI () {
   const controls = document.getElementById('price-extra-controls')
   if (!controls) return
 
@@ -812,7 +807,7 @@ function updatePriceExtraControlsUI() {
 }
 
 // ====== Texto de copiado ======
-function buildCopyTextForItem(item = {}) {
+function buildCopyTextForItem (item = {}) {
   const desc = (item.descripcion || '').trim()
   let price = ''
 
@@ -825,9 +820,7 @@ function buildCopyTextForItem(item = {}) {
     precioParaCopiar = Number(item.precioArsFinal)
   } else {
     const precioBase =
-      item.precioArsOverride != null
-        ? item.precioArsOverride
-        : item.precioArs
+      item.precioArsOverride != null ? item.precioArsOverride : item.precioArs
 
     if (precioBase != null && !Number.isNaN(Number(precioBase))) {
       precioParaCopiar = aplicarAjustePrecio(precioBase)
@@ -836,10 +829,7 @@ function buildCopyTextForItem(item = {}) {
 
   if (precioParaCopiar != null) {
     price = fmtARS(precioParaCopiar)
-  } else if (
-    item.precioUsd != null &&
-    !Number.isNaN(Number(item.precioUsd))
-  ) {
+  } else if (item.precioUsd != null && !Number.isNaN(Number(item.precioUsd))) {
     price = fmtUSD(item.precioUsd)
   }
 
@@ -853,7 +843,7 @@ function buildCopyTextForItem(item = {}) {
   return parts.join(' ').trim()
 }
 
-function buildPinnedListText() {
+function buildPinnedListText () {
   if (!pinned.size) return ''
 
   return Array.from(pinned.values())
@@ -865,7 +855,7 @@ function buildPinnedListText() {
 // ====== Toast copiar ======
 let __copyToastTimer = null
 
-function showCopied(text = 'Copiado') {
+function showCopied (text = 'Copiado') {
   const toast = document.getElementById('copy-toast')
 
   if (!toast) return
@@ -875,13 +865,10 @@ function showCopied(text = 'Copiado') {
 
   clearTimeout(__copyToastTimer)
 
-  __copyToastTimer = setTimeout(
-    () => toast.classList.remove('show'),
-    1200
-  )
+  __copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1200)
 }
 
-async function writeToClipboard(payload) {
+async function writeToClipboard (payload) {
   try {
     await navigator.clipboard.writeText(payload)
     showCopied('Copiado')
@@ -906,8 +893,30 @@ async function writeToClipboard(payload) {
   }
 }
 
+// ====== WhatsApp ======
+function isMobileDevice () {
+  return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)
+}
+
+function shareByWhatsApp (message) {
+  const text = String(message || '').trim()
+
+  if (!text) {
+    showCopied('No hay mensaje para compartir')
+    return
+  }
+
+  const encoded = encodeURIComponent(text)
+
+  const url = isMobileDevice()
+    ? `https://wa.me/?text=${encoded}`
+    : `https://web.whatsapp.com/send?text=${encoded}`
+
+  window.open(url, '_blank', 'noopener,noreferrer')
+}
+
 // ====== Placeholder tabla ======
-function renderPlaceholder(message = 'Escribí para buscar') {
+function renderPlaceholder (message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
       <td colspan="5" style="text-align:center; opacity:.7; padding:16px;">${message}</td>
@@ -915,7 +924,7 @@ function renderPlaceholder(message = 'Escribí para buscar') {
 }
 
 // ====== Estilos label promoción ======
-function ensurePromoLabelStyles() {
+function ensurePromoLabelStyles () {
   if (document.getElementById('promo-label-styles')) return
 
   const style = document.createElement('style')
@@ -944,10 +953,55 @@ function ensurePromoLabelStyles() {
   document.head.appendChild(style)
 }
 
+// ====== Estilos botones de fila ======
+function ensureRowActionStyles () {
+  if (document.getElementById('row-action-styles')) return
+
+  const style = document.createElement('style')
+  style.id = 'row-action-styles'
+  style.textContent = `
+    .row-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .wa-share-btn {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .wa-share-btn:hover {
+      transform: scale(1.08);
+      background: rgba(37, 211, 102, 0.12);
+    }
+
+    .wa-share-btn:active {
+      transform: scale(.96);
+    }
+
+    .wa-share-btn svg {
+      display: block;
+    }
+  `
+
+  document.head.appendChild(style)
+}
+
 // ====== Anclados ======
 const pinned = new Map()
 
-function renderPinnedBar() {
+function renderPinnedBar () {
   if (!pinnedBar) return
 
   if (pinned.size === 0) {
@@ -966,8 +1020,8 @@ function renderPinnedBar() {
         it.precioArsFinal != null
           ? fmtARS(it.precioArsFinal)
           : it.precioArs != null
-            ? fmtARS(aplicarAjustePrecio(it.precioArs))
-            : ''
+          ? fmtARS(aplicarAjustePrecio(it.precioArs))
+          : ''
 
       const usd =
         !soloPesos && it.precioUsd != null
@@ -978,9 +1032,10 @@ function renderPinnedBar() {
       <div class="pin-chip" data-key="${it.__key}">
         <span class="pin-icon">⚓</span>
         <span class="pin-desc">${shorten(it.descripcion, 34)}</span>
-        ${ars
-          ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
-          : usd
+        ${
+          ars
+            ? `<span class="pin-price" style="white-space: nowrap;">${ars}${usd}</span>`
+            : usd
             ? `<span class="pin-price" style="white-space: nowrap;">${usd}</span>`
             : ''
         }
@@ -1001,9 +1056,7 @@ function renderPinnedBar() {
       renderPinnedBar()
 
       document
-        .querySelectorAll(
-          `.anchor-btn[data-key="${cssEscape(key)}"]`
-        )
+        .querySelectorAll(`.anchor-btn[data-key="${cssEscape(key)}"]`)
         .forEach(b => {
           b.classList.remove('active')
           b.setAttribute('aria-pressed', 'false')
@@ -1026,7 +1079,7 @@ function renderPinnedBar() {
   })
 }
 
-function togglePin(item) {
+function togglePin (item) {
   const key = canonicalKey(item?.codigo)
 
   if (!key) return
@@ -1039,7 +1092,12 @@ function togglePin(item) {
 
   const rate = effectiveUsdRate()
 
-  if (rate && item?.precioUsd != null && item.precioArs == null && item.precioArsFinal == null) {
+  if (
+    rate &&
+    item?.precioUsd != null &&
+    item.precioArs == null &&
+    item.precioArsFinal == null
+  ) {
     toSave.precioArs = Math.round(Number(item.precioUsd) * rate)
     toSave.precioArsFinal = aplicarAjustePrecio(toSave.precioArs)
   }
@@ -1066,7 +1124,7 @@ function togglePin(item) {
 let anchorMenuOverlay = null
 let anchorMenuPanel = null
 
-function ensureAnchorMenu() {
+function ensureAnchorMenu () {
   if (anchorMenuOverlay && anchorMenuPanel) {
     return { overlay: anchorMenuOverlay, panel: anchorMenuPanel }
   }
@@ -1083,7 +1141,7 @@ function ensureAnchorMenu() {
 
   const panel = document.createElement('div')
   panel.id = 'anchor-menu-panel'
-  panel.style.minWidth = '180px'
+  panel.style.minWidth = '220px'
   panel.style.maxWidth = '92vw'
   panel.style.background = 'var(--background)'
   panel.style.border = '1px solid var(--card)'
@@ -1096,7 +1154,9 @@ function ensureAnchorMenu() {
 
   panel.innerHTML = `
     <button data-action="copy" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">📋 Copiar cubierta</button>
+    <button data-action="whatsapp" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">🟢 Compartir cubierta por WhatsApp</button>
     <button data-action="copy-all" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">📋 Copiar ancladas</button>
+    <button data-action="whatsapp-all" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">🟢 Compartir ancladas por WhatsApp</button>
     <button data-action="pin" style="width:100%;text-align:left;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;">⚓ Anclar</button>
   `
 
@@ -1129,7 +1189,7 @@ function ensureAnchorMenu() {
   return { overlay, panel }
 }
 
-function showAnchorMenu(btn, { item, copyText }) {
+function showAnchorMenu (btn, { item, copyText }) {
   const { overlay, panel } = ensureAnchorMenu()
   const key = canonicalKey(item.codigo)
 
@@ -1157,10 +1217,8 @@ function showAnchorMenu(btn, { item, copyText }) {
 
     panel.style.position = 'fixed'
     panel.style.left =
-      Math.min(
-        window.innerWidth - panel.offsetWidth - 8,
-        Math.max(8, r.left)
-      ) + 'px'
+      Math.min(window.innerWidth - panel.offsetWidth - 8, Math.max(8, r.left)) +
+      'px'
 
     panel.style.top = r.bottom + margin + 'px'
     panel.style.transform = 'none'
@@ -1182,6 +1240,11 @@ function showAnchorMenu(btn, { item, copyText }) {
       return
     }
 
+    if (action === 'whatsapp') {
+      shareByWhatsApp(copy)
+      return
+    }
+
     if (action === 'copy-all') {
       const payload = buildPinnedListText()
 
@@ -1191,30 +1254,37 @@ function showAnchorMenu(btn, { item, copyText }) {
       return
     }
 
+    if (action === 'whatsapp-all') {
+      const payload = buildPinnedListText()
+
+      if (payload) shareByWhatsApp(payload)
+      else showCopied('No hay productos anclados')
+
+      return
+    }
+
     if (action === 'pin') {
       const it =
-        (tableBody._lastRowMap &&
-          tableBody._lastRowMap.get(key)) ||
-        item
+        (tableBody._lastRowMap && tableBody._lastRowMap.get(key)) || item
 
       togglePin(it)
     }
   }
 }
 
-function hideAnchorMenu() {
+function hideAnchorMenu () {
   if (!anchorMenuOverlay) return
   anchorMenuOverlay.style.display = 'none'
 }
 
 // ====== CSV helpers ======
-function limpiarTextoCsv(text) {
+function limpiarTextoCsv (text) {
   return String(text || '')
     .replace(/^\uFEFF/, '')
     .replace(/\0/g, '')
 }
 
-function limpiarValorCsv(value) {
+function limpiarValorCsv (value) {
   let texto = String(value || '').trim()
 
   if (texto.startsWith('="') && texto.endsWith('"')) {
@@ -1228,13 +1298,11 @@ function limpiarValorCsv(value) {
   return texto.trim()
 }
 
-function detectCsvDelimiter(text) {
+function detectCsvDelimiter (text) {
   const cleanText = limpiarTextoCsv(text)
 
   const firstLine =
-    cleanText
-      .split(/\r?\n/)
-      .find(line => line.trim() !== '') || ''
+    cleanText.split(/\r?\n/).find(line => line.trim() !== '') || ''
 
   const semicolonCount = (firstLine.match(/;/g) || []).length
   const tabCount = (firstLine.match(/\t/g) || []).length
@@ -1246,7 +1314,7 @@ function detectCsvDelimiter(text) {
   return ','
 }
 
-function parseCsvLine(line, delimiter) {
+function parseCsvLine (line, delimiter) {
   const result = []
   let current = ''
   let insideQuotes = false
@@ -1281,7 +1349,7 @@ function parseCsvLine(line, delimiter) {
   return result
 }
 
-function parseCsv(text) {
+function parseCsv (text) {
   const cleanText = limpiarTextoCsv(text)
   const delimiter = detectCsvDelimiter(cleanText)
 
@@ -1290,12 +1358,10 @@ function parseCsv(text) {
     delimiter === '\t' ? 'TAB' : delimiter
   )
 
-  return cleanText
-    .split(/\r?\n/)
-    .map(line => parseCsvLine(line, delimiter))
+  return cleanText.split(/\r?\n/).map(line => parseCsvLine(line, delimiter))
 }
 
-function parseStockCsvNumber(value) {
+function parseStockCsvNumber (value) {
   if (value === null || value === undefined || value === '') return 0
 
   if (typeof value === 'number' && Number.isFinite(value)) {
@@ -1312,7 +1378,7 @@ function parseStockCsvNumber(value) {
   return Number.isFinite(numero) ? numero : 0
 }
 
-async function fetchStockCsvText() {
+async function fetchStockCsvText () {
   let lastError = null
 
   for (const url of STOCK_CSV_URLS) {
@@ -1354,11 +1420,13 @@ async function fetchStockCsvText() {
   throw lastError || new Error('No se pudo cargar stock.csv')
 }
 
-function isEmptyCsvRow(row) {
-  return !Array.isArray(row) || row.every(cell => String(cell || '').trim() === '')
+function isEmptyCsvRow (row) {
+  return (
+    !Array.isArray(row) || row.every(cell => String(cell || '').trim() === '')
+  )
 }
 
-function normalizarHeader(value) {
+function normalizarHeader (value) {
   return limpiarValorCsv(value)
     .toLowerCase()
     .normalize('NFD')
@@ -1367,15 +1435,13 @@ function normalizarHeader(value) {
     .trim()
 }
 
-function findHeaderIndex(rows) {
+function findHeaderIndex (rows) {
   return rows.findIndex(row => {
     const colA = normalizarHeader(row?.[0])
     const colB = normalizarHeader(row?.[1])
 
     const esCodigo =
-      colA === 'codigo' ||
-      colA.includes('codigo') ||
-      colA.includes('cdigo')
+      colA === 'codigo' || colA.includes('codigo') || colA.includes('cdigo')
 
     const esArticulo =
       colB === 'articulo' ||
@@ -1386,7 +1452,7 @@ function findHeaderIndex(rows) {
   })
 }
 
-async function fetchStockFromCsv(stock) {
+async function fetchStockFromCsv (stock) {
   const csvText = await fetchStockCsvText()
   const rows = parseCsv(csvText)
 
@@ -1457,14 +1523,16 @@ async function fetchStockFromCsv(stock) {
   console.log('[stock.csv] Primeros productos:', data.slice(0, 5))
 
   if (!data.length) {
-    throw new Error('stock.csv fue leído, pero no hay productos con stock para este depósito')
+    throw new Error(
+      'stock.csv fue leído, pero no hay productos con stock para este depósito'
+    )
   }
 
   return data
 }
 
 // ====== Render tabla ======
-function renderTable(data) {
+function renderTable (data) {
   tableBody.innerHTML = ''
 
   if (!data || data.length === 0) {
@@ -1485,8 +1553,7 @@ function renderTable(data) {
 
     const key = canonicalKey(item.codigo)
 
-    const precioUsd =
-      item.precioUsd != null ? Number(item.precioUsd) : null
+    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
 
     let precioArsBase = null
     let precioArsFinal = null
@@ -1509,14 +1576,20 @@ function renderTable(data) {
     const priceHtml =
       precioUsd != null || precioArsFinal != null
         ? `<div class="price-wrap" style="display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
-           ${precioArsFinal != null
-          ? `<span class="price-ars" style="font-weight:600;">${fmtARS(precioArsFinal)}</span>`
-          : ''
-        }
-           ${!soloPesos && precioUsd != null
-          ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(precioUsd)}</span>`
-          : ''
-        }
+           ${
+             precioArsFinal != null
+               ? `<span class="price-ars" style="font-weight:600;">${fmtARS(
+                   precioArsFinal
+                 )}</span>`
+               : ''
+           }
+           ${
+             !soloPesos && precioUsd != null
+               ? `<span class="price-usd" style="opacity:.8;">${fmtUSD(
+                   precioUsd
+                 )}</span>`
+               : ''
+           }
          </div>`
         : ''
 
@@ -1536,7 +1609,30 @@ function renderTable(data) {
       <button class="anchor-btn ${pinned.has(key) ? 'active' : ''}" 
               title="${pinned.has(key) ? 'Desanclar' : 'Anclar'}" 
               aria-pressed="${pinned.has(key) ? 'true' : 'false'}"
-              data-key="${key}"><img src="./media/3dots.png"></button>`
+              data-key="${key}">
+        <img src="./media/3dots.png">
+      </button>`
+
+    const whatsappBtnHTML = `
+      <button
+        class="wa-share-btn"
+        title="Compartir por WhatsApp"
+        aria-label="Compartir por WhatsApp"
+        data-key="${key}"
+      >
+        <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="16" fill="#25D366"></circle>
+          <path fill="#ffffff" d="M23.2 8.8A10.2 10.2 0 0 0 6.6 20.4L5 27l6.8-1.8a10.2 10.2 0 0 0 4.9 1.3h.1A10.2 10.2 0 0 0 23.2 8.8zm-6.4 15.8h-.1a8.6 8.6 0 0 1-4.4-1.2l-.3-.2-4 .9.9-3.9-.2-.3a8.7 8.7 0 1 1 8.1 4.7zm4.8-6.5c-.3-.1-1.8-.9-2-.9s-.4-.1-.6.1-.7.9-.8 1c-.2.2-.3.2-.6.1-1.7-.8-2.9-1.9-4-3.4-.3-.4 0-.5.2-.7.2-.2.3-.4.5-.5.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5s-.6-1.5-.8-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.8.4s-1 1-1 2.4 1 2.8 1.2 3c.1.2 2.2 3.4 5.3 4.7 1.3.6 2.3.9 3.1 1.1 1.3.4 2.5.3 3.4.2 1-.1 1.8-.8 2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.2-.6-.4z"></path>
+        </svg>
+      </button>
+    `
+
+    const actionsHTML = `
+      <div class="row-actions">
+        ${anchorBtnHTML}
+        ${whatsappBtnHTML}
+      </div>
+    `
 
     const promoLabelHTML = item.enPromocion
       ? `<span class="promo-label" title="Producto en promoción">★ Promo</span>`
@@ -1553,7 +1649,7 @@ function renderTable(data) {
       </td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
-      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${anchorBtnHTML}</td>
+      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${actionsHTML}</td>
     `
 
     tableBody.appendChild(tr)
@@ -1570,6 +1666,18 @@ function renderTable(data) {
     tableBody.__delegated = true
 
     tableBody.addEventListener('click', e => {
+      const waBtn = e.target.closest('.wa-share-btn')
+
+      if (waBtn) {
+        e.stopPropagation()
+
+        const row = waBtn.closest('tr')
+        const copyText = row?.dataset?.copy || ''
+
+        shareByWhatsApp(copyText)
+        return
+      }
+
       const anchorBtn = e.target.closest('.anchor-btn')
 
       if (anchorBtn) {
@@ -1579,16 +1687,13 @@ function renderTable(data) {
         const row = anchorBtn.closest('tr')
         const copyText = row?.dataset?.copy || ''
 
-        const it =
-          (tableBody._lastRowMap &&
-            tableBody._lastRowMap.get(k)) || {
-            codigo: k,
-            descripcion:
-              row?.querySelector('td')?.innerText || '',
-            precioUsd: null,
-            precioArs: null,
-            precioArsFinal: null
-          }
+        const it = (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) || {
+          codigo: k,
+          descripcion: row?.querySelector('td')?.innerText || '',
+          precioUsd: null,
+          precioArs: null,
+          precioArsFinal: null
+        }
 
         showAnchorMenu(anchorBtn, { item: it, copyText })
         return
@@ -1628,16 +1733,14 @@ function renderTable(data) {
         if (btn) {
           const k = tr.dataset.key
 
-          const it =
-            (tableBody._lastRowMap &&
-              tableBody._lastRowMap.get(k)) || {
-              codigo: k,
-              descripcion:
-                tr.querySelector('td')?.innerText || '',
-              precioUsd: null,
-              precioArs: null,
-              precioArsFinal: null
-            }
+          const it = (tableBody._lastRowMap &&
+            tableBody._lastRowMap.get(k)) || {
+            codigo: k,
+            descripcion: tr.querySelector('td')?.innerText || '',
+            precioUsd: null,
+            precioArs: null,
+            precioArsFinal: null
+          }
 
           showAnchorMenu(btn, {
             item: it,
@@ -1648,10 +1751,7 @@ function renderTable(data) {
     })
 
     window.addEventListener('resize', () => {
-      if (
-        !anchorMenuOverlay ||
-        anchorMenuOverlay.style.display === 'none'
-      ) {
+      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') {
         return
       }
 
@@ -1663,7 +1763,7 @@ function renderTable(data) {
 }
 
 // ====== Búsqueda ======
-function normalizarBusqueda(value) {
+function normalizarBusqueda (value) {
   return String(value || '')
     .toLowerCase()
     .normalize('NFD')
@@ -1676,21 +1776,19 @@ function normalizarBusqueda(value) {
 }
 
 // ====== Filtros ======
-function setActiveBtn(btn) {
+function setActiveBtn (btn) {
   filtroBtns.forEach(b => b && b.classList.remove('active'))
 
   if (btn) btn.classList.add('active')
 }
 
-function aplicarFiltros() {
+function aplicarFiltros () {
   const valorOriginal = buscador.value.trim()
   const valor = valorOriginal.toLowerCase()
   const valorNormalizado = normalizarBusqueda(valorOriginal)
 
   if (!valorOriginal) {
-    renderPlaceholder(
-      'Utiliza la barra de búsqueda para ver resultados'
-    )
+    renderPlaceholder('Utiliza la barra de búsqueda para ver resultados')
     return
   }
 
@@ -1722,7 +1820,7 @@ function aplicarFiltros() {
 }
 
 // ====== Carga principal ======
-async function cargarDatos(stock) {
+async function cargarDatos (stock) {
   loading && (loading.style.display = '')
 
   if (error) error.textContent = ''
@@ -1744,55 +1842,53 @@ async function cargarDatos(stock) {
 
     const priceMap = new Map()
 
-      ; (Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
-        const precio = p?.precio ?? null
+    ;(Array.isArray(dataPrices) ? dataPrices : []).forEach(p => {
+      const precio = p?.precio ?? null
 
-        codeKeysOne(p?.codigo).forEach(k => {
-          if (!priceMap.has(k)) {
-            priceMap.set(k, precio)
-          }
-        })
+      codeKeysOne(p?.codigo).forEach(k => {
+        if (!priceMap.has(k)) {
+          priceMap.set(k, precio)
+        }
       })
+    })
 
-    allData = (Array.isArray(dataStock) ? dataStock : []).map(
-      item => {
-        const keys = codeKeys(item?.codigo)
-        let precioUsd = null
-        let precioArsOverride = null
-        let enPromocion = false
+    allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
+      const keys = codeKeys(item?.codigo)
+      let precioUsd = null
+      let precioArsOverride = null
+      let enPromocion = false
 
-        for (const k of keys) {
-          if (priceMap.has(k)) {
-            precioUsd = priceMap.get(k)
-            break
-          }
-        }
-
-        for (const k of keys) {
-          if (ofertasMap.has(k)) {
-            const of = ofertasMap.get(k)
-
-            enPromocion = true
-
-            if (of.tipo === 'usd') {
-              precioUsd = of.precio
-              precioArsOverride = null
-            } else {
-              precioArsOverride = of.precio
-            }
-
-            break
-          }
-        }
-
-        return {
-          ...item,
-          precioUsd,
-          precioArsOverride,
-          enPromocion
+      for (const k of keys) {
+        if (priceMap.has(k)) {
+          precioUsd = priceMap.get(k)
+          break
         }
       }
-    )
+
+      for (const k of keys) {
+        if (ofertasMap.has(k)) {
+          const of = ofertasMap.get(k)
+
+          enPromocion = true
+
+          if (of.tipo === 'usd') {
+            precioUsd = of.precio
+            precioArsOverride = null
+          } else {
+            precioArsOverride = of.precio
+          }
+
+          break
+        }
+      }
+
+      return {
+        ...item,
+        precioUsd,
+        precioArsOverride,
+        enPromocion
+      }
+    })
 
     if (loading) loading.style.display = 'none'
 
@@ -1803,8 +1899,7 @@ async function cargarDatos(stock) {
 
     if (loading) loading.style.display = 'none'
 
-    const mensaje =
-      err?.message || 'Error desconocido al cargar stock'
+    const mensaje = err?.message || 'Error desconocido al cargar stock'
 
     if (error) {
       error.textContent = `Error al cargar stock: ${mensaje}`
@@ -1817,7 +1912,7 @@ async function cargarDatos(stock) {
 // ====== UI Cotización ======
 let usdLineRef = null
 
-function ensureUsdInline() {
+function ensureUsdInline () {
   if (usdLineRef) return usdLineRef
 
   const container = document.querySelector('main') || document.body
@@ -1867,16 +1962,15 @@ function ensureUsdInline() {
   return usdLineRef
 }
 
-function updateUsdInlineUIFromExcel() {
+function updateUsdInlineUIFromExcel () {
   const refs = ensureUsdInline()
 
-  refs.precio.textContent =
-    DOLAR_TOTAL > 0 ? fmtARS(Number(DOLAR_TOTAL)) : '—'
+  refs.precio.textContent = DOLAR_TOTAL > 0 ? fmtARS(Number(DOLAR_TOTAL)) : '—'
 
   refs.label.textContent = 'Absoluto'
 }
 
-function fetchUsdRate() {
+function fetchUsdRate () {
   if (isManualDollar()) {
     usdRate = Number(DOLAR_TOTAL)
     updateUsdInlineUIFromExcel()
@@ -1890,7 +1984,7 @@ function fetchUsdRate() {
 }
 
 // ====== Listeners ======
-function updateClearBtn() {
+function updateClearBtn () {
   if (!clearBuscador) return
 
   const has = (buscador?.value || '').length > 0
@@ -1947,13 +2041,12 @@ stockSelect &&
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
 
-  renderPlaceholder(
-    'Utiliza la barra de busqueda para en encontrar cubiertas'
-  )
+  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
 
   renderPinnedBar()
   ensureUsdInline()
   ensurePromoLabelStyles()
+  ensureRowActionStyles()
   ensurePriceExtraControls()
 
   fetchUsdRate()
