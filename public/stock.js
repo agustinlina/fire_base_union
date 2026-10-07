@@ -1480,6 +1480,7 @@ async function fetchStockFromCsv (stock) {
     .map(row => {
       const codigo = limpiarValorCsv(row[0])
       const descripcion = limpiarValorCsv(row[1])
+      const marca = limpiarValorCsv(row[2])
       const rubro = limpiarValorCsv(row[3])
 
       const truckCba = parseStockCsvNumber(row[10])
@@ -1497,6 +1498,7 @@ async function fetchStockFromCsv (stock) {
       return {
         codigo,
         descripcion,
+        marca,
         rubro,
         stock: stockFinal,
         stockTruckCba: truckCba,
@@ -1647,6 +1649,7 @@ function renderTable (data) {
           ${promoLabelHTML}
         </span>
       </td>
+      <td>${item.marca || ''}</td>
       <td>${item.rubro || ''}</td>
       <td>${stockDisplay}</td>
       <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${actionsHTML}</td>
@@ -1803,14 +1806,16 @@ function aplicarFiltros () {
   datos = datos.filter(it => {
     const codigo = String(it.codigo || '').toLowerCase()
     const descripcion = String(it.descripcion || '').toLowerCase()
+    const marca = String(it.marca || '').toLowerCase()
     const rubro = String(it.rubro || '').toLowerCase()
 
-    const textoCompleto = `${codigo} ${descripcion} ${rubro}`
+    const textoCompleto = `${codigo} ${descripcion} ${marca} ${rubro}`
     const textoNormalizado = normalizarBusqueda(textoCompleto)
 
     return (
       codigo.includes(valor) ||
       descripcion.includes(valor) ||
+      marca.includes(valor) ||
       rubro.includes(valor) ||
       textoNormalizado.includes(valorNormalizado)
     )
