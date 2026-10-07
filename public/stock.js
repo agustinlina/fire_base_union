@@ -919,7 +919,7 @@ function shareByWhatsApp (message) {
 function renderPlaceholder (message = 'Escribí para buscar') {
   tableBody.innerHTML = `
     <tr class="placeholder-row">
-      <td colspan="5" style="text-align:center; opacity:.7; padding:16px;">${message}</td>
+      <td colspan="4" style="text-align:center; opacity:.7; padding:16px;">${message}</td>
     </tr>`
 }
 
@@ -1480,7 +1480,10 @@ async function fetchStockFromCsv (stock) {
     .map(row => {
       const codigo = limpiarValorCsv(row[0])
       const descripcion = limpiarValorCsv(row[1])
+
+      // Marca: columna C
       const marca = limpiarValorCsv(row[2])
+
       const rubro = limpiarValorCsv(row[3])
 
       const truckCba = parseStockCsvNumber(row[10])
@@ -1555,7 +1558,8 @@ function renderTable (data) {
 
     const key = canonicalKey(item.codigo)
 
-    const precioUsd = item.precioUsd != null ? Number(item.precioUsd) : null
+    const precioUsd =
+      item.precioUsd != null ? Number(item.precioUsd) : null
 
     let precioArsBase = null
     let precioArsFinal = null
@@ -1642,17 +1646,26 @@ function renderTable (data) {
 
     tr.innerHTML = `
       <td class="descycode">
-        <span style="font-size:12px!important;">${item.descripcion || ''}</span>
+        <span>${item.descripcion || ''}</span>
         <span style="height:16px"></span>
-        <span style="font-size:10px">
+        <span style="font-size:12px">
           Código:<code> ${item.codigo}</code>
           ${promoLabelHTML}
         </span>
       </td>
-      <td style="font-size:12px!important;">${item.marca || ''}</td>
-      <td style="font-size:12px!important;">${item.rubro || ''}</td>
-      <td style="font-size:12px!important;">${stockDisplay}</td>
-      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;font-size:12px!important;">${priceHtml}${actionsHTML}</td>
+
+      <td>
+        <div>${item.rubro || ''}</div>
+        <div style="font-size:12px; opacity:.75; margin-top:4px;">
+          Marca: <code>${item.marca || ''}</code>
+        </div>
+      </td>
+
+      <td>${stockDisplay}</td>
+
+      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">
+        ${priceHtml}${actionsHTML}
+      </td>
     `
 
     tableBody.appendChild(tr)
@@ -1690,15 +1703,21 @@ function renderTable (data) {
         const row = anchorBtn.closest('tr')
         const copyText = row?.dataset?.copy || ''
 
-        const it = (tableBody._lastRowMap && tableBody._lastRowMap.get(k)) || {
-          codigo: k,
-          descripcion: row?.querySelector('td')?.innerText || '',
-          precioUsd: null,
-          precioArs: null,
-          precioArsFinal: null
-        }
+        const it =
+          (tableBody._lastRowMap &&
+            tableBody._lastRowMap.get(k)) || {
+            codigo: k,
+            descripcion: row?.querySelector('td')?.innerText || '',
+            precioUsd: null,
+            precioArs: null,
+            precioArsFinal: null
+          }
 
-        showAnchorMenu(anchorBtn, { item: it, copyText })
+        showAnchorMenu(anchorBtn, {
+          item: it,
+          copyText
+        })
+
         return
       }
 
@@ -1736,14 +1755,15 @@ function renderTable (data) {
         if (btn) {
           const k = tr.dataset.key
 
-          const it = (tableBody._lastRowMap &&
-            tableBody._lastRowMap.get(k)) || {
-            codigo: k,
-            descripcion: tr.querySelector('td')?.innerText || '',
-            precioUsd: null,
-            precioArs: null,
-            precioArsFinal: null
-          }
+          const it =
+            (tableBody._lastRowMap &&
+              tableBody._lastRowMap.get(k)) || {
+              codigo: k,
+              descripcion: tr.querySelector('td')?.innerText || '',
+              precioUsd: null,
+              precioArs: null,
+              precioArsFinal: null
+            }
 
           showAnchorMenu(btn, {
             item: it,
@@ -1754,7 +1774,10 @@ function renderTable (data) {
     })
 
     window.addEventListener('resize', () => {
-      if (!anchorMenuOverlay || anchorMenuOverlay.style.display === 'none') {
+      if (
+        !anchorMenuOverlay ||
+        anchorMenuOverlay.style.display === 'none'
+      ) {
         return
       }
 
@@ -1809,8 +1832,11 @@ function aplicarFiltros () {
     const marca = String(it.marca || '').toLowerCase()
     const rubro = String(it.rubro || '').toLowerCase()
 
-    const textoCompleto = `${codigo} ${descripcion} ${marca} ${rubro}`
-    const textoNormalizado = normalizarBusqueda(textoCompleto)
+    const textoCompleto =
+      `${codigo} ${descripcion} ${marca} ${rubro}`
+
+    const textoNormalizado =
+      normalizarBusqueda(textoCompleto)
 
     return (
       codigo.includes(valor) ||
@@ -1859,6 +1885,7 @@ async function cargarDatos (stock) {
 
     allData = (Array.isArray(dataStock) ? dataStock : []).map(item => {
       const keys = codeKeys(item?.codigo)
+
       let precioUsd = null
       let precioArsOverride = null
       let enPromocion = false
@@ -1904,13 +1931,17 @@ async function cargarDatos (stock) {
 
     if (loading) loading.style.display = 'none'
 
-    const mensaje = err?.message || 'Error desconocido al cargar stock'
+    const mensaje =
+      err?.message || 'Error desconocido al cargar stock'
 
     if (error) {
-      error.textContent = `Error al cargar stock: ${mensaje}`
+      error.textContent =
+        `Error al cargar stock: ${mensaje}`
     }
 
-    renderPlaceholder(`No pudimos cargar stock: ${mensaje}`)
+    renderPlaceholder(
+      `No pudimos cargar stock: ${mensaje}`
+    )
   }
 }
 
@@ -1920,11 +1951,13 @@ let usdLineRef = null
 function ensureUsdInline () {
   if (usdLineRef) return usdLineRef
 
-  const container = document.querySelector('main') || document.body
+  const container =
+    document.querySelector('main') || document.body
 
   if (!document.getElementById('usd-inline-styles')) {
     const style = document.createElement('style')
     style.id = 'usd-inline-styles'
+
     style.textContent = `
       .usd-inline {
         display:block;
@@ -1951,6 +1984,7 @@ function ensureUsdInline () {
   const line = document.createElement('div')
   line.className = 'usd-inline'
   line.id = 'usd-inline'
+
   line.innerHTML = `
     <span class="muted">Dólar:</span>
     <span id="usd-inline-precio" class="strong">—</span>
@@ -1970,7 +2004,10 @@ function ensureUsdInline () {
 function updateUsdInlineUIFromExcel () {
   const refs = ensureUsdInline()
 
-  refs.precio.textContent = DOLAR_TOTAL > 0 ? fmtARS(Number(DOLAR_TOTAL)) : '—'
+  refs.precio.textContent =
+    DOLAR_TOTAL > 0
+      ? fmtARS(Number(DOLAR_TOTAL))
+      : '—'
 
   refs.label.textContent = 'Absoluto'
 }
@@ -1982,7 +2019,8 @@ function fetchUsdRate () {
     return
   }
 
-  const refs = usdLineRef || ensureUsdInline()
+  const refs =
+    usdLineRef || ensureUsdInline()
 
   refs.precio.textContent = '—'
   refs.label.textContent = 'Absoluto'
@@ -1992,9 +2030,11 @@ function fetchUsdRate () {
 function updateClearBtn () {
   if (!clearBuscador) return
 
-  const has = (buscador?.value || '').length > 0
+  const has =
+    (buscador?.value || '').length > 0
 
-  clearBuscador.style.display = has ? 'block' : 'none'
+  clearBuscador.style.display =
+    has ? 'block' : 'none'
 }
 
 buscador &&
@@ -2046,7 +2086,9 @@ stockSelect &&
 window.addEventListener('DOMContentLoaded', () => {
   setActiveBtn(filtroTodos)
 
-  renderPlaceholder('Utiliza la barra de busqueda para en encontrar cubiertas')
+  renderPlaceholder(
+    'Utiliza la barra de busqueda para en encontrar cubiertas'
+  )
 
   renderPinnedBar()
   ensureUsdInline()
