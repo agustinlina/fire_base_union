@@ -1642,17 +1642,17 @@ function renderTable (data) {
 
     tr.innerHTML = `
       <td class="descycode">
-        <span>${item.descripcion || ''}</span>
+        <span style="font-size:12px!important;">${item.descripcion || ''}</span>
         <span style="height:16px"></span>
-        <span style="font-size:12px">
+        <span style="font-size:10px">
           Código:<code> ${item.codigo}</code>
           ${promoLabelHTML}
         </span>
       </td>
-      <td>${item.marca || ''}</td>
-      <td>${item.rubro || ''}</td>
-      <td>${stockDisplay}</td>
-      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;">${priceHtml}${actionsHTML}</td>
+      <td style="font-size:12px!important;">${item.marca || ''}</td>
+      <td style="font-size:12px!important;">${item.rubro || ''}</td>
+      <td style="font-size:12px!important;">${stockDisplay}</td>
+      <td style="white-space: nowrap;display:flex;justify-content:flex-end;gap:8px;align-items:center;font-size:12px!important;">${priceHtml}${actionsHTML}</td>
     `
 
     tableBody.appendChild(tr)
